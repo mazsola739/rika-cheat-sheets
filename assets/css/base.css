@@ -209,9 +209,15 @@ svg {
   background: var(--hover);
 }
 
+/* az aktív menüpont ugyanazzal a filccel van kiemelve, mint az oldal címe */
 .nav-links a[aria-current="page"] {
-  background: linear-gradient(176deg, transparent 12%, var(--teal-l) 16%, var(--teal-l) 84%, transparent 88%);
+  background: linear-gradient(176deg, transparent 12%, var(--nav-hl, var(--teal-l)) 16%, var(--nav-hl, var(--teal-l)) 84%, transparent 88%);
 }
+
+.nav-links a[href="principles.html"] { --nav-hl: #d0bfff; }
+.nav-links a[href="roadmap.html"] { --nav-hl: #b2f2bb; }
+.nav-links a[href="cheatsheets.html"] { --nav-hl: var(--orange-l); }
+.nav-links a[href="snippets.html"] { --nav-hl: var(--teal-l); }
 
 .lang-toggle {
   display: inline-flex;

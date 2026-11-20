@@ -1,4 +1,4 @@
-/* Roadmap oldal: kanyargós út, rajta a témák dobozai, két oldalra ágazó pipálható "levelekkel". */
+/* Roadmap oldal: kanyargós út, rajta a témák dobozai felváltva, egy-egy oldalra ágazó pipálható "levelekkel", mellette kicsinyített térkép. */
 
 /* ---------- haladássáv (a Mentés & letöltés dobozban) ---------- */
 
@@ -120,16 +120,113 @@
   padding-bottom: 56px;
 }
 
-/* kanyargós gerinc: hullámvonal, ami függőlegesen ismétlődik */
-.road::before {
-  content: "";
+/* az út mellett oldalt a kicsinyített térkép */
+.road-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 118px;
+  column-gap: 26px;
+  align-items: start;
+}
+
+.minimap {
+  position: sticky;
+  top: 16px;
+  height: min(calc(100vh - 32px), 900px);
+  margin-top: 50px;
+  padding: 8px 6px;
+  border: 2px dashed var(--line);
+  border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+
+.minimap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.minimap rect {
+  vector-effect: non-scaling-stroke;
+  stroke: var(--ink);
+  stroke-width: 0.6px;
+}
+
+.mm-trunk {
+  fill: none;
+  stroke: #1c7ed6;
+  stroke-width: 1.4px;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.8;
+}
+
+.mm-lines path {
+  fill: none;
+  stroke: var(--a);
+  stroke-width: 0.6px;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.6;
+}
+
+.mm-banner,
+.mm-topic {
+  fill: color-mix(in srgb, var(--c, var(--card)) var(--pct, 0%), var(--card));
+}
+
+.mm-leaf {
+  fill: var(--card);
+}
+
+/* a kipipált pont a térképen teljes színt kap, hogy kicsiben is látsszon */
+.mm-leaf.is-on {
+  fill: var(--c);
+}
+
+.minimap .mm-view {
+  fill: rgba(28, 126, 214, 0.08);
+  stroke: #1c7ed6;
+  stroke-width: 1.4px;
+  stroke-dasharray: 4 3;
+}
+
+/* tág képernyőn a térkép a margóba kerül, az út megtartja a teljes szélességét */
+@media (min-width: 1520px) {
+  .road-layout {
+    grid-template-columns: minmax(0, 1fr) 0;
+    column-gap: 0;
+  }
+
+  .minimap {
+    width: 128px;
+    margin-left: 30px;
+  }
+}
+
+@media (max-width: 1099px) {
+  .road-layout {
+    display: block;
+  }
+
+  .minimap {
+    display: none;
+  }
+}
+
+/* kanyargós gerinc: a JS húzza a szakaszcímeken és a témák dobozain át */
+.trunk {
   position: absolute;
-  top: 0;
-  bottom: 84px;
-  left: 50%;
-  width: 24px;
-  margin-left: -12px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='160'%3E%3Cpath d='M12 0C20 40 20 40 12 80S4 120 12 160' fill='none' stroke='%231c7ed6' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E") repeat-y top center;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trunk path {
+  fill: none;
+  stroke: #1c7ed6;
+  stroke-width: 3.2;
+  stroke-linecap: round;
   opacity: 0.8;
 }
 
@@ -190,15 +287,19 @@
   transition: width 0.45s ease;
 }
 
-/* ---------- egy ág: levelek | téma | levelek ---------- */
+/* ---------- egy ág: a téma az egyik oldalon, a pontjai a másik felé ágaznak ---------- */
 
 .branch {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(170px, 220px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, var(--empty, 2fr)) minmax(170px, 220px) minmax(0, 5fr);
   align-items: center;
   column-gap: 64px;
-  margin: 26px 0;
+  margin: 34px 0;
+}
+
+.branch.to-left {
+  grid-template-columns: minmax(0, 5fr) minmax(170px, 220px) minmax(0, var(--empty, 2fr));
 }
 
 .branch-lines {
@@ -447,13 +548,17 @@
   font: 700 22px/1.2 var(--font-head);
 }
 
-/* ---------- közepes szélesség: ugyanaz a kétoldalas fa, csak tömörebben ---------- */
+/* ---------- közepes szélesség: ugyanaz a fa, csak tömörebben ---------- */
 
 @media (max-width: 1000px) and (min-width: 641px) {
   .branch {
-    grid-template-columns: minmax(0, 1fr) minmax(120px, 150px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, var(--empty, 2fr)) minmax(120px, 150px) minmax(0, 5fr);
     column-gap: 30px;
-    margin: 22px 0;
+    margin: 28px 0;
+  }
+
+  .branch.to-left {
+    grid-template-columns: minmax(0, 5fr) minmax(120px, 150px) minmax(0, var(--empty, 2fr));
   }
 
   .topic {
@@ -496,7 +601,7 @@
 /* ---------- keskeny képernyő: fa-lista (téma, alatta behúzott ágak) ---------- */
 
 @media (max-width: 640px) {
-  .road::before {
+  .trunk {
     display: none;
   }
 
@@ -549,12 +654,8 @@
     border-left: 2.6px dashed var(--a);
   }
 
-  .leaves-left {
+  .branch .leaves {
     padding-top: 14px;
-  }
-
-  .leaves-right {
-    padding-top: 8px;
   }
 
   .leaf {
@@ -576,7 +677,8 @@
 }
 
 @media print {
-  .actions {
+  .actions,
+  .minimap {
     display: none;
   }
 }

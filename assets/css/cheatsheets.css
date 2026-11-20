@@ -30,6 +30,8 @@
 .sheet-grid {
   row-gap: 54px;
   padding-top: 30px;
+  /* minden dosszié egyforma magas, a fül hossza nem számít */
+  grid-auto-rows: 1fr;
 }
 
 .sheet-card {
@@ -130,11 +132,43 @@
   position: relative;
 }
 
+/* vissza a listához: jól látható címke a bal felső sarokban */
 .back {
-  display: inline-block;
-  margin-bottom: 10px;
-  font: 600 16px/1 var(--font-head);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-bottom: 16px;
+  padding: 8px 16px 7px 12px;
+  border: 2.2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: 2px 3px 0 var(--shadow);
+  color: var(--ink);
+  font: 700 16px/1 var(--font-head);
   text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.back:hover,
+.back:focus-visible {
+  transform: translateX(-3px);
+  background: var(--c);
+  text-decoration: none;
+}
+
+/* a sötét blueprint lapon a lap saját színével világít */
+.sheet-paper .back {
+  border-color: var(--c);
+  background: var(--c);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+  color: #141b2d;
+}
+
+.sheet-paper .back:hover,
+.sheet-paper .back:focus-visible {
+  background: #fff;
+  border-color: #fff;
 }
 
 .sheet-head {
@@ -206,14 +240,12 @@
   background: color-mix(in srgb, var(--c) 55%, transparent);
 }
 
+/* a többsoros kód ugyanúgy néz ki, mint az egysoros: nincs külön doboz, csak a sorok egymás alatt */
 .cs-multi {
   display: block;
-  margin: 2px 0;
-  padding: 8px 10px;
+  margin: 1px 0;
   overflow-x: auto;
   white-space: pre;
-  background: var(--code-bg);
-  border: 1.6px dashed var(--line);
 }
 
 .cs-note {
@@ -238,9 +270,8 @@
   box-shadow: 5px 6px 0 var(--shadow);
 }
 
-.view-blueprint .back,
-.view-blueprint .sheet-count,
-.view-blueprint .sheet-intro {
+.sheet-paper .sheet-count,
+.sheet-paper .sheet-intro {
   color: #b8c7e0;
 }
 
@@ -254,10 +285,12 @@
   align-items: center;
 }
 
+/* csíkos, körvonalas cím: a sötét lapon a pasztell színnel, a világos papíron a mélyebb színnel */
 .view-blueprint .sheet-name {
+  --stripe: var(--c);
   color: transparent;
-  -webkit-text-stroke: 2px var(--c);
-  background: repeating-linear-gradient(-45deg, var(--c) 0 2px, transparent 2px 6px);
+  -webkit-text-stroke: 2px var(--stripe);
+  background: repeating-linear-gradient(-45deg, var(--stripe) 0 2px, transparent 2px 6px);
   -webkit-background-clip: text;
   background-clip: text;
   text-shadow: none;
@@ -265,9 +298,20 @@
   text-transform: uppercase;
 }
 
+.sheet-top .sheet-name {
+  --stripe: var(--a);
+}
+
+.sheet-top .sheet-name-icon {
+  color: var(--a);
+}
+
 .view-blueprint .sheet-sub {
-  color: #fff;
   text-decoration-color: var(--orange);
+}
+
+.sheet-paper .sheet-sub {
+  color: #fff;
 }
 
 .view-blueprint .sheet-intro {
@@ -278,13 +322,18 @@
   justify-content: center;
 }
 
-.view-blueprint .sheet-tools .level {
+.sheet-paper .sheet-tools .level {
   background: #fff;
 }
 
-.view-blueprint .btn-ghost {
+.sheet-paper .btn-ghost {
   color: #e7f0ff;
   border-color: #e7f0ff;
+}
+
+/* ahol van poszter, ott a fejléc és a poszter a világos papíron áll, a blueprint lap külön alatta */
+.sheet-top .playground {
+  margin-bottom: 30px;
 }
 
 .view-blueprint .playground {
@@ -395,11 +444,6 @@
 .view-blueprint .cs-code:hover,
 .view-blueprint .cs-code:focus-visible {
   background: rgba(116, 192, 252, 0.16);
-}
-
-.view-blueprint .cs-multi {
-  background: rgba(0, 0, 0, 0.25);
-  border-color: rgba(231, 240, 255, 0.2);
 }
 
 .view-blueprint .tok-k { color: #b197fc; }

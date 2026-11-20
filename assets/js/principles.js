@@ -27,13 +27,12 @@
       'pr.desc': 'A tiszta kód alapelvei (KISS, YAGNI, DRY, SOLID…) katalógusban, saját plakát-mémekkel, kódpéldákkal, előnyökkel és hátrányokkal.',
       'pr.kicker': 'Tiszta kód, röviden',
       'pr.title': 'Elvek',
-      'pr.lead': 'KISS, YAGNI, DRY, SOLID és társaik. Mindegyikhez mém, probléma, megoldás, előnyök és hátrányok.',
+      'pr.lead': 'KISS, YAGNI, DRY, SOLID és társaik.',
       'pr.menu': 'Elvek menü',
       'pr.catalog': 'Katalógus',
       'pr.catalogTitle': 'Az elvek katalógusa',
-      'pr.catalogLead': 'A tiszta kód legfontosabb elvei egy helyen. Mindegyikhez van plakát-mém, probléma és megoldás kóddal, hétköznapi hasonlat, előnyök és hátrányok.',
       'pr.groups': 'Csoportok',
-      'pr.hint': 'Vidd az egeret egy szelet fölé a mémjéért, kattints a megnyitáshoz. Billentyűzettel: ← → lépked, Enter megnyitja.',
+      'pr.hint': 'Mutass egy szeletre vagy egy névre: kigyullad a nyilával és a listájával együtt. Kattints a megnyitáshoz. Billentyűzettel: ← → lépked, Enter megnyitja.',
       'pr.wheelLine1': 'A tiszta kód',
       'pr.wheelLine2': 'alapelvei',
       'pr.wheelCount': '{n} elv',
@@ -63,13 +62,12 @@
       'pr.desc': 'Clean-code principles (KISS, YAGNI, DRY, SOLID…) as a catalog, with original poster memes, code examples, pros and cons.',
       'pr.kicker': 'Clean code, in short',
       'pr.title': 'Principles',
-      'pr.lead': 'KISS, YAGNI, DRY, SOLID and friends. Each with a meme, the problem, the solution, and the trade-offs.',
+      'pr.lead': 'KISS, YAGNI, DRY, SOLID and friends.',
       'pr.menu': 'Principles menu',
       'pr.catalog': 'Catalog',
       'pr.catalogTitle': 'The catalog of principles',
-      'pr.catalogLead': 'The key clean-code principles in one place. Each comes with a poster meme, the problem and the solution in code, a real-world analogy, and pros and cons.',
       'pr.groups': 'Groups',
-      'pr.hint': 'Hover a slice to see its meme, click to open it. Keyboard: ← → to step, Enter to open.',
+      'pr.hint': 'Point at a slice or a name: it lights up together with its arrow and list. Click to open it. Keyboard: ← → to step, Enter to open.',
       'pr.wheelLine1': 'Clean code',
       'pr.wheelLine2': 'principles',
       'pr.wheelCount': '{n} principles',
@@ -183,21 +181,7 @@
     return [key, { gi, idx, mid, side: mid <= 180 ? 'right' : 'left' }];
   }));
 
-  /* csoport-ikonok a belső gyűrűre (saját rajz, 24×24) */
-  const GROUP_ICONS = {
-    core: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z',
-    debug: 'M8 10h8v5a4 4 0 0 1-8 0zM9 10a3 3 0 0 1 6 0M4 13h4M16 13h4M5 8l3 2M19 8l-3 2M5 19l3-2M19 19l-3-2',
-    workflow: 'M6 4v11M6 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18 9c0 5-7 4-12 8',
-    solid: 'M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5',
-    design: 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM15.5 8.5l-2 5-5 2 2-5z',
-    frontend: 'M3 5h18v14H3zM3 9h18M6 7h.01M9 7h.01',
-    values: 'M12 20s-7.5-4.6-7.5-10.2A4.1 4.1 0 0 1 12 7.4a4.1 4.1 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z',
-    laws: 'M12 3v17M7 20h10M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z',
-  };
-
-  let peekEl = null;
   let linksEl = null;
-  let peekIndex = -1;
 
   const isNarrow = () => (wheelEl ? wheelEl.getBoundingClientRect().width < 480 : false);
 
@@ -234,13 +218,13 @@
         }, label))));
     });
 
-    // a belső gyűrűn csoportonként egy ikon
+    // a belső gyűrűn a csoport sorszáma, ugyanaz, mint a mellette lévő számozott dobozon
     const icons = svg('g', { class: 'ring-icons', 'aria-hidden': 'true' },
       GROUP_KEYS.map((key) => {
         const [x, y] = polar((R0 + R1) / 2, GROUP_ARCS[key].mid);
-        return svg('g', { class: 'ring-icon', transform: `translate(${f1(x)} ${f1(y)})` },
-          svg('circle', { r: 17 }),
-          svg('path', { d: GROUP_ICONS[key] || GROUP_ICONS.core, transform: 'translate(-10.5 -10.5) scale(0.875)' }));
+        return svg('g', { class: 'ring-icon', 'data-group': key, transform: `translate(${f1(x)} ${f1(y)})`, style: `--g:${GROUP_COLORS[key]}` },
+          svg('circle', { r: 16 }),
+          svg('text', { class: 'ring-num', 'text-anchor': 'middle', 'dominant-baseline': 'central', y: 1 }, String(GROUP_ARCS[key].gi + 1)));
       }));
 
     // fehér közép, címmel
@@ -254,18 +238,18 @@
     wheelEl.replaceChildren(root);
   }
 
-  /** Rámutatáskor a kerék közepén megjelenik az elv plakát-mémje. */
-  function showPeek(i) {
-    if (!peekEl) return;
-    if (i < 0) {
-      peekEl.classList.remove('is-on');
-      return;
-    }
-    if (i !== peekIndex) {
-      peekIndex = i;
-      peekEl.replaceChildren(posterBox(CARDS[i], 'poster poster-mini') || '');
-    }
-    peekEl.classList.add('is-on');
+  /*
+   * Kiemelés rámutatáskor (szeleten vagy a dobozban egy néven): az elv szelete élesebb lesz,
+   * a többi halványul, a csoportja nyila kigyullad és a szelet felé "folyik", a dobozban pedig
+   * kiemelődik a neve. Így látszik, hová ugrik a kattintás.
+   */
+  function setFocus(i) {
+    if (!heroEl || heroEl.hidden) return;
+    heroEl.querySelectorAll('.is-focus').forEach((el) => el.classList.remove('is-focus'));
+    const card = i >= 0 ? CARDS[i] : null;
+    heroEl.classList.toggle('has-focus', Boolean(card));
+    if (!card) return;
+    heroEl.querySelectorAll(`[data-index="${i}"], [data-group="${card.group}"]`).forEach((el) => el.classList.add('is-focus'));
   }
 
   /** Szaggatott vezetővonalak a számozott dobozoktól a csoportjuk szeleteihez (csak ha mellettük vannak). */
@@ -292,11 +276,24 @@
       const isLeft = arc.side === 'left';
       const sx = (isLeft ? rect.right + 6 : rect.left - 6) - b.left;
       const sy = num.top + num.height / 2 - b.top;
-      const [px, py] = polar(R + 8, arc.mid);
+      const [px, py] = polar(R + 16, arc.mid);
       const ex = cx + px * scale;
       const ey = cy + py * scale;
-      const d = `M${f1(sx)} ${f1(sy)}C${f1(sx + (isLeft ? 50 : -50))} ${f1(sy)} ${f1(cx + px * scale * 1.3)} ${f1(cy + py * scale * 1.3)} ${f1(ex)} ${f1(ey)}`;
-      return [svg('path', { class: 'wl-path', d, stroke: color }), svg('circle', { cx: f1(ex), cy: f1(ey), r: 4, fill: color })];
+      const c2x = cx + px * scale * 1.3;
+      const c2y = cy + py * scale * 1.3;
+      const d = `M${f1(sx)} ${f1(sy)}C${f1(sx + (isLeft ? 50 : -50))} ${f1(sy)} ${f1(c2x)} ${f1(c2y)} ${f1(ex)} ${f1(ey)}`;
+      // nyílhegy a vonal végén, a kerék felé fordítva
+      const len = Math.hypot(ex - c2x, ey - c2y) || 1;
+      const ux = (ex - c2x) / len;
+      const uy = (ey - c2y) / len;
+      const tipX = ex + ux * 8;
+      const tipY = ey + uy * 8;
+      const arrow = `M${f1(tipX)} ${f1(tipY)}L${f1(ex - uy * 6)} ${f1(ey + ux * 6)}L${f1(ex + uy * 6)} ${f1(ey - ux * 6)}Z`;
+      const group = box.dataset.group;
+      return [
+        svg('path', { class: 'wl-path', 'data-group': group, d, stroke: color }),
+        svg('path', { class: 'wl-arrow', 'data-group': group, d: arrow, fill: color }),
+      ];
     }));
   }
 
@@ -320,8 +317,6 @@
 
   function renderHero() {
     wheelEl = h('div', { class: 'wheel' });
-    peekEl = h('div', { class: 'wheel-peek', 'aria-hidden': 'true' });
-    peekIndex = -1;
     linksEl = svg('svg', { class: 'wheel-links', 'aria-hidden': 'true' });
     const side = (name) => GROUP_KEYS
       .filter((key) => GROUP_ARCS[key].side === name)
@@ -329,12 +324,11 @@
       .map(callout);
     heroEl.replaceChildren(
       h('header', { class: 'hero-head' },
-        h('h2', { class: 'a-title', tabindex: '-1' }, t('pr.catalogTitle')),
-        h('p', { class: 'a-lead' }, t('pr.catalogLead'))),
+        h('h2', { class: 'a-title', tabindex: '-1' }, t('pr.catalogTitle'))),
       h('div', { class: 'wheel-block' },
         linksEl,
         h('div', { class: 'callouts callouts-left' }, side('left')),
-        h('div', { class: 'wheel-box' }, wheelEl, peekEl),
+        h('div', { class: 'wheel-box' }, wheelEl),
         h('div', { class: 'callouts callouts-right' }, side('right'))),
       h('p', { class: 'wheel-hint' }, t('pr.hint')));
     heroEl.hidden = false;
@@ -346,7 +340,6 @@
     heroEl.hidden = true;
     heroEl.replaceChildren();
     wheelEl = null;
-    peekEl = null;
     linksEl = null;
   }
 
@@ -354,12 +347,12 @@
 
   function renderSide() {
     sideBody.replaceChildren(
-      h('p', { class: 'side-brand', 'aria-hidden': 'true' }, t('pr.title')),
+      h('p', { class: 'side-brand', 'aria-hidden': 'true' }, h('span', { class: 'hl' }, t('pr.title'))),
       h('ul', { class: 'side-tree' },
         h('li', {}, h('a', { class: 'side-link side-top', href: '#catalog', 'aria-current': active < 0 ? 'page' : null }, icon('catalog', 'side-icon'), t('pr.catalog'))),
-        GROUP_KEYS.map((key) => h('li', { class: 'side-group' },
+        GROUP_KEYS.map((key) => h('li', { class: 'side-group', 'data-group': key, style: `--g:${GROUP_COLORS[key]}` },
           h('a', { class: 'side-link side-group-link', href: `#group-${key}` },
-            h('span', { class: 'g-dot', style: `--g:${GROUP_COLORS[key]}`, 'aria-hidden': 'true' }), tx(DATA.groups[key])),
+            h('span', { class: 'side-num', 'aria-hidden': 'true' }, String(GROUP_KEYS.indexOf(key) + 1)), tx(DATA.groups[key])),
           h('ul', {}, CARDS.map((card, i) => (card.group === key
             ? h('li', {}, h('a', { class: 'side-link side-item', href: `#${card.id}`, 'aria-current': i === active ? 'page' : null }, sideLabel(card)))
             : null)))))));
@@ -371,9 +364,59 @@
     sideToggle.setAttribute('aria-expanded', String(open));
   }
 
+  /** Az oldalsáv a saját görgetésén belül odagördül egy elemhez (az oldal nem mozdul). */
+  function scrollSideTo(el) {
+    if (!el || sideEl.scrollHeight <= sideEl.clientHeight + 4) return;
+    const sideBox = sideEl.getBoundingClientRect();
+    const box = el.getBoundingClientRect();
+    if (box.top >= sideBox.top + 40 && box.bottom <= sideBox.bottom - 40) return; // már látszik
+    sideEl.scrollTo({ top: sideEl.scrollTop + box.top - sideBox.top - 48, behavior: 'smooth' });
+  }
+
+  /*
+   * Görgetéskövetés a katalógusban: amelyik csoportnál jársz, az emelődik ki az oldalsávban,
+   * és az oldalsáv is odagördül. Elv-oldalon az aktuális elvhez gördül.
+   */
+  let spyGroup;
+  function markSideGroup(key) {
+    if (key === spyGroup) return;
+    spyGroup = key;
+    sideBody.querySelectorAll('.side-group.is-current').forEach((el) => el.classList.remove('is-current'));
+    const groupEl = key ? sideBody.querySelector(`.side-group[data-group="${key}"]`) : null;
+    if (groupEl) groupEl.classList.add('is-current');
+    sideCurrent.textContent = key ? tx(DATA.groups[key]) : t('pr.catalog');
+    scrollSideTo(groupEl || sideBody.querySelector('.side-top'));
+  }
+
+  function spyScroll() {
+    if (view !== 'catalog') return;
+    const line = window.innerHeight * 0.35;
+    const sections = [...mainEl.querySelectorAll('.cat-group')];
+    let current = null;
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= line) current = section.id.replace(/^group-/, '');
+    }
+    // a lap alján az utolsó csoport nem ér fel a vonalig, de akkor már az az aktuális
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    const last = sections[sections.length - 1];
+    if (atBottom && last && last.getBoundingClientRect().top < window.innerHeight) current = last.id.replace(/^group-/, '');
+    markSideGroup(current);
+  }
+
+  let spyFrame = 0;
+  window.addEventListener('scroll', () => {
+    if (spyFrame) return;
+    spyFrame = requestAnimationFrame(() => {
+      spyFrame = 0;
+      spyScroll();
+    });
+  }, { passive: true });
+
   /* ---------- katalógus ---------- */
 
-  const tile = (card, i) => h('a', { class: 'tile', href: `#${card.id}`, style: `--a:${sliceColor(i)}` },
+  // a polaroidok enyhén ferdén állnak, mint egy scrapbookban; kettő egymás mellett sosem egyforma
+  const TILTS = [-1.6, 1.2, -0.7, 1.5, -1.2, 0.6, -0.4, 1.0];
+  const tile = (card, i) => h('a', { class: 'tile', href: `#${card.id}`, style: `--a:${sliceColor(i)};--tilt:${TILTS[i % TILTS.length]}deg` },
     h('span', { class: 'tile-art' }, scene(card.id, 'tile-pic')),
     h('span', { class: 'tile-big' }, tx(card.big)),
     h('span', { class: 'tile-name', lang: 'en' }, card.name));
@@ -383,7 +426,7 @@
     mainEl.replaceChildren(h('div', { class: 'cat-groups' }, GROUP_KEYS.map((key) => {
       const items = CARDS.map((card, i) => [card, i]).filter(([card]) => card.group === key);
       return h('section', { class: 'cat-group', id: `group-${key}`, style: `--g:${GROUP_COLORS[key]}` },
-        h('h3', { class: 'cat-group-title' }, h('span', { class: 'g-dot', 'aria-hidden': 'true' }), tx(DATA.groups[key]),
+        h('h3', { class: 'cat-group-title' }, h('span', { class: 'co-num', 'aria-hidden': 'true' }, String(GROUP_ARCS[key].gi + 1)), tx(DATA.groups[key]),
           h('span', { class: 'cat-group-count' }, String(items.length))),
         DATA.groupInfo?.[key] ? h('p', { class: 'cat-group-desc' }, tx(DATA.groupInfo[key])) : null,
         h('ul', { class: 'tiles' }, items.map(([card, i]) => h('li', {}, tile(card, i)))));
@@ -479,6 +522,7 @@
     document.title = i >= 0 ? `${tx(CARDS[i].big)} · ${t('pr.docTitle')}` : t('pr.docTitle');
     renderSide();
     setSideOpen(false);
+    spyGroup = undefined;
 
     if (hash.startsWith('group-')) {
       document.getElementById(hash)?.scrollIntoView({ block: 'start' });
@@ -487,6 +531,9 @@
       if (top.getBoundingClientRect().top < 0) top.scrollIntoView({ block: 'start' });
       top.querySelector('.a-title')?.focus({ preventScroll: true });
     }
+    // az oldalsáv kövesse: katalógusban a csoportot, elv-oldalon magát az elvet
+    if (i >= 0) scrollSideTo(sideBody.querySelector('.side-item[aria-current="page"]'));
+    else requestAnimationFrame(spyScroll);
   }
 
   /* ---------- események ---------- */
@@ -526,23 +573,23 @@
     target.focus();
   });
 
-  // szelet vagy a dobozok egy eleme fölött: a mém a kerék közepén
-  const peekTarget = (node) => node?.closest?.('[data-index]');
+  // szelet vagy a dobozok egy neve fölött: kiemelés a szeleten, a nyílon és a listában
+  const focusTarget = (node) => node?.closest?.('[data-index]');
   heroEl.addEventListener('mouseover', (event) => {
-    const target = peekTarget(event.target);
-    if (target) showPeek(Number(target.dataset.index));
+    const target = focusTarget(event.target);
+    if (target) setFocus(Number(target.dataset.index));
   });
   heroEl.addEventListener('mouseout', (event) => {
-    if (!peekTarget(event.target) || peekTarget(event.relatedTarget)) return;
-    const focused = peekTarget(document.activeElement);
-    showPeek(focused && heroEl.contains(focused) ? Number(focused.dataset.index) : -1);
+    if (!focusTarget(event.target) || focusTarget(event.relatedTarget)) return;
+    const focused = focusTarget(document.activeElement);
+    setFocus(focused && heroEl.contains(focused) ? Number(focused.dataset.index) : -1);
   });
   heroEl.addEventListener('focusin', (event) => {
-    const target = peekTarget(event.target);
-    showPeek(target ? Number(target.dataset.index) : -1);
+    const target = focusTarget(event.target);
+    setFocus(target ? Number(target.dataset.index) : -1);
   });
   heroEl.addEventListener('focusout', (event) => {
-    if (!peekTarget(event.relatedTarget)) showPeek(-1);
+    if (!focusTarget(event.relatedTarget)) setFocus(-1);
   });
 
   let lastNarrow = null;

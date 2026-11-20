@@ -15,7 +15,7 @@
       'rm.docTitle': 'Roadmap: frontend → fullstack · Rika cheat sheets',
       'rm.desc': 'Pipálható roadmap az én utam szerint: HTML, CSS, JavaScript, TypeScript, React, kitérők, aztán Node.js és Express a fullstackig.',
       'rm.kicker': 'Frontendtől fullstackig · az én utam',
-      'rm.lead': 'HTML, CSS, JavaScript, TypeScript, React – néha kitérővel –, aztán Node.js és Express. Pipáld ki, amit már tudsz: minél többet tudsz, annál színesebb.',
+      'rm.lead': 'Ez az én roadmapom: szerintem erre érdemes elindulni. HTML, CSS, JavaScript, TypeScript, React, közben pár kitérő, aztán Node.js és Express. Pipáld ki, amit már tudsz: minél többet tudsz, annál színesebb.',
       'rm.legend': 'Jelmagyarázat',
       'rm.level.must': 'Muszáj tudni',
       'rm.level.good': 'Jó tudni',
@@ -51,7 +51,7 @@
       'rm.docTitle': 'Roadmap: frontend → fullstack · Rika cheat sheets',
       'rm.desc': 'A roadmap you can tick off, along my own path: HTML, CSS, JavaScript, TypeScript, React, a few detours, then Node.js and Express to fullstack.',
       'rm.kicker': 'From frontend to fullstack · my path',
-      'rm.lead': 'HTML, CSS, JavaScript, TypeScript, React – with a few detours – then Node.js and Express. Tick off what you already know: the more you know, the more colorful it gets.',
+      'rm.lead': 'This is my roadmap: the way I think it’s worth starting out. HTML, CSS, JavaScript, TypeScript, React, a few detours along the way, then Node.js and Express. Tick off what you already know: the more you know, the more colorful it gets.',
       'rm.legend': 'Legend',
       'rm.level.must': 'Must know',
       'rm.level.good': 'Good to know',
@@ -149,20 +149,49 @@
   }
 
   /*
-   * Egy ág: középen a téma doboza (az úton), két oldalra szaggatott ágak a pontokhoz.
-   * A pontok első fele balra, a második jobbra kerül, hogy sorban olvasható maradjon.
+   * Egy ág: a téma doboza az úton, a pontjai egy oldalra ágaznak.
+   * A témák felváltva állnak: az egyik bal felé tolódik és jobbra ágazik, a következő fordítva,
+   * így a gerinc kanyarogva fut közöttük. A SWAY egy kis szabálytalanság, hogy ne legyen túl szabályos.
    */
+  const SWAY = [0, 0.6, -0.4, 0.3, -0.6, 0.5, -0.2];
+
   function renderBranch(topic) {
-    const half = Math.ceil(topic.items.length / 2);
-    return h('div', { class: 'branch', 'data-topic': topic.id },
+    const toRight = topic.number % 2 === 1;
+    const side = toRight ? 'right' : 'left';
+    const empty = (2 + SWAY[topic.number % SWAY.length]).toFixed(1);
+    return h('div', { class: `branch to-${side}`, 'data-topic': topic.id, style: `--empty:${empty}fr` },
       svg('svg', { class: 'branch-lines', 'aria-hidden': 'true' }),
-      h('ul', { class: 'leaves leaves-left', 'aria-labelledby': `topic-${topic.id}` }, topic.items.slice(0, half).map(renderLeaf)),
       h('div', { class: 'topic' },
         h('span', { class: 'badge', 'aria-hidden': 'true' }, String(topic.number)),
         h('h3', { class: 'topic-title', id: `topic-${topic.id}` }, tx(topic.title)),
         h('span', { class: 'count' }),
         h('span', { class: 'stamp', 'aria-hidden': 'true' }, t('rm.done'))),
-      h('ul', { class: 'leaves leaves-right', 'aria-labelledby': `topic-${topic.id}` }, topic.items.slice(half).map(renderLeaf)));
+      h('ul', { class: `leaves leaves-${side}`, 'aria-labelledby': `topic-${topic.id}` }, topic.items.map(renderLeaf)));
+  }
+
+  /* A kanyargós gerinc: a szakaszcímeken, a témák dobozain és a végén át húzott görbe (csak széles nézetben). */
+  const trunk = svg('svg', { class: 'trunk', 'aria-hidden': 'true' });
+
+  function drawTrunk() {
+    if (!trunk.isConnected || getComputedStyle(trunk).display === 'none') return;
+    const base = road.getBoundingClientRect();
+    const mid = (el) => {
+      const b = el.getBoundingClientRect();
+      return [b.left + b.width / 2 - base.left, b.top + b.height / 2 - base.top];
+    };
+    const points = [[base.width / 2, 0], ...[...road.querySelectorAll('.stage-banner, .topic, .end')].map(mid)];
+    const f = (n) => n.toFixed(1);
+    let d = `M${f(points[0][0])} ${f(points[0][1])}`;
+    for (let i = 1; i < points.length; i++) {
+      const [x0, y0] = points[i - 1];
+      const [x1, y1] = points[i];
+      const k = (y1 - y0) * 0.55;
+      d += `C${f(x0)} ${f(y0 + k)} ${f(x1)} ${f(y1 - k)} ${f(x1)} ${f(y1)}`;
+    }
+    trunk.setAttribute('viewBox', `0 0 ${f(base.width)} ${f(base.height)}`);
+    trunk.setAttribute('width', f(base.width));
+    trunk.setAttribute('height', f(base.height));
+    trunk.replaceChildren(svg('path', { d }));
   }
 
   /* A szaggatott ágak kirajzolása a téma dobozától minden levélig (csak széles nézetben). */
@@ -191,7 +220,94 @@
     lines.replaceChildren(...paths);
   }
 
-  const drawAllBranches = () => road.querySelectorAll('.branch').forEach(drawBranchLines);
+  /*
+   * Kicsinyített térkép oldalt: ugyanaz az út kicsiben (gerinc, témák, pontok), a kipipált pontok
+   * kiszíneződnek, a keret mutatja, hol tartasz. Kattintásra vagy húzásra oda görget.
+   */
+  const minimap = document.getElementById('minimap');
+  const miniSvg = svg('svg', { preserveAspectRatio: 'xMidYMin meet' });
+  const miniView = svg('rect', { class: 'mm-view', x: 0, y: 0, width: 0, height: 0, rx: 18 });
+  minimap?.append(miniSvg);
+
+  const miniVisible = () => minimap && getComputedStyle(minimap).display !== 'none';
+
+  function drawMinimap() {
+    if (!miniVisible()) return;
+    const base = road.getBoundingClientRect();
+    const box = (el) => {
+      const b = el.getBoundingClientRect();
+      return { x: b.left - base.left, y: b.top - base.top, width: b.width, height: b.height };
+    };
+    const parts = [];
+    const trunkPath = trunk.querySelector('path');
+    if (trunkPath) parts.push(svg('path', { class: 'mm-trunk', d: trunkPath.getAttribute('d') }));
+    road.querySelectorAll('.stage').forEach((stageEl) => {
+      const group = svg('g', { style: stageEl.getAttribute('style') });
+      const banner = stageEl.querySelector('.stage-banner');
+      group.append(svg('rect', { class: 'mm-banner', ...box(banner), rx: 14, style: `--pct:${banner.style.getPropertyValue('--pct')}` }));
+      stageEl.querySelectorAll('.branch').forEach((branch) => {
+        const b = box(branch);
+        const lines = svg('g', { class: 'mm-lines', transform: `translate(${b.x.toFixed(1)} ${b.y.toFixed(1)})` });
+        branch.querySelectorAll('.branch-lines path').forEach((p) => lines.append(svg('path', { d: p.getAttribute('d') })));
+        group.append(lines);
+        group.append(svg('rect', { class: 'mm-topic', ...box(branch.querySelector('.topic')), rx: 12, style: `--pct:${branch.style.getPropertyValue('--pct')}` }));
+        branch.querySelectorAll('.leaf label').forEach((label) => {
+          const on = label.querySelector('input').checked;
+          group.append(svg('rect', { class: `mm-leaf${on ? ' is-on' : ''}`, ...box(label), rx: 8 }));
+        });
+      });
+      parts.push(group);
+    });
+    const end = road.querySelector('.end');
+    if (end) parts.push(svg('rect', { class: 'mm-banner', ...box(end), rx: 30 }));
+    miniView.setAttribute('width', base.width.toFixed(1));
+    parts.push(miniView);
+    miniSvg.setAttribute('viewBox', `0 0 ${base.width.toFixed(1)} ${base.height.toFixed(1)}`);
+    miniSvg.replaceChildren(...parts);
+    moveMiniView();
+  }
+
+  /** A térképen a keret követi, mi látszik épp az útból. */
+  function moveMiniView() {
+    if (!miniVisible()) return;
+    const base = road.getBoundingClientRect();
+    const top = Math.max(0, -base.top);
+    const bottom = Math.min(base.height, innerHeight - base.top);
+    miniView.setAttribute('y', top.toFixed(1));
+    miniView.setAttribute('height', Math.max(0, bottom - top).toFixed(1));
+  }
+
+  let viewFrame = 0;
+  window.addEventListener('scroll', () => {
+    if (viewFrame) return;
+    viewFrame = requestAnimationFrame(() => {
+      viewFrame = 0;
+      moveMiniView();
+    });
+  }, { passive: true });
+
+  function scrollFromMinimap(event) {
+    const ctm = miniSvg.getScreenCTM();
+    if (!ctm) return;
+    const point = new DOMPoint(event.clientX, event.clientY).matrixTransform(ctm.inverse());
+    const roadTop = road.getBoundingClientRect().top + scrollY;
+    window.scrollTo({ top: roadTop + point.y - innerHeight / 2 });
+  }
+
+  minimap?.addEventListener('pointerdown', (event) => {
+    event.preventDefault();
+    minimap.setPointerCapture(event.pointerId);
+    scrollFromMinimap(event);
+  });
+  minimap?.addEventListener('pointermove', (event) => {
+    if (minimap.hasPointerCapture(event.pointerId)) scrollFromMinimap(event);
+  });
+
+  const drawAllBranches = () => {
+    road.querySelectorAll('.branch').forEach(drawBranchLines);
+    drawTrunk();
+    drawMinimap();
+  };
   let branchTimer;
   window.addEventListener('resize', () => {
     clearTimeout(branchTimer);
@@ -218,7 +334,7 @@
   }
 
   function render() {
-    road.replaceChildren(...stages.map(renderStage), h('p', { class: 'end' }, t('rm.end')));
+    road.replaceChildren(trunk, ...stages.map(renderStage), h('p', { class: 'end' }, t('rm.end')));
     refresh();
     requestAnimationFrame(drawAllBranches);
   }
@@ -248,6 +364,7 @@
     document.getElementById('track-cover').style.width = `${100 - total.p * 100}%`;
     document.getElementById('track').setAttribute('aria-valuenow', String(percent));
     document.getElementById('total-count').textContent = `${total.n} / ${total.all} · ${percent}%`;
+    drawMinimap();
   }
 
   function burst(card, accent) {

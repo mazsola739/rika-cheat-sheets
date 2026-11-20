@@ -19,7 +19,7 @@
       'cs.desc': 'Frontend puskák blueprint stílusban, kattintgatós CSS-generátorokkal: Flexbox, Grid, színek, árnyékok, JavaScript, Git, React.',
       'cs.kicker': 'Frontend puskák',
       'cs.title': 'Cheat sheetek',
-      'cs.lead': 'Egy oldalon a lényeg. Ahol lehet kattintgatni, ott fent egy játszótér, alatta a lista – kattints egy kódra, és már másolhatod is.',
+      'cs.lead': 'Egy oldalon a lényeg.',
       'cs.searchLabel': 'Keresés a cheat sheetek között',
       'cs.searchPh': 'Keresés: flex, gradient, regex…',
       'cs.all': 'Mind',
@@ -51,7 +51,7 @@
       'cs.desc': 'Frontend cheat sheets in blueprint style, with clickable CSS generators: Flexbox, Grid, colors, shadows, JavaScript, Git, React.',
       'cs.kicker': 'Frontend cheat sheets',
       'cs.title': 'Cheat sheets',
-      'cs.lead': 'The essentials on one page. Where you can click around, there’s a playground on top and the list below – click any code to copy it.',
+      'cs.lead': 'The essentials on one page.',
       'cs.searchLabel': 'Search cheat sheets',
       'cs.searchPh': 'Search: flex, gradient, regex…',
       'cs.all': 'All',
@@ -550,8 +550,11 @@
         h('span', { class: 'sheet-count' }, t('cs.entries', { n: countItems(sheet), m: minutes(sheet) })),
         h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => window.print() }, t('cs.print'))));
 
+    // ahol van poszter, ott a fejléc és a poszter külön áll a világos papíron, a sötét blueprint lap alatta
+    const poster = renderPoster(sheet.playground);
     app.replaceChildren(h('article', { class: 'sheet wrap view-blueprint', style: `--c:${color.c};--a:${color.a}` },
-      h('div', { class: 'sheet-paper' }, head, renderPoster(sheet.playground), renderBlueprint(sheet))));
+      poster ? h('div', { class: 'sheet-top' }, head, poster) : null,
+      h('div', { class: 'sheet-paper' }, poster ? null : head, renderBlueprint(sheet))));
   }
 
   /* ---------- másolás kattintásra ---------- */
