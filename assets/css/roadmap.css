@@ -16,7 +16,6 @@
 .track {
   position: relative;
   flex: 1;
-  max-width: 560px;
   height: 18px;
   overflow: hidden;
   border: 2.2px solid var(--ink);
@@ -49,11 +48,9 @@
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 22px;
-  margin: 16px 0 0;
-  padding-top: 12px;
-  border-top: 2px dashed var(--line);
-  padding-left: 0;
+  gap: 6px 20px;
+  margin: 0;
+  padding: 0;
   list-style: none;
   font-size: 18px;
 }
@@ -69,23 +66,50 @@
   z-index: 1;
 }
 
+/* a doboz ugyanolyan széles, mint alatta az út, így nem lóg balra */
 .actions-box {
-  max-width: 800px;
-  padding: 16px 20px 18px;
+  padding: 16px 22px 18px;
   border: 2.5px dashed var(--ink-soft);
   border-radius: var(--r-card);
   background: color-mix(in srgb, var(--card) 88%, transparent);
 }
 
+/* fejléc: balra a cím, jobbra a jelmagyarázat */
+.actions-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 24px;
+  margin-bottom: 4px;
+}
+
 .actions-title {
   --c: #ffec99;
-  margin: 0 0 4px;
+  margin: 0;
   font: 800 22px/1.2 var(--font-head);
 }
 
 .actions-hint {
   margin: 0 0 14px;
   color: var(--ink-soft);
+}
+
+/* a Visszaállítás a sor végén, külön a letöltő gomboktól */
+.btn-reset {
+  margin-left: auto;
+}
+
+/* közepes szélességen kicsit kisebb gombok, hogy a négy letöltő gomb egy sorban maradjon */
+@media (max-width: 900px) {
+  .actions .btns {
+    gap: 10px;
+  }
+
+  .actions .btn {
+    padding: 7px 12px;
+    font-size: 15px;
+  }
 }
 
 /* ---------- az út ---------- */

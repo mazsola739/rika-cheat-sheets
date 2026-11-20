@@ -41,7 +41,14 @@
 
     <section class="wrap actions" aria-labelledby="actions-title">
       <div class="actions-box">
-        <h2 id="actions-title" class="actions-title"><span class="hl" data-i18n="rm.actions">Save &amp; download</span></h2>
+        <div class="actions-head">
+          <h2 id="actions-title" class="actions-title"><span class="hl" data-i18n="rm.actions">Save &amp; download</span></h2>
+          <ul class="legend" data-i18n-attr="aria-label:rm.legend" aria-label="Legend">
+            <li class="level-must"><span class="dot"></span><span data-i18n="rm.level.must">Must know</span></li>
+            <li class="level-good"><span class="dot"></span><span data-i18n="rm.level.good">Good to know</span></li>
+            <li class="level-extra"><span class="dot"></span><span data-i18n="rm.level.extra">Optional extra</span></li>
+          </ul>
+        </div>
         <div class="progress-row">
           <span class="progress-label" data-i18n="rm.progress">Progress</span>
           <div class="track" id="track" role="progressbar" data-i18n-attr="aria-label:rm.progressAria" aria-label="Overall progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -55,14 +62,9 @@
           <button type="button" class="btn" data-action="md" data-i18n="rm.md">Checklist (.md)</button>
           <button type="button" class="btn" data-action="json" data-i18n="rm.json">Backup (.json)</button>
           <button type="button" class="btn" data-action="import" data-i18n="rm.import">Load (.json)</button>
-          <button type="button" class="btn btn-ghost" data-action="reset" data-i18n="rm.reset">Reset</button>
+          <button type="button" class="btn btn-ghost btn-reset" data-action="reset" data-i18n="rm.reset">Reset</button>
         </div>
         <input type="file" id="import-file" accept=".json,application/json" hidden>
-        <ul class="legend" data-i18n-attr="aria-label:rm.legend" aria-label="Legend">
-          <li class="level-must"><span class="dot"></span><span data-i18n="rm.level.must">Must know</span></li>
-          <li class="level-good"><span class="dot"></span><span data-i18n="rm.level.good">Good to know</span></li>
-          <li class="level-extra"><span class="dot"></span><span data-i18n="rm.level.extra">Optional extra</span></li>
-        </ul>
       </div>
     </section>
 
