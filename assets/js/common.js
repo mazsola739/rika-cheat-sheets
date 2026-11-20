@@ -552,20 +552,7 @@
    * A színezés képnél CSS-szűrővel megy: 0% haladásnál szürke, 100%-nál teljes színű.
    */
   const ART_IMAGE = 'assets/img/brain.webp';
-  let artImagePromise;
-
-  function findArtImage() {
-    artImagePromise ||= !ART_IMAGE
-      ? Promise.resolve(null)
-      : new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve(ART_IMAGE);
-        img.onerror = () => resolve(null);
-        img.src = ART_IMAGE;
-      });
-    return artImagePromise;
-  }
-
+  const ART_SIZE = { width: 2000, height: 669 }; // a kép valódi mérete: így betöltés előtt is megvan a helye
   /*
    * "Színes zseblámpa" a képen (csak a kezdőlapon; a betöltéskori söprés után kapcsol be):
    *  - ha egérrel a kép fölött mozogsz, lassan elszürkül, csak a kurzor körül marad színes,
@@ -636,29 +623,40 @@
     });
   }
 
+  /*
+   * A fejléc képe. Saját képfájlnál (ART_IMAGE) rögtön a kép kerül a helyére: előtte nem rajzolunk
+   * semmi mást, így frissítéskor nem villan be a régi, kódból rajzolt agy. A söprés csak akkor indul,
+   * amikor a kép betöltött (addig .is-loading). A kódból rajzolt agy csak akkor jön, ha a kép nem tölthető be.
+   */
   function mountArt(host, options = {}) {
     if (!host) return () => {};
     let amount = 1;
-    let imageMode = false;
-    let setSvg = mountSvgArt(host, options);
-    findArtImage().then((src) => {
-      if (!src) return;
-      imageMode = true;
-      host.classList.add('has-image');
+    let setSvg = null;
+    const fallBack = () => {
+      host.classList.remove('has-image', 'is-loading');
+      setSvg = mountSvgArt(host, options);
+      setSvg(amount);
+    };
+    if (!ART_IMAGE) fallBack();
+    else {
+      host.classList.add('has-image', 'is-loading');
       // két réteg: alul a fekete-fehér, felül a színes, ami balról jobbra "befestődik"
-      host.replaceChildren(
-        h('img', { class: 'art-img art-gray', src, alt: '' }),
-        h('img', { class: 'art-img art-color', src, alt: '' }),
-      );
-      host.style.setProperty('--gray', grayFor(amount));
-      if (options.peek) enableColorPeek(host);
-    });
-    // 0%-nál is maradjon egy csipetnyi szín, ne legyen teljesen fakó
-    const grayFor = (p) => (0.78 * (1 - p)).toFixed(3);
+      const layer = (cls) => h('img', { class: `art-img ${cls}`, src: ART_IMAGE, alt: '', ...ART_SIZE });
+      const gray = layer('art-gray');
+      host.replaceChildren(gray, layer('art-color'));
+      const ready = () => {
+        host.classList.remove('is-loading');
+        if (options.peek) enableColorPeek(host);
+      };
+      if (gray.complete && gray.naturalWidth) ready();
+      else {
+        gray.addEventListener('load', ready, { once: true });
+        gray.addEventListener('error', fallBack, { once: true });
+      }
+    }
     return (value = 1) => {
       amount = Math.min(1, Math.max(0, value));
-      if (imageMode) host.style.setProperty('--gray', grayFor(amount));
-      else setSvg(amount);
+      setSvg?.(amount);
     };
   }
 
