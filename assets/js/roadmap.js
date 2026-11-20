@@ -12,10 +12,10 @@
 
   addStrings({
     hu: {
-      'rm.docTitle': 'Frontend Roadmap · Rika cheat sheets',
-      'rm.desc': 'Pipálható frontend roadmap: jelöld, amit már tudsz, és töltsd le a saját haladásodat képként vagy checklistként.',
-      'rm.kicker': 'Frontend · saját tanulási térkép',
-      'rm.lead': 'Pipáld ki, amit már tudsz. Minél többet tudsz, annál színesebb lesz.',
+      'rm.docTitle': 'Roadmap: frontend → fullstack · Rika cheat sheets',
+      'rm.desc': 'Pipálható roadmap az én utam szerint: HTML, CSS, JavaScript, TypeScript, React, kitérők, aztán Node.js és Express a fullstackig.',
+      'rm.kicker': 'Frontendtől fullstackig · az én utam',
+      'rm.lead': 'HTML, CSS, JavaScript, TypeScript, React – néha kitérővel –, aztán Node.js és Express. Pipáld ki, amit már tudsz: minél többet tudsz, annál színesebb.',
       'rm.legend': 'Jelmagyarázat',
       'rm.level.must': 'Muszáj tudni',
       'rm.level.good': 'Jó tudni',
@@ -48,10 +48,10 @@
       'rm.cleared': 'Minden pipa törölve.',
     },
     en: {
-      'rm.docTitle': 'Frontend Roadmap · Rika cheat sheets',
-      'rm.desc': 'A frontend roadmap you can tick off: mark what you already know and download your progress as an image or a checklist.',
-      'rm.kicker': 'Frontend · my learning map',
-      'rm.lead': 'Tick off what you already know. The more you know, the more colorful it gets.',
+      'rm.docTitle': 'Roadmap: frontend → fullstack · Rika cheat sheets',
+      'rm.desc': 'A roadmap you can tick off, along my own path: HTML, CSS, JavaScript, TypeScript, React, a few detours, then Node.js and Express to fullstack.',
+      'rm.kicker': 'From frontend to fullstack · my path',
+      'rm.lead': 'HTML, CSS, JavaScript, TypeScript, React – with a few detours – then Node.js and Express. Tick off what you already know: the more you know, the more colorful it gets.',
       'rm.legend': 'Legend',
       'rm.level.must': 'Must know',
       'rm.level.good': 'Good to know',

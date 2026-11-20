@@ -15,7 +15,7 @@ Kézzel rajzolt frontend puskák, újrahasznosítható JavaScript snippetek és 
 
 | Oldal | Mit tud |
 | --- | --- |
-| [Roadmap](roadmap.html) | 4 szakasz, 126 pont. Pipálás, a haladás a böngészőben marad. Letöltés képként (`.png`), checklistként (`.md`), mentésként (`.json`), és visszatöltés. |
+| [Roadmap](roadmap.html) | Az én utam frontendtől fullstackig: HTML, CSS, JavaScript → TypeScript → React, kitérők (Next.js, Angular), aztán Node.js és Express. 5 szakasz, 145 pont. Pipálás, a haladás a böngészőben marad. Letöltés képként (`.png`), checklistként (`.md`), mentésként (`.json`), és visszatöltés. |
 | [Cheat sheetek](cheatsheets.html) | 8 puska (Flexbox, Grid, CSS szelektorok, tömbmetódusok, async, DOM, Git, React hookok). Poszter / füzet / blueprint nézet, Flexbox és Grid játszótér, kattintásra másolás, nyomtatás. |
 | [Snippetek](snippets.html) | 167 JavaScript snippet füzetlapon, post-iteken (vagy kódablakokban): kategóriafülek, a „Mind” fülön kategóriánként csoportosítva, oldalanként 10 (lapozóval), keresés (`/`), kedvencek, másolás. |
 | [Elvek](principles.html) | 34 fejlesztési alapelv hat csoportban (alapelvek, gondolkodás és hibakeresés, munkamódszer, SOLID, tervezés, frontend – pl. KISS, DRY, YAGNI, Early Return, Rubber Duck, GIGO, Commit Often) katalógusban, a [refactoring.guru](https://refactoring.guru/) elrendezésének mintájára: oldalsáv fa-menüvel, szivárványkerék, képes csempék. Minden elvhez saját plakát-mém, probléma és megoldás kóddal, hasonlat, mikor használd, előnyök és hátrányok, kapcsolódó elvek. |

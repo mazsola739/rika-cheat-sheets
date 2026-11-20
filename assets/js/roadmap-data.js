@@ -1,5 +1,7 @@
 /*
- * A frontend roadmap tartalma (magyarul és angolul).
+ * A roadmap tartalma (magyarul és angolul), az én utam szerint:
+ * HTML, CSS, JavaScript → TypeScript → React, néha kitérővel a Next.js és az Angular felé,
+ * aztán Node.js és Express, hogy fullstack legyek.
  *
  * Egy pont: [kulcs, magyar felirat, angol felirat?, szint?]
  *  - az angol felirat elhagyható, ha ugyanaz (pl. 'Flexbox')
@@ -10,12 +12,12 @@
  */
 window.ROADMAP = {
   id: 'frontend',
-  title: 'Frontend Roadmap',
+  title: 'Roadmap: frontend → fullstack',
   stages: [
     {
       id: 'basics',
       title: { hu: 'Alapok', en: 'Basics' },
-      subtitle: { hu: 'Kezdő szint · építs projekteket tanulás közben', en: 'Beginner · build projects while learning' },
+      subtitle: { hu: 'Ahol minden kezdődött · HTML, CSS, JavaScript', en: 'Where it all started · HTML, CSS, JavaScript' },
       color: '#b2f2bb',
       accent: '#2f9e44',
       topics: [
@@ -95,12 +97,23 @@ window.ROADMAP = {
       ],
     },
     {
-      id: 'intermediate',
-      title: { hu: 'Haladó', en: 'Intermediate' },
-      subtitle: { hu: 'Középszint · eszközök, típusok, biztonság', en: 'Intermediate · tooling, types, security' },
+      id: 'typescript',
+      title: { hu: 'TypeScript & eszközök', en: 'TypeScript & tooling' },
+      subtitle: { hu: 'Biztosabb kód, kényelmesebb munka · típusok, build, csomagok', en: 'Safer code, smoother work · types, builds, packages' },
       color: '#ffd8a8',
       accent: '#e8590c',
       topics: [
+        {
+          id: 'ts',
+          title: 'TypeScript',
+          items: [
+            ['types', 'Alap típusok', 'Basic types'],
+            ['interfaces', 'interface és type', 'interface vs. type'],
+            ['generics', 'Generikusok', 'Generics'],
+            ['narrowing', 'Type narrowing'],
+            ['utility', 'Utility típusok (Partial, Pick…)', 'Utility types (Partial, Pick…)', 'good'],
+          ],
+        },
         {
           id: 'pkg',
           title: { hu: 'Csomagkezelők', en: 'Package managers' },
@@ -109,7 +122,8 @@ window.ROADMAP = {
             ['scripts', 'npm scripts'],
             ['semver', 'Verziók, package-lock', 'Versions, package-lock'],
             ['yarn', 'yarn', 'yarn', 'good'],
-            ['pnpm', 'pnpm', 'pnpm', 'extra'],
+            ['pnpm', 'pnpm', 'pnpm', 'good'],
+            ['bun', 'Bun', 'Bun', 'good'],
           ],
         },
         {
@@ -119,7 +133,7 @@ window.ROADMAP = {
             ['vite', 'Vite'],
             ['eslint', 'ESLint'],
             ['prettier', 'Prettier'],
-            ['webpack', 'Webpack', 'Webpack', 'good'],
+            ['biome', 'Biome', 'Biome', 'good'],
           ],
         },
         {
@@ -134,24 +148,12 @@ window.ROADMAP = {
           ],
         },
         {
-          id: 'ts',
-          title: 'TypeScript',
-          items: [
-            ['types', 'Alap típusok', 'Basic types'],
-            ['interfaces', 'interface és type', 'interface vs. type'],
-            ['generics', 'Generikusok', 'Generics'],
-            ['narrowing', 'Type narrowing'],
-            ['utility', 'Utility típusok (Partial, Pick…)', 'Utility types (Partial, Pick…)', 'good'],
-          ],
-        },
-        {
           id: 'browser',
           title: { hu: 'BOM & böngésző API-k', en: 'BOM & browser APIs' },
           items: [
             ['bom', 'BOM: window, location, history'],
             ['storage', 'localStorage, sessionStorage'],
             ['observer', 'IntersectionObserver', 'IntersectionObserver', 'good'],
-            ['workers', 'Web Workers, Service Workers', 'Web Workers, Service Workers', 'extra'],
           ],
         },
         {
@@ -165,12 +167,22 @@ window.ROADMAP = {
             ['owasp', 'OWASP Top 10', 'OWASP Top 10', 'good'],
           ],
         },
+        {
+          id: 'perf',
+          title: { hu: 'Teljesítmény & a11y', en: 'Performance & a11y' },
+          items: [
+            ['lighthouse', 'Lighthouse, DevTools Performance'],
+            ['images', 'Képoptimalizálás, lazy loading', 'Image optimization, lazy loading'],
+            ['aria', 'ARIA, billentyűzetes navigáció', 'ARIA, keyboard navigation'],
+            ['cwv', 'Core Web Vitals', 'Core Web Vitals', 'good'],
+          ],
+        },
       ],
     },
     {
       id: 'react',
       title: 'React',
-      subtitle: { hu: 'Keretrendszer · a komponensek világa', en: 'Framework · the world of components' },
+      subtitle: { hu: 'A fő vonal · komponensek, hookok, állapot', en: 'The main line · components, hooks, state' },
       color: '#a5d8ff',
       accent: '#1c7ed6',
       topics: [
@@ -209,7 +221,6 @@ window.ROADMAP = {
             ['errorb', 'Error boundary', 'Error boundaries', 'good'],
             ['portals', 'Portal', 'Portals', 'good'],
             ['hoc', 'HOC, render props', 'HOCs, render props', 'extra'],
-            ['fiber', 'Fiber architektúra', 'Fiber architecture', 'extra'],
           ],
         },
         {
@@ -260,15 +271,6 @@ window.ROADMAP = {
             ['chakra', 'Chakra UI', 'Chakra UI', 'extra'],
           ],
         },
-      ],
-    },
-    {
-      id: 'pro',
-      title: { hu: 'Profi', en: 'Pro' },
-      subtitle: { hu: 'Haladó szint · tesztelés, teljesítmény, deploy', en: 'Advanced · testing, performance, deployment' },
-      color: '#d0bfff',
-      accent: '#7048e8',
-      topics: [
         {
           id: 'testing',
           title: { hu: 'Tesztelés', en: 'Testing' },
@@ -278,33 +280,93 @@ window.ROADMAP = {
             ['e2e', 'E2E: Playwright / Cypress', 'E2E: Playwright / Cypress', 'good'],
           ],
         },
-        {
-          id: 'perf',
-          title: { hu: 'Teljesítmény & a11y', en: 'Performance & a11y' },
-          items: [
-            ['lighthouse', 'Lighthouse, DevTools Performance'],
-            ['images', 'Képoptimalizálás, lazy loading', 'Image optimization, lazy loading'],
-            ['aria', 'ARIA, billentyűzetes navigáció', 'ARIA, keyboard navigation'],
-            ['cwv', 'Core Web Vitals', 'Core Web Vitals', 'good'],
-          ],
-        },
+      ],
+    },
+    {
+      id: 'detours',
+      title: { hu: 'Kitérők', en: 'Detours' },
+      subtitle: { hu: 'Néha eltévedtem · Next.js, Angular, mobil és asztali appok', en: 'Sometimes I wandered off · Next.js, Angular, mobile and desktop apps' },
+      color: '#fcc2d7',
+      accent: '#d6336c',
+      topics: [
         {
           id: 'next',
           title: { hu: 'Next.js & renderelés', en: 'Next.js & rendering' },
           items: [
             ['next', 'Next.js'],
+            ['app-router', 'App Router, layoutok', 'App Router, layouts'],
             ['modes', 'SSR, SSG, ISR'],
             ['rsc', 'Server Components', 'Server Components', 'good'],
-            ['astro', 'Astro, Gatsby', 'Astro, Gatsby', 'extra'],
           ],
         },
         {
-          id: 'patterns',
-          title: { hu: 'Tervezési minták', en: 'Design patterns' },
+          id: 'angular',
+          title: 'Angular',
           items: [
-            ['clean', 'Tiszta kód, SOLID alapok', 'Clean code, SOLID basics', 'good'],
-            ['js-patterns', 'Module, Observer, Factory', 'Module, Observer, Factory', 'good'],
-            ['react-patterns', 'React minták: compound, container', 'React patterns: compound, container', 'good'],
+            ['components', 'Komponensek, sablonok, data binding', 'Components, templates, data binding'],
+            ['services', 'Service-ek, dependency injection', 'Services, dependency injection'],
+            ['router', 'Angular Router'],
+            ['forms', 'Reaktív űrlapok', 'Reactive forms'],
+            ['rxjs', 'RxJS, Observable-ök', 'RxJS, observables'],
+            ['ngrx', 'NgRx', 'NgRx', 'good'],
+            ['signals', 'Signals', 'Signals', 'good'],
+          ],
+        },
+        {
+          id: 'beyond',
+          title: { hu: 'Mobil & asztali', en: 'Mobile & desktop' },
+          items: [
+            ['react-native', 'React Native (mobil)', 'React Native (mobile)', 'extra'],
+            ['electron', 'Electron (asztali)', 'Electron (desktop)', 'extra'],
+          ],
+        },
+      ],
+    },
+    {
+      id: 'fullstack',
+      title: 'Node.js → fullstack',
+      subtitle: { hu: 'A szerver oldal · Node.js, Express, adatbázis, deploy', en: 'The server side · Node.js, Express, databases, deployment' },
+      color: '#d0bfff',
+      accent: '#7048e8',
+      topics: [
+        {
+          id: 'node',
+          title: 'Node.js',
+          items: [
+            ['basics', 'Node.js alapok, modulok (CommonJS, ESM)', 'Node.js basics, modules (CommonJS, ESM)'],
+            ['fs', 'Fájlok és útvonalak: fs, path', 'Files and paths: fs, path'],
+            ['loop', 'Event loop, aszinkron I/O', 'Event loop, async I/O'],
+            ['cli', 'Saját CLI és npm csomag', 'Your own CLI and npm package', 'good'],
+          ],
+        },
+        {
+          id: 'express',
+          title: 'Express.js',
+          items: [
+            ['routes', 'Útvonalak és route paraméterek', 'Routes and route parameters'],
+            ['middleware', 'Middleware-ek', 'Middleware'],
+            ['rest', 'REST API tervezés', 'REST API design'],
+            ['errors', 'Hibakezelés, státuszkódok', 'Error handling, status codes'],
+            ['validation', 'Bemenet ellenőrzése', 'Input validation'],
+          ],
+        },
+        {
+          id: 'db',
+          title: { hu: 'Adatbázis', en: 'Databases' },
+          items: [
+            ['sql', 'SQL alapok', 'SQL basics'],
+            ['sqlite', 'SQLite'],
+            ['postgres', 'PostgreSQL / MySQL', 'PostgreSQL / MySQL', 'good'],
+          ],
+        },
+        {
+          id: 'fullstack',
+          title: 'Fullstack',
+          items: [
+            ['connect', 'Frontend és backend összekötése', 'Connecting frontend and backend'],
+            ['proxy', 'CORS és proxy fejlesztés közben', 'CORS and a dev proxy'],
+            ['api-tests', 'API tesztek (Supertest)', 'API tests (Supertest)', 'good'],
+            ['docker', 'Docker', 'Docker', 'good'],
           ],
         },
         {
@@ -318,14 +380,12 @@ window.ROADMAP = {
           ],
         },
         {
-          id: 'beyond',
-          title: { hu: 'Ami ezen túl van', en: 'Beyond' },
+          id: 'patterns',
+          title: { hu: 'Tervezési minták', en: 'Design patterns' },
           items: [
-            ['node', 'Node.js backend alapok', 'Node.js backend basics', 'good'],
-            ['pwa', 'PWA', 'PWA', 'extra'],
-            ['react-native', 'React Native (mobil)', 'React Native (mobile)', 'extra'],
-            ['electron', 'Electron (desktop)', 'Electron (desktop)', 'extra'],
-            ['wasm', 'WebAssembly', 'WebAssembly', 'extra'],
+            ['clean', 'Tiszta kód, SOLID alapok', 'Clean code, SOLID basics', 'good'],
+            ['js-patterns', 'Module, Observer, Factory', 'Module, Observer, Factory', 'good'],
+            ['react-patterns', 'React minták: compound, container', 'React patterns: compound, container', 'good'],
           ],
         },
       ],
