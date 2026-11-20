@@ -191,6 +191,8 @@
     solid: 'M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5',
     design: 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM15.5 8.5l-2 5-5 2 2-5z',
     frontend: 'M3 5h18v14H3zM3 9h18M6 7h.01M9 7h.01',
+    values: 'M12 20s-7.5-4.6-7.5-10.2A4.1 4.1 0 0 1 12 7.4a4.1 4.1 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z',
+    laws: 'M12 3v17M7 20h10M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z',
   };
 
   let peekEl = null;
@@ -211,7 +213,8 @@
       const mid = a0 + STEP / 2;
       const [dx, dy] = polar(12, mid);
       const label = tx(card.big);
-      const base = narrow ? 24 : 17;
+      // sok szeletnél kisebb betű, hogy elférjen a keskeny szeletben
+      const base = (narrow ? 24 : 17) * Math.min(1, 36 / N);
       const size = Math.min(label.length <= 2 ? base * 1.5 : base, 132 / (label.length * 0.56));
       slices.append(svg('a', {
         class: `slice${i === lastVisited ? ' is-active' : ''}`,
@@ -311,7 +314,7 @@
       h('header', { class: 'co-head' },
         h('span', { class: 'co-num', 'aria-hidden': 'true' }, String(arc.gi + 1)),
         h('h3', { class: 'co-title' }, h('a', { href: `#group-${key}` }, tx(DATA.groups[key])))),
-      h('ul', { class: 'co-box' }, arc.idx.map((i) => h('li', {},
+      h('ul', { class: `co-box${arc.idx.length > 6 ? ' is-long' : ''}` }, arc.idx.map((i) => h('li', {},
         h('a', { href: `#${CARDS[i].id}`, 'data-index': String(i) }, sideLabel(CARDS[i]))))));
   }
 

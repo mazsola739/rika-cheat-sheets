@@ -706,6 +706,233 @@
       <path d="M328 192Q342 194 340 206Q338 216 328 214" stroke="#ced4da" stroke-width="4" fill="none"/>
       <text x="310" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#e8590c">&lt;/&gt;</text>
       <path d="M302 172Q296 160 304 150M314 170Q308 158 316 146" stroke="#fff" stroke-width="2.5" fill="none" opacity=".45" stroke-linecap="round"/>`,
+    communication: () => `
+      <rect width="400" height="300" fill="url(#ps-day)"/>
+      <path d="M0 230Q100 205 200 222T400 214V300H0Z" fill="url(#ps-grass)"/>
+      <g fill="#fff" opacity=".85"><ellipse cx="300" cy="70" rx="50" ry="13"/><circle cx="286" cy="61" r="15"/><circle cx="310" cy="56" r="18"/></g>
+      <path d="M86 150Q200 205 314 150" stroke="#6c757d" stroke-width="2.5" fill="none"/>
+      <g transform="translate(60 150) rotate(-8)"><rect x="-26" y="-24" width="40" height="48" rx="3" fill="#ced4da"/>
+        <path d="M-26 -14H14M-26 14H14" stroke="#adb5bd" stroke-width="2"/><ellipse cx="14" cy="0" rx="8" ry="24" fill="#868e96"/><ellipse cx="-26" cy="0" rx="6" ry="24" fill="#dee2e6"/></g>
+      <g transform="translate(340 150) rotate(8)"><rect x="-14" y="-24" width="40" height="48" rx="3" fill="#ced4da"/>
+        <path d="M-14 -14H26M-14 14H26" stroke="#adb5bd" stroke-width="2"/><ellipse cx="-14" cy="0" rx="8" ry="24" fill="#868e96"/><ellipse cx="26" cy="0" rx="6" ry="24" fill="#dee2e6"/></g>
+      <path d="M96 120q10 10 0 22M106 112q16 18 0 38M116 104q22 26 0 54" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9"/>`,
+
+    feedback: () => `
+      <rect width="400" height="300" fill="url(#ps-dusk)"/>
+      <circle cx="320" cy="200" r="70" fill="url(#ps-sun)"/>
+      <path d="M0 236Q120 214 240 232T400 226V300H0Z" fill="#2e3a24"/>
+      <ellipse cx="200" cy="140" rx="150" ry="70" stroke="#fff" stroke-width="2.5" stroke-dasharray="3 9" stroke-linecap="round" fill="none" opacity=".85" transform="rotate(-12 200 140)"/>
+      <g transform="translate(320 92) rotate(30)"><path d="M0 0L-30 -20Q-36 -26 -28 -30L4 -8L28 -30Q36 -26 30 -20Z" fill="#f08c00" stroke="#7a3e00" stroke-width="2.5" stroke-linejoin="round"/></g>
+      <path d="M346 80h18M350 92h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+      <path d="M90 236V196M90 196L82 212M90 196L98 212M90 204L76 196M90 204L104 194" stroke="#1e1c1a" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <circle cx="90" cy="188" r="7" fill="#1e1c1a"/>`,
+
+    courage: () => `
+      <rect width="400" height="300" fill="url(#ps-day)"/>
+      <rect y="210" width="400" height="90" fill="url(#ps-sea)"/>
+      <path d="M150 232H260M200 252H330M90 270H180" stroke="#fff" stroke-width="1.5" opacity=".3"/>
+      <path d="M0 80H110Q122 160 112 300H0Z" fill="url(#ps-rock)"/>
+      <path d="M20 110L70 118M10 160L84 166M28 220L90 226" stroke="#5e331d" stroke-width="2" opacity=".5"/>
+      <rect x="100" y="74" width="120" height="8" rx="2" fill="#f1f3f5" stroke="#495057" stroke-width="1.5"/>
+      <path d="M112 82V98M130 82V96" stroke="#495057" stroke-width="3"/>
+      <circle cx="210" cy="44" r="7" fill="#343a40"/>
+      <path d="M210 51V64M210 64L204 74M210 64L216 74M210 55L201 44M210 55L219 44" stroke="#343a40" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M236 206q10 -6 20 0q10 6 20 0" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>`,
+
+    respect: () => `
+      <rect width="400" height="300" fill="url(#ps-wall)"/>
+      <circle cx="200" cy="80" r="170" fill="url(#ps-lamp)" opacity=".5"/>
+      <rect y="214" width="400" height="86" fill="url(#ps-wood)"/>
+      <ellipse cx="200" cy="222" rx="110" ry="8" fill="#000" opacity=".18"/>
+      <g transform="rotate(12 150 180)"><rect x="118" y="146" width="56" height="70" rx="8" fill="#ffd8a8" stroke="#495057" stroke-width="2.5"/>
+        <path d="M118 162q-22 6 0 34" stroke="#495057" stroke-width="5" fill="none"/></g>
+      <g transform="rotate(-12 250 180)"><rect x="226" y="146" width="56" height="70" rx="8" fill="#a5d8ff" stroke="#495057" stroke-width="2.5"/>
+        <path d="M282 162q22 6 0 34" stroke="#495057" stroke-width="5" fill="none"/></g>
+      <path d="M200 112C186 94 166 104 176 122L200 140L224 122C234 104 214 94 200 112Z" fill="#fff" opacity=".6"/>
+      <path d="M186 140q-6 -12 2 -20M214 140q6 -12 -2 -20" stroke="#fff" stroke-width="2.5" fill="none" opacity=".5"/>`,
+
+    'illegal-states': () => `
+      <rect width="400" height="300" fill="url(#ps-night)"/>
+      ${stars(30, 21, 140)}
+      <rect y="250" width="400" height="50" fill="#1b1f27"/>
+      <rect x="194" y="150" width="12" height="100" fill="#343a40"/>
+      <rect x="168" y="40" width="64" height="150" rx="10" fill="#212529" stroke="#495057" stroke-width="2"/>
+      <circle cx="200" cy="72" r="34" fill="url(#ps-glow)"/>
+      <circle cx="200" cy="158" r="34" fill="#69db7c" opacity=".35"/>
+      <circle cx="200" cy="72" r="18" fill="#ff6b6b"/>
+      <circle cx="200" cy="115" r="18" fill="#3a3326"/>
+      <circle cx="200" cy="158" r="18" fill="#69db7c"/>
+      <path d="M186 64h4M186 150h4" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+      <path d="M140 270H260" stroke="#ffd43b" stroke-width="3" stroke-dasharray="14 10" opacity=".5"/>`,
+
+    'parse-dont-validate': () => {
+      const star = (cx, cy, r, fill, extra = '') => {
+        const pts = Array.from({ length: 10 }, (_, i) => {
+          const a = (Math.PI / 5) * i - Math.PI / 2;
+          const rr = i % 2 ? r * 0.45 : r;
+          return `${f1(cx + rr * Math.cos(a))} ${f1(cy + rr * Math.sin(a))}`;
+        });
+        return `<path d="M${pts.join('L')}Z" fill="${fill}" ${extra}/>`;
+      };
+      return `
+      <rect width="400" height="300" fill="url(#ps-wood)"/>
+      <path d="M0 40Q200 30 400 44M0 120Q200 110 400 126M0 210Q200 200 400 216" stroke="#4a2f1b" stroke-width="1.5" fill="none" opacity=".5"/>
+      <ellipse cx="140" cy="160" rx="110" ry="70" fill="#f3d9a4"/>
+      <ellipse cx="128" cy="148" rx="80" ry="44" fill="#f7e3b8" opacity=".6"/>
+      ${star(100, 150, 22, '#c9a36a')}${star(170, 175, 22, '#c9a36a')}
+      ${star(150, 120, 26, 'none', 'stroke="#868e96" stroke-width="5" stroke-linejoin="round"')}
+      <rect x="250" y="120" width="130" height="110" rx="8" fill="#adb5bd"/>
+      <rect x="256" y="126" width="118" height="98" rx="6" fill="#ced4da"/>
+      ${star(285, 155, 18, '#e8b45f')}${star(345, 155, 18, '#e8b45f')}${star(285, 200, 18, '#e8b45f')}${star(345, 200, 18, '#e8b45f')}${star(315, 178, 18, '#e8b45f')}`;
+    },
+
+    'tell-dont-ask': () => {
+      const tiles = Array.from({ length: 6 }, (_, i) => `M${i * 70} 0V150`).join('') + 'M0 50H400M0 100H400';
+      return `
+      <rect width="400" height="300" fill="#f1ece3"/>
+      <path d="${tiles}" stroke="#d8cfc2" stroke-width="2"/>
+      <rect y="150" width="400" height="150" fill="#cdbfaa"/>
+      <rect x="110" y="104" width="180" height="170" rx="8" fill="#495057"/>
+      <rect x="110" y="104" width="180" height="34" rx="8" fill="#343a40"/>
+      <circle cx="140" cy="121" r="8" fill="#adb5bd"/><circle cx="170" cy="121" r="8" fill="#adb5bd"/><circle cx="230" cy="121" r="8" fill="#adb5bd"/>
+      <rect x="130" y="152" width="140" height="94" rx="6" fill="#2b2016"/>
+      <rect x="136" y="158" width="128" height="82" rx="4" fill="#e8590c" opacity=".55"/>
+      <circle cx="200" cy="200" r="50" fill="url(#ps-glow)"/>
+      <rect x="150" y="226" width="100" height="6" rx="3" fill="#868e96"/>
+      <circle cx="262" cy="84" r="20" fill="#fff" stroke="#e03131" stroke-width="5"/>
+      <path d="M262 84V72M262 84l9 5" stroke="#212529" stroke-width="3" stroke-linecap="round"/>
+      <rect x="256" y="58" width="12" height="6" rx="2" fill="#e03131"/>`;
+    },
+
+    encapsulation: () => `
+      <rect width="400" height="300" fill="url(#ps-studio)"/>
+      <circle cx="200" cy="120" r="150" fill="#fff" opacity=".4"/>
+      <rect y="246" width="400" height="54" fill="#d8c8f0"/>
+      <ellipse cx="200" cy="250" rx="100" ry="8" fill="#000" opacity=".15"/>
+      <rect x="120" y="140" width="160" height="108" rx="4" fill="#7048e8"/>
+      <rect x="110" y="120" width="180" height="30" rx="4" fill="#845ef7"/>
+      <rect x="190" y="120" width="20" height="128" fill="#ffd43b"/>
+      <rect x="110" y="128" width="180" height="14" fill="#ffd43b" opacity=".0"/>
+      <path d="M200 120C170 86 150 104 172 118ZM200 120C230 86 250 104 228 118Z" fill="#fab005" stroke="#e8590c" stroke-width="2"/>
+      <circle cx="200" cy="118" r="7" fill="#fab005" stroke="#e8590c" stroke-width="2"/>
+      <circle cx="140" cy="200" r="4" fill="#fff" opacity=".6"/><circle cx="250" cy="180" r="3" fill="#fff" opacity=".6"/><circle cx="160" cy="166" r="3" fill="#fff" opacity=".6"/>`,
+
+    'descriptive-errors': () => `
+      <rect width="400" height="300" fill="url(#ps-day)"/>
+      <path d="M0 180L100 166L200 178L300 160L400 174V300H0Z" fill="#9fb59a"/>
+      <rect y="190" width="400" height="110" fill="url(#ps-grass)"/>
+      <path d="M150 190H250L350 300H50Z" fill="#555b62"/>
+      <rect x="196" y="196" width="8" height="104" fill="none"/>
+      <path d="M90 248L130 236H270L310 248Z" fill="#fff" opacity="0"/>
+      <rect x="196" y="120" width="8" height="120" fill="#868e96"/>
+      <rect x="150" y="40" width="100" height="100" rx="10" transform="rotate(45 200 90)" fill="#fab005" stroke="#212529" stroke-width="4"/>
+      <path d="M222 102H186V78M186 78L174 92M186 78L198 92" stroke="#212529" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="166" y="150" width="68" height="26" rx="4" fill="#fff" stroke="#212529" stroke-width="3"/>
+      <text x="200" y="169" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="15" fill="#212529">200 m</text>
+      <path d="M60 236H140M260 236H340" stroke="#e03131" stroke-width="10" stroke-dasharray="14 10"/>`,
+
+    'red-green-refactor': () => `
+      <rect width="400" height="300" fill="#7a4a2a"/>
+      <rect x="16" y="16" width="368" height="268" rx="6" fill="#2f4f3a"/>
+      <rect x="16" y="16" width="368" height="268" rx="6" fill="#fff" opacity=".04"/>
+      <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="200" cy="86" r="40" stroke="#ff8787"/>
+        <circle cx="120" cy="206" r="40" stroke="#8ce99a"/>
+        <circle cx="280" cy="206" r="40" stroke="#74c0fc"/>
+        <path d="M186 72l28 28M214 72l-28 28" stroke="#ff8787"/>
+        <path d="M102 206l12 12 22 -24" stroke="#8ce99a"/>
+        <path d="M296 196a16 16 0 1 0 0 20M296 196l-8 -2M296 196l2 -8" stroke="#74c0fc"/>
+        <path d="M160 108L134 162M158 160l-24 2 6 -22" stroke="#f1f3f5" opacity=".85"/>
+        <path d="M168 214H232M224 206l8 8 -8 8" stroke="#f1f3f5" opacity=".85"/>
+        <path d="M264 164L238 112M232 132l6 -20 18 10" stroke="#f1f3f5" opacity=".85"/>
+      </g>
+      <rect x="300" y="268" width="40" height="8" rx="2" fill="#f8f9fa" opacity=".8"/>`,
+
+    'vertical-slices': () => `
+      <rect width="400" height="300" fill="url(#ps-wall)"/>
+      <rect y="220" width="400" height="80" fill="url(#ps-wood)"/>
+      <ellipse cx="160" cy="226" rx="120" ry="18" fill="#f8f9fa"/>
+      <path d="M60 210V150Q60 130 160 130Q260 130 260 150V210Q260 228 160 228Q60 228 60 210Z" fill="#f3d9a4"/>
+      <path d="M60 168Q160 186 260 168V184Q160 202 60 184Z" fill="#e64980"/>
+      <path d="M60 196Q160 214 260 196V206Q160 224 60 206Z" fill="#7b4b2e"/>
+      <ellipse cx="160" cy="146" rx="100" ry="18" fill="#fff4e6"/>
+      <path d="M160 146L200 132L230 152L176 168Z" fill="#cdbfaa" opacity=".9"/>
+      <circle cx="120" cy="140" r="6" fill="#e03131"/><circle cx="150" cy="134" r="6" fill="#e03131"/><circle cx="190" cy="142" r="6" fill="#e03131"/>
+      <ellipse cx="320" cy="232" rx="56" ry="10" fill="#f8f9fa"/>
+      <path d="M290 230L350 230L330 160Z" fill="#f3d9a4"/>
+      <path d="M296 210L344 210L340 196L300 196Z" fill="#e64980"/>
+      <path d="M292 226L348 226L345 218L295 218Z" fill="#7b4b2e"/>
+      <path d="M330 160L320 170L340 172Z" fill="#fff4e6"/>`,
+
+    'git-50-72': () => {
+      const body = [0, 1, 2, 3].map((i) => `<rect x="70" y="${150 + i * 22}" width="${[236, 226, 236, 150][i]}" height="7" rx="3" fill="#868e96"/>`).join('');
+      return `
+      <rect width="400" height="300" fill="url(#ps-wood)"/>
+      <rect x="44" y="30" width="312" height="250" rx="4" fill="#fffdf5"/>
+      <rect x="44" y="30" width="312" height="250" rx="4" fill="none" stroke="#dee2e6" stroke-width="2"/>
+      <rect x="70" y="80" width="150" height="12" rx="4" fill="#212529"/>
+      ${body}
+      <path d="M220 58V100" stroke="#1c7ed6" stroke-width="2.5" stroke-dasharray="5 4"/>
+      <path d="M306 58V250" stroke="#e03131" stroke-width="2.5" stroke-dasharray="5 4"/>
+      <text x="220" y="52" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="14" fill="#1c7ed6">50</text>
+      <text x="306" y="52" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="14" fill="#e03131">72</text>`;
+    },
+
+    murphy: () => `
+      <rect width="400" height="300" fill="#f1ece3"/>
+      <rect y="230" width="400" height="70" fill="#a8a29a"/>
+      <path d="M0 230H400" stroke="#868079" stroke-width="2"/>
+      <rect x="0" y="150" width="150" height="14" fill="#8b5e3c"/>
+      <rect x="10" y="164" width="12" height="66" fill="#6e4a2f"/>
+      <ellipse cx="60" cy="146" rx="40" ry="6" fill="#f8f9fa" stroke="#ced4da" stroke-width="2"/>
+      <g transform="translate(236 168) rotate(160)">
+        <rect x="-38" y="-30" width="76" height="60" rx="16" fill="#d9a066"/>
+        <rect x="-32" y="-24" width="64" height="48" rx="12" fill="#f3d39b"/>
+        <path d="M-30 18Q0 28 30 18L30 26Q0 34 -30 26Z" fill="#ffe066"/>
+      </g>
+      <path d="M180 118l-14 -10M200 108l-6 -16M222 110l2 -16" stroke="#868e96" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="236" cy="234" rx="44" ry="6" fill="#000" opacity=".15"/>`,
+
+    hofstadter: () => `
+      <rect width="400" height="300" fill="url(#ps-studio)"/>
+      <circle cx="200" cy="130" r="150" fill="#fff" opacity=".35"/>
+      <rect y="250" width="400" height="50" fill="#bfae94"/>
+      <rect x="140" y="42" width="120" height="14" rx="4" fill="#7b4b2e"/>
+      <rect x="140" y="236" width="120" height="14" rx="4" fill="#7b4b2e"/>
+      <path d="M150 56V236M250 56V236" stroke="#5e3a22" stroke-width="6"/>
+      <path d="M162 56H238Q238 120 204 146Q238 172 238 236H162Q162 172 196 146Q162 120 162 56Z" fill="#e7f5ff" opacity=".6" stroke="#adb5bd" stroke-width="2"/>
+      <path d="M176 92H224Q220 120 200 136Q180 120 176 92Z" fill="#e8b45f"/>
+      <path d="M200 140V214" stroke="#e8b45f" stroke-width="2.5"/>
+      <path d="M168 236Q200 196 232 236Z" fill="#e8b45f"/>
+      <circle cx="320" cy="90" r="34" fill="#fff" stroke="#495057" stroke-width="4"/>
+      <path d="M320 90V68M320 90L336 98" stroke="#212529" stroke-width="3.5" stroke-linecap="round"/>`,
+
+    postel: () => `
+      <rect width="400" height="300" fill="url(#ps-day)"/>
+      <rect y="240" width="400" height="60" fill="#868e96"/>
+      <path d="M0 240H400" stroke="#adb5bd" stroke-width="3"/>
+      <rect x="164" y="110" width="72" height="130" rx="8" fill="#e03131"/>
+      <path d="M164 140Q164 100 200 100Q236 100 236 140" fill="#c92a2a"/>
+      <rect x="178" y="138" width="44" height="8" rx="3" fill="#2b2b2b"/>
+      <rect x="184" y="172" width="32" height="18" rx="2" fill="#ffd43b"/>
+      <g transform="translate(96 150) rotate(-24)"><path d="M-22 -14L20 -18L24 14L-18 18Z" fill="#fff" stroke="#adb5bd" stroke-width="2"/><path d="M-20 -14L2 4L22 -16" stroke="#ced4da" stroke-width="2" fill="none"/></g>
+      <g transform="translate(60 196) rotate(16)"><path d="M-18 -12L16 -14L20 12L-16 16Z" fill="#f1f3f5" stroke="#adb5bd" stroke-width="2"/><path d="M-10 -4L8 2" stroke="#868e96" stroke-width="2"/></g>
+      <g transform="translate(120 98) rotate(10)"><path d="M-16 -10L14 -12L18 10L-14 14Z" fill="#fff8e1" stroke="#adb5bd" stroke-width="2"/></g>
+      <g fill="#fff" stroke="#495057" stroke-width="2"><rect x="270" y="200" width="56" height="36" rx="2"/><rect x="274" y="192" width="56" height="36" rx="2"/><rect x="278" y="184" width="56" height="36" rx="2"/></g>
+      <path d="M278 184L306 204L334 184" stroke="#495057" stroke-width="2" fill="none"/>
+      <rect x="318" y="188" width="10" height="12" fill="#e03131"/>`,
+
+    gall: () => `
+      <rect width="400" height="300" fill="url(#ps-dawn)"/>
+      <circle cx="330" cy="80" r="60" fill="url(#ps-sun)"/>
+      <path d="M0 236Q200 216 400 232V300H0Z" fill="url(#ps-grass)"/>
+      <path d="M70 236V218M70 222Q60 210 56 214Q62 222 70 222M70 218Q80 206 84 210Q78 218 70 218" stroke="#2b8a3e" stroke-width="3" fill="#51cf66"/>
+      <path d="M170 236V180" stroke="#5b3a24" stroke-width="5"/>
+      <circle cx="170" cy="176" r="22" fill="#40c057"/><circle cx="160" cy="186" r="14" fill="#2f9e44"/>
+      <path d="M300 236V130" stroke="#5b3a24" stroke-width="10"/>
+      <path d="M300 170L274 150M300 156L326 134" stroke="#5b3a24" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="300" cy="112" r="40" fill="#2f9e44"/><circle cx="268" cy="140" r="28" fill="#37b24d"/><circle cx="332" cy="132" r="30" fill="#2b8a3e"/><circle cx="300" cy="86" r="26" fill="#40c057"/>
+      <path d="M96 222h40M130 214l8 8 -8 8M200 210h50M244 202l8 8 -8 8" stroke="#495057" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/>`,
   };
 
   window.PRINCIPLE_SCENES = { defs: DEFS, draw: SCENES };

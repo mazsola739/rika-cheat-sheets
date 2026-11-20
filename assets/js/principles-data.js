@@ -16,9 +16,11 @@ window.PRINCIPLES = {
     core: { hu: 'Alapelvek', en: 'Core ideas' },
     debug: { hu: 'Gondolkodás, hibakeresés', en: 'Thinking & debugging' },
     workflow: { hu: 'Munkamódszer', en: 'Workflow' },
+    values: { hu: 'Értékek', en: 'Values' },
     solid: { hu: 'SOLID', en: 'SOLID' },
     design: { hu: 'Tervezés', en: 'Design' },
     frontend: { hu: 'Frontend', en: 'Frontend' },
+    laws: { hu: 'Törvények', en: 'Laws' },
   },
   cards: [
     {
@@ -601,6 +603,286 @@ window.PRINCIPLES = {
         en: 'Readable doesn’t mean wordy: extra lines and comments make reading harder, too.',
       },
     },
+    {
+      id: 'communication',
+      big: { hu: 'Kommunikáció', en: 'Communication' },
+      name: 'Communication (XP value)',
+      group: 'values',
+      lang: 'text',
+      summary: { hu: 'A kód, a commit és a pull request is üzenet: írd úgy, hogy a másik ember értse.', en: 'Code, commits and pull requests are messages too: write them so the other person understands.' },
+      why: {
+        hu: 'A legtöbb csapatprobléma nem technikai: valaki nem tudott valamiről. A jó kommunikáció olcsóbb, mint bármelyik hibajavítás.',
+        en: 'Most team problems aren’t technical: someone didn’t know about something. Good communication is cheaper than any bug fix.',
+      },
+      bad: 'PR title: fix\nDescription: (empty)',
+      good: 'PR title: Fix the cart total when an item is removed\n\nWhat: the total ignored removed items.\nWhy: users saw the old price at checkout.\nHow to test: add 2 items, remove 1, check the total.',
+      watch: {
+        hu: 'A több szó nem mindig jobb: a lényeg legyen elöl, a részletek utána.',
+        en: 'More words aren’t always better: put the point first and the details after.',
+      },
+    },
+    {
+      id: 'feedback',
+      big: { hu: 'Visszajelzés', en: 'Feedback' },
+      name: 'Feedback (XP value)',
+      group: 'values',
+      lang: 'sh',
+      summary: { hu: 'Kérj és adj visszajelzést minél hamarabb és minél gyakrabban: tesztekből, review-ból, felhasználóktól.', en: 'Ask for and give feedback as early and as often as you can: from tests, reviews and users.' },
+      why: {
+        hu: 'Minél rövidebb a kör a hiba és a felismerése között, annál olcsóbb javítani.',
+        en: 'The shorter the loop between a mistake and noticing it, the cheaper the fix.',
+      },
+      bad: 'npm test   # once a week, right before the release',
+      good: 'npm test -- --watch   # every save runs the tests',
+      watch: {
+        hu: 'A visszajelzés a kódról szóljon, ne a személyről – és légy nyitott rá, ha neked szól.',
+        en: 'Feedback is about the code, not the person – and stay open when it’s meant for you.',
+      },
+    },
+    {
+      id: 'courage',
+      big: { hu: 'Bátorság', en: 'Courage' },
+      name: 'Courage (XP value)',
+      group: 'values',
+      lang: 'sh',
+      summary: { hu: 'Merj kidobni, átírni és nemet mondani, ha a kód vagy a terv rossz irányba megy.', en: 'Dare to delete, rewrite and say no when the code or the plan is heading the wrong way.' },
+      why: {
+        hu: 'A rossz kód nem javul attól, hogy félünk hozzányúlni. A tesztek és a Git adják a bátorságot.',
+        en: 'Bad code doesn’t get better because we are afraid to touch it. Tests and Git give you the courage.',
+      },
+      bad: '# “Don’t touch it, it works somehow.”\n# 2,000 lines that nobody understands',
+      good: 'git switch -c refactor/cart\n# small steps, tests green after each one\ngit commit -m "Split cart.js into smaller modules"',
+      watch: {
+        hu: 'A bátorság nem vakmerőség: előbb legyen teszt és commit, aztán jöhet a nagy átírás.',
+        en: 'Courage isn’t recklessness: get tests and a commit in place first, then do the big rewrite.',
+      },
+    },
+    {
+      id: 'respect',
+      big: { hu: 'Tisztelet', en: 'Respect' },
+      name: 'Respect (XP value)',
+      group: 'values',
+      lang: 'text',
+      summary: { hu: 'Tiszteld a csapattársaidat, a felhasználókat és a kód jövőbeli olvasóját – a review a kódról szól, nem az emberről.', en: 'Respect your teammates, your users and the future reader of the code – a review is about the code, not the person.' },
+      why: {
+        hu: 'Ahol nem kell félni a kérdésektől és a hibáktól, ott gyorsabban tanul mindenki.',
+        en: 'Where nobody fears questions or mistakes, everyone learns faster.',
+      },
+      bad: 'Review comment: “Who wrote this garbage?”',
+      good: 'Review comment: “This loop runs twice for each item – could we\nfilter first? Happy to pair on it if you like.”',
+      watch: {
+        hu: 'A tisztelet nem azt jelenti, hogy mindenre igent mondasz: az őszinte, kedves kritika is tisztelet.',
+        en: 'Respect doesn’t mean saying yes to everything: honest, kind criticism is respect too.',
+      },
+    },
+    {
+      id: 'illegal-states',
+      big: { hu: 'Tiltott állapot', en: 'Illegal states' },
+      name: 'Make Illegal States Unrepresentable',
+      group: 'design',
+      summary: { hu: 'Úgy tervezd a típusokat, hogy lehetetlen állapotot ne is lehessen leírni.', en: 'Design your types so that impossible states can’t even be written down.' },
+      why: {
+        hu: 'Ha a fordító nem engedi a hibás kombinációt, nem kell futásidőben vadászni rá.',
+        en: 'If the compiler rejects the bad combination, you don’t have to hunt for it at runtime.',
+      },
+      bad: 'type Request = {\n  isLoading: boolean;\n  data?: User;\n  error?: string;\n};\n// loading + data + error at once? Possible. And wrong.',
+      good: "type Request =\n  | { status: 'loading' }\n  | { status: 'success'; data: User }\n  | { status: 'error'; error: string };",
+      watch: {
+        hu: 'Ne bonyolítsd túl: ott használd, ahol tényleg előfordulhat rossz kombináció.',
+        en: 'Don’t overdo it: use it where a bad combination can really happen.',
+      },
+    },
+    {
+      id: 'parse-dont-validate',
+      big: 'Parse > validate',
+      name: "Parse, Don't Validate",
+      group: 'design',
+      summary: { hu: 'A bejövő adatot ne csak ellenőrizd: egyszer alakítsd át biztos típussá, és onnan azt használd.', en: 'Don’t just check incoming data: turn it into a safe type once, and use that from then on.' },
+      why: {
+        hu: 'Ha csak ellenőrzöl, a kód többi része továbbra is „bármit” kap, és mindenhol újra kell ellenőrizni.',
+        en: 'If you only check, the rest of the code still receives “anything”, and you have to check again everywhere.',
+      },
+      bad: "function isValidEmail(text) {\n  return text.includes('@');\n}\nif (isValidEmail(input)) send(input); // still just a string",
+      good: "function parseEmail(text) {\n  const email = text.trim().toLowerCase();\n  if (!email.includes('@')) throw new Error(`Not an email: ${text}`);\n  return { kind: 'email', value: email };\n}\nsend(parseEmail(input)); // send() only accepts an Email",
+      watch: {
+        hu: 'A program szélén parse-olj (űrlap, API-válasz), belül már bízhatsz a típusban.',
+        en: 'Parse at the edges (forms, API responses); inside, you can trust the type.',
+      },
+    },
+    {
+      id: 'tell-dont-ask',
+      big: { hu: 'Mondd, ne kérdezd', en: "Tell, don't ask" },
+      name: "Tell, Don't Ask",
+      group: 'design',
+      summary: { hu: 'Ne kérdezd le az objektum állapotát, hogy aztán helyette dönts: mondd meg neki, mit csináljon.', en: 'Don’t pull an object’s state out to decide for it: tell it what to do.' },
+      why: {
+        hu: 'A döntés oda kerül, ahol az adat van, így a szabály egy helyen él.',
+        en: 'The decision lives next to the data, so the rule lives in one place.',
+      },
+      bad: 'if (account.balance >= amount) {\n  account.balance -= amount;\n}',
+      good: 'account.withdraw(amount);\n// withdraw() checks the balance itself',
+      watch: {
+        hu: 'Sima adatszerkezeteknél (pl. egy JSON-nál) nem kell mindenhez metódus.',
+        en: 'Plain data structures (like JSON) don’t need a method for everything.',
+      },
+    },
+    {
+      id: 'encapsulation',
+      big: { hu: 'Egységbezárás', en: 'Encapsulation' },
+      name: 'Encapsulation',
+      group: 'design',
+      summary: { hu: 'A belső részletek maradjanak belül: kifelé csak egy kicsi, stabil felület látsszon.', en: 'Keep the internals inside: show only a small, stable surface to the outside.' },
+      why: {
+        hu: 'Amit senki sem lát kívülről, azt szabadon átírhatod anélkül, hogy bármi eltörne.',
+        en: 'What nobody sees from the outside, you can rewrite freely without breaking anything.',
+      },
+      bad: 'const counter = { count: 0 };\ncounter.count = -5; // anyone can break it',
+      good: 'function createCounter() {\n  let count = 0;\n  return {\n    increment: () => ++count,\n    value: () => count,\n  };\n}',
+      watch: {
+        hu: 'Ne rejts el mindent: amit a használónak tényleg el kell érnie, legyen kényelmesen elérhető.',
+        en: 'Don’t hide everything: what users really need should be easy to reach.',
+      },
+    },
+    {
+      id: 'descriptive-errors',
+      big: { hu: 'Érthető hibák', en: 'Clear errors' },
+      name: 'Descriptive Error Messages',
+      group: 'debug',
+      summary: { hu: 'A hibaüzenet mondja meg, mi történt, hol, és mit tehetsz – ne csak annyit, hogy „Hiba”.', en: 'An error message should say what happened, where, and what you can do – not just “Error”.' },
+      why: {
+        hu: 'Egy jó hibaüzenet perceket spórol a fejlesztőnek és bosszúságot a felhasználónak.',
+        en: 'A good error message saves the developer minutes and the user frustration.',
+      },
+      bad: "throw new Error('Error');",
+      good: 'throw new Error(\n  `Could not load the cart for user ${userId}: the server answered 503. Try again in a minute.`\n);',
+      watch: {
+        hu: 'A felhasználónak ne mutass belső részleteket (stack trace, jelszó, SQL) – azok a naplóba valók.',
+        en: 'Don’t show internals to users (stack traces, passwords, SQL) – those belong in the logs.',
+      },
+    },
+    {
+      id: 'red-green-refactor',
+      big: { hu: 'Piros-zöld-refaktor', en: 'Red-green-refactor' },
+      name: 'Red, Green, Refactor (TDD)',
+      group: 'workflow',
+      summary: { hu: 'Előbb írj egy bukó tesztet (piros), aztán a legegyszerűbb kódot, ami átmegy (zöld), végül tisztítsd ki (refaktor).', en: 'First write a failing test (red), then the simplest code that passes (green), then clean it up (refactor).' },
+      why: {
+        hu: 'A teszt előre megmondja, mit akarsz, a zöld bizonyítja, hogy működik, a refaktor pedig, hogy szép is.',
+        en: 'The test says up front what you want, green proves it works, and refactoring makes it nice.',
+      },
+      bad: '// write 300 lines, then maybe a test\nfunction slugify(text) { /* ... */ }',
+      good: "test('slugify makes a URL-friendly name', () => {\n  expect(slugify('Hello World')).toBe('hello-world'); // red\n});\nconst slugify = (text) => text.toLowerCase().replace(/\\s+/g, '-'); // green\n// refactor: rename, tidy up, keep it green",
+      watch: {
+        hu: 'Nem kell mindenre TDD: kísérletezésnél és prototípusnál nyugodtan írd előbb a kódot.',
+        en: 'Not everything needs TDD: for experiments and prototypes, writing the code first is fine.',
+      },
+    },
+    {
+      id: 'vertical-slices',
+      big: { hu: 'Függőleges szelet', en: 'Vertical slices' },
+      name: 'Vertical Slices',
+      group: 'workflow',
+      lang: 'text',
+      summary: { hu: 'Egy funkciót vigyél végig minden rétegen (felület, logika, adat), ne rétegenként építs.', en: 'Build one feature through every layer (UI, logic, data) instead of building layer by layer.' },
+      why: {
+        hu: 'Így minden lépés végén van valami működő, amit ki lehet próbálni és meg lehet mutatni.',
+        en: 'Each step then ends with something working that can be tried and shown.',
+      },
+      bad: 'Week 1: the whole database\nWeek 2: the whole API\nWeek 3: the whole UI\nWeek 4: nothing works together',
+      good: 'Day 1: “Add to cart” – button, API, database row\nDay 2: “Remove from cart” – button, API, database row\nDay 3: “Cart total” – …',
+      watch: {
+        hu: 'A közös alapokat (pl. az adatbázis-kapcsolatot) azért egyszer meg kell csinálni – csak ne mindet előre.',
+        en: 'Shared foundations (like the database connection) still need doing once – just not all of them up front.',
+      },
+    },
+    {
+      id: 'git-50-72',
+      big: '50/72',
+      name: 'The 50/72 Rule of Git',
+      group: 'workflow',
+      lang: 'text',
+      summary: { hu: 'Commit-üzenet: legfeljebb kb. 50 karakteres cím, üres sor, aztán 72 karakterenként tördelt leírás.', en: 'Commit message: a title of about 50 characters, a blank line, then a body wrapped at 72 characters.' },
+      why: {
+        hu: 'Így a cím kifér a git logban és a GitHubon, a leírás pedig minden eszközben olvasható marad.',
+        en: 'The title then fits in git log and on GitHub, and the body stays readable in every tool.',
+      },
+      bad: 'fixed the thing with the cart where sometimes the total was wrong when you removed stuff and also some css',
+      good: 'Fix the cart total after removing an item\n\nThe total was computed before the item was removed,\nso users saw the old price at checkout. It is now\nderived from the items on every change.',
+      watch: {
+        hu: 'Nem a karakterszámolás a lényeg: a cím egy mondatban mondja el, mit csinál a commit.',
+        en: 'It’s not about counting characters: the title should say in one sentence what the commit does.',
+      },
+    },
+    {
+      id: 'murphy',
+      big: 'Murphy',
+      name: "Murphy's Law",
+      group: 'laws',
+      summary: { hu: 'Ami elromolhat, az el is romlik – úgyhogy készülj fel rá: kezeld a hibákat és a szélső eseteket.', en: 'Anything that can go wrong will go wrong – so plan for it: handle errors and edge cases.' },
+      why: {
+        hu: 'A hálózat lassú lesz, a lista üres, a felhasználó kétszer kattint. Ha erre készülsz, nem ér meglepetés.',
+        en: 'The network will be slow, the list empty, the user will double-click. Plan for it and nothing surprises you.',
+      },
+      bad: "const user = await fetch('/api/me').then((r) => r.json());\nrender(user.name);",
+      good: "try {\n  const res = await fetch('/api/me');\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);\n  const user = await res.json();\n  render(user?.name ?? 'Guest');\n} catch (error) {\n  showError('Could not load your profile.');\n}",
+      watch: {
+        hu: 'Ne bénulj le: a valószínű hibákra készülj, ne minden elképzelhető katasztrófára.',
+        en: 'Don’t freeze up: plan for the likely failures, not every imaginable disaster.',
+      },
+    },
+    {
+      id: 'hofstadter',
+      big: 'Hofstadter',
+      name: "Hofstadter's Law",
+      group: 'laws',
+      lang: 'text',
+      summary: { hu: 'Minden tovább tart, mint gondolod – még akkor is, ha ezt is beleszámolod.', en: 'It always takes longer than you expect – even when you take that into account.' },
+      why: {
+        hu: 'A becslések rendszeresen alulmaradnak: váratlan hibák, megbeszélések és apróságok mindig jönnek.',
+        en: 'Estimates come up short again and again: surprise bugs, meetings and small things always turn up.',
+      },
+      bad: 'Estimate: “Login page? 2 hours.”',
+      good: 'Login page:\n- form and layout: 2 h\n- validation and errors: 2 h\n- API and tests: 3 h\n- the unexpected: +50%\n→ about 1.5 days',
+      watch: {
+        hu: 'A becslés nem ígéret: ha kiderül, hogy tovább tart, szólj korán.',
+        en: 'An estimate isn’t a promise: if it turns out longer, say so early.',
+      },
+    },
+    {
+      id: 'postel',
+      big: 'Postel',
+      name: "Postel's Law (Robustness Principle)",
+      group: 'laws',
+      summary: { hu: 'Légy megengedő abban, amit elfogadsz, és szigorú abban, amit kiküldesz.', en: 'Be liberal in what you accept, and conservative in what you send.' },
+      why: {
+        hu: 'A rendszered elboldogul a kicsit „pongyola” bemenettel is, a kimeneted pedig mindig tiszta és kiszámítható.',
+        en: 'Your system copes with slightly sloppy input, while your output stays clean and predictable.',
+      },
+      bad: "// the user typed ' 1 200 Ft ' with spaces\nconst price = Number(input); // NaN",
+      good: "const price = Number(input.replace(/[^\\d.,]/g, '').replace(',', '.'));\n// accept loosely, store strictly: always a plain number",
+      watch: {
+        hu: 'A túl megengedő bemenet biztonsági rés lehet: a laza elfogadás után mindig alakítsd át és ellenőrizd.',
+        en: 'Overly lenient input can be a security hole: after accepting loosely, always convert and check.',
+      },
+    },
+    {
+      id: 'gall',
+      big: 'Gall',
+      name: "Gall's Law",
+      group: 'laws',
+      lang: 'text',
+      summary: { hu: 'Működő bonyolult rendszer mindig egy működő egyszerűből nő ki – a nulláról bonyolultnak tervezett ritkán működik.', en: 'A complex system that works grew from a simple system that worked – one designed complex from scratch rarely works.' },
+      why: {
+        hu: 'Az egyszerű rendszert meg lehet érteni, ki lehet próbálni, és lépésenként lehet bővíteni.',
+        en: 'A simple system can be understood, tried out and extended step by step.',
+      },
+      bad: 'v1.0: microservices, event bus, 3 databases, admin panel\n→ never launched',
+      good: 'v0.1: one page, one form, saves to a file\nv0.2: + a database\nv0.3: + login\n→ live since week one',
+      watch: {
+        hu: 'Az egyszerű kezdés nem jelent hanyagságot: a tiszta szerkezet könnyíti a növekedést.',
+        en: 'Starting simple doesn’t mean sloppy: a clean structure makes growing easier.',
+      },
+    },
   ],
 };
 
@@ -611,9 +893,11 @@ window.PRINCIPLES.groupInfo = {
   core: { hu: 'Az alapok: maradj egyszerű, hagyd ki a feleslegeset, és bánj okosan az ismétléssel.', en: 'The basics: keep it simple, skip the unnecessary, and handle repetition wisely.' },
   debug: { hu: 'Gondolkodás és hibakeresés: hogyan bonts le egy feladatot, és hogyan találd meg gyorsan a hibát.', en: 'Thinking and debugging: how to break a task down and how to find the bug fast.' },
   workflow: { hu: 'Tanulás és munkamódszer: szokások, amikkel gyorsabban fejlődsz és kevesebbet szenvedsz.', en: 'Learning and workflow: habits that help you grow faster and suffer less.' },
+  values: { hu: 'Értékek: amitől egy csapat jól tud együtt dolgozni – kommunikáció, visszajelzés, bátorság, tisztelet.', en: 'Values: what helps a team work well together – communication, feedback, courage and respect.' },
   solid: { hu: 'Öt elv arról, hogyan maradjanak a modulok és komponensek kicsik, cserélhetők és bővíthetők.', en: 'Five principles for keeping modules and components small, swappable and extensible.' },
   design: { hu: 'Hogyan oszd fel és kösd össze a kódot, hogy kiszámítható és könnyen változtatható legyen.', en: 'How to split and connect code so it stays predictable and easy to change.' },
   frontend: { hu: 'Elvek, amik a böngészőben és Reactben különösen sokat számítanak.', en: 'Principles that matter most in the browser and in React.' },
+  laws: { hu: 'Törvények: félig vicces, de nagyon is igaz megfigyelések a szoftverkészítésről.', en: 'Laws: half-joking but very true observations about building software.' },
 };
 
 /*
@@ -1271,6 +1555,310 @@ window.PRINCIPLES.guide = {
       ['kiss', { hu: 'az egyszerű kód a legolvashatóbb kód.', en: 'simple code is the most readable code.' }],
     ],
   },
+  communication: {
+    problem: { hu: 'Mindenki a saját fejében tartja, mit csinál, és a félreértések csak a kiadásnál derülnek ki.', en: 'Everyone keeps their plans in their own head, and misunderstandings only show up at release time.' },
+    analogy: { hu: 'A rally-navigátor nem a célban mondja meg, hogy balra kellett volna fordulni.', en: 'A rally co-driver doesn’t mention the left turn after the finish line.' },
+    when: [
+      { hu: 'Pull requestnél: mit, miért, és hogyan lehet kipróbálni.', en: 'In pull requests: what, why, and how to test it.' },
+      { hu: 'Ha elakadsz: szólj korán, ne a határidő napján.', en: 'When you are stuck: speak up early, not on the deadline.' },
+    ],
+    pros: [
+      { hu: 'Kevesebb félreértés és dupla munka.', en: 'Fewer misunderstandings and less duplicate work.' },
+      { hu: 'Gyorsabb review és betanulás.', en: 'Faster reviews and onboarding.' },
+    ],
+    cons: [
+      { hu: 'A túl sok megbeszélés elveszi az időt a munkától.', en: 'Too many meetings eat the time for actual work.' },
+    ],
+    related: [
+      ['self-documenting', { hu: 'a kód is kommunikál – a nevein keresztül.', en: 'code communicates too – through its names.' }],
+      ['git-50-72', { hu: 'a commit-üzenet a legkisebb, de leggyakoribb levél, amit írsz.', en: 'a commit message is the smallest, most frequent letter you write.' }],
+    ],
+  },
+  feedback: {
+    problem: { hu: 'Hetekig készül valami csendben, és csak a végén derül ki, hogy nem ez kellett.', en: 'Something is built quietly for weeks, and only at the end does it turn out to be the wrong thing.' },
+    analogy: { hu: 'A GPS nem a cél után szól, hogy rossz felé mentél – minden kanyarnál újraszámol.', en: 'A GPS doesn’t wait for the destination to say you went wrong – it recalculates at every turn.' },
+    when: [
+      { hu: 'Kódolás közben: watch módú tesztek, linter a szerkesztőben.', en: 'While coding: tests in watch mode, a linter in the editor.' },
+      { hu: 'Félkész munkánál: mutasd meg korán egy kollégának.', en: 'With half-done work: show it to a colleague early.' },
+    ],
+    pros: [
+      { hu: 'A hibák kicsik maradnak.', en: 'Mistakes stay small.' },
+      { hu: 'Gyorsabban tanulsz.', en: 'You learn faster.' },
+    ],
+    cons: [
+      { hu: 'A túl sok visszajelzés zaj lehet – szűrd ki, mi a fontos.', en: 'Too much feedback becomes noise – filter out what matters.' },
+    ],
+    related: [
+      ['red-green-refactor', { hu: 'a teszt a leggyorsabb visszajelzés.', en: 'a test is the fastest feedback.' }],
+      ['fail-fast', { hu: 'a gyorsan jelzett hiba is visszajelzés.', en: 'an early error is feedback too.' }],
+    ],
+  },
+  courage: {
+    problem: { hu: 'Mindenki kerülgeti a „kényes” részt, így az évről évre rosszabb lesz.', en: 'Everyone tiptoes around the “fragile” part, so it gets worse every year.' },
+    analogy: { hu: 'A fogorvos is fúr, ha kell – a halogatás csak drágábbá teszi.', en: 'A dentist drills when it’s needed – putting it off only makes it more expensive.' },
+    when: [
+      { hu: 'Ha egy rész miatt mindenki fél bármit is változtatni.', en: 'When everyone is afraid to change anything in one part.' },
+      { hu: 'Ha a terv nyilvánvalóan rossz: mondd ki.', en: 'When the plan is clearly wrong: say so.' },
+    ],
+    pros: [
+      { hu: 'A kód nem rohad tovább.', en: 'The code stops rotting.' },
+      { hu: 'Őszintébb csapatmunka.', en: 'More honest teamwork.' },
+    ],
+    cons: [
+      { hu: 'Biztonsági háló (teszt, verziókezelés) nélkül kockázatos.', en: 'Without a safety net (tests, version control) it’s risky.' },
+    ],
+    related: [
+      ['dead-code', { hu: 'a törlés is bátorság.', en: 'deleting is courage too.' }],
+      ['commit-often', { hu: 'a sok kis commit ad bátorságot.', en: 'lots of small commits give you courage.' }],
+    ],
+  },
+  respect: {
+    problem: { hu: 'A durva review-któl és a lekezelő válaszoktól az emberek elhallgatnak, és a hibák rejtve maradnak.', en: 'Harsh reviews and dismissive answers make people go quiet, and mistakes stay hidden.' },
+    analogy: { hu: 'A konyhában is szólsz, ha forró a lábas – nem kiabálsz, hanem figyelmeztetsz.', en: 'In a kitchen you warn someone the pan is hot – you don’t yell, you give a heads-up.' },
+    when: [
+      { hu: 'Code review-nál: kérdezz, javasolj, magyarázz.', en: 'In code review: ask, suggest, explain.' },
+      { hu: 'Kezdők kérdéseinél: nincs buta kérdés.', en: 'With beginners’ questions: there are no stupid questions.' },
+    ],
+    pros: [
+      { hu: 'Biztonságos csapat, ahol mernek kérdezni.', en: 'A safe team where people dare to ask.' },
+      { hu: 'Jobb kód, mert több szem néz rá.', en: 'Better code, because more eyes look at it.' },
+    ],
+    cons: [
+      { hu: 'A „kedvesség” mögé bújva néha elmarad a fontos kritika.', en: 'Hiding behind “being nice” can mean important criticism goes unsaid.' },
+    ],
+    related: [
+      ['code-for-humans', { hu: 'az olvasható kód az olvasó iránti tisztelet.', en: 'readable code is respect for the reader.' }],
+      ['communication', { hu: 'a tisztelet a hangnemen dől el.', en: 'respect is decided by the tone.' }],
+    ],
+  },
+  'illegal-states': {
+    problem: { hu: 'Több boolean és opcionális mező együtt olyan kombinációkat enged, amiknek a valóságban nincs értelmük.', en: 'Several booleans and optional fields together allow combinations that make no sense in reality.' },
+    analogy: { hu: 'A közlekedési lámpa nem tud egyszerre pirosat és zöldet mutatni – így építették.', en: 'A traffic light can’t show red and green at once – it was built that way.' },
+    when: [
+      { hu: 'Betöltés / siker / hiba állapotoknál.', en: 'For loading / success / error states.' },
+      { hu: 'Ha egy objektumban több flag is ellentmondhat egymásnak.', en: 'When several flags in one object can contradict each other.' },
+    ],
+    pros: [
+      { hu: 'Kevesebb if és ellenőrzés.', en: 'Fewer ifs and checks.' },
+      { hu: 'A szerkesztő kiegészítése is pontosabb.', en: 'Editor autocompletion gets more precise.' },
+    ],
+    cons: [
+      { hu: 'Kicsit több típusírás az elején.', en: 'A bit more typing up front.' },
+    ],
+    related: [
+      ['parse-dont-validate', { hu: 'a parse adja a biztos típust, ez tartja is meg.', en: 'parsing gives you the safe type; this keeps it safe.' }],
+      ['ssot', { hu: 'egy állapot, egy igazság.', en: 'one state, one truth.' }],
+    ],
+  },
+  'parse-dont-validate': {
+    problem: { hu: 'Ugyanazt az ellenőrzést tíz helyen ismétled, és egy helyről biztosan kimarad.', en: 'You repeat the same check in ten places, and one of them will be missed.' },
+    analogy: { hu: 'A sütiszaggató egyszer formázza meg a tésztát – utána nem kell minden sütit lemérni.', en: 'A cookie cutter shapes the dough once – after that you don’t measure every cookie.' },
+    when: [
+      { hu: 'Űrlapadatnál, URL-paraméternél, API-válasznál.', en: 'For form data, URL parameters and API responses.' },
+      { hu: 'Ha ugyanazt az ellenőrzést többször írnád meg.', en: 'When you would write the same check more than once.' },
+    ],
+    pros: [
+      { hu: 'Egy helyen dől el, mi érvényes.', en: 'One place decides what is valid.' },
+      { hu: 'A belső kód egyszerűbb lesz.', en: 'The inner code gets simpler.' },
+    ],
+    cons: [
+      { hu: 'Több típus és átalakító függvény.', en: 'More types and converter functions.' },
+    ],
+    related: [
+      ['user-input', { hu: 'a parse a bizalmatlanság legjobb formája.', en: 'parsing is the best form of distrust.' }],
+      ['illegal-states', { hu: 'a parse után már csak érvényes állapot létezik.', en: 'after parsing, only valid states exist.' }],
+    ],
+  },
+  'tell-dont-ask': {
+    problem: { hu: 'Ugyanaz a szabály (van-e elég pénz?) szétszóródik mindenhol, ahol az objektumot használják.', en: 'The same rule (is there enough money?) gets scattered wherever the object is used.' },
+    analogy: { hu: 'A taxisnak megmondod a címet, nem kérdezgeted kanyaronként, merre van a kormány.', en: 'You give the taxi driver the address; you don’t ask where the steering wheel is at every turn.' },
+    when: [
+      { hu: 'Ha egy if egy objektum mezőit nézi, aztán ugyanazt az objektumot módosítja.', en: 'When an if reads an object’s fields and then changes the same object.' },
+      { hu: 'Üzleti logikánál (kosár, számla, felhasználó).', en: 'In business logic (cart, account, user).' },
+    ],
+    pros: [
+      { hu: 'A szabály egy helyen van.', en: 'The rule is in one place.' },
+      { hu: 'Kevesebb kiszivárgó belső részlet.', en: 'Fewer leaking internals.' },
+    ],
+    cons: [
+      { hu: 'Túl sok apró metódus lehet belőle.', en: 'It can lead to lots of tiny methods.' },
+    ],
+    related: [
+      ['encapsulation', { hu: 'a „mondd meg” csak egységbezárással működik.', en: '“tell” only works with encapsulation.' }],
+      ['demeter', { hu: 'ne nyúlj a belsejébe – kérd meg, hogy csinálja ő.', en: 'don’t reach inside – ask it to do the job.' }],
+    ],
+  },
+  encapsulation: {
+    problem: { hu: 'Bárki átírhatja a belső adatot, így a hibás állapot bárhonnan jöhet.', en: 'Anyone can overwrite the internal data, so a broken state can come from anywhere.' },
+    analogy: { hu: 'Az ajándékdoboz belsejét nem látod – és nem is kell, amíg ki nem bontod.', en: 'You can’t see inside a gift box – and you don’t need to until you open it.' },
+    when: [
+      { hu: 'Modulok és komponensek nyilvános felületénél.', en: 'For the public surface of modules and components.' },
+      { hu: 'Ha egy adatot csak szabályok szerint szabad módosítani.', en: 'When data may only change according to rules.' },
+    ],
+    pros: [
+      { hu: 'A belső rész szabadon változhat.', en: 'The inside is free to change.' },
+      { hu: 'Kevesebb váratlan mellékhatás.', en: 'Fewer unexpected side effects.' },
+    ],
+    cons: [
+      { hu: 'Hibakereséskor nehezebb belelátni.', en: 'Harder to look inside while debugging.' },
+    ],
+    related: [
+      ['tell-dont-ask', { hu: 'a bezárt objektumnak megmondod, mit tegyen.', en: 'you tell an encapsulated object what to do.' }],
+      ['isp', { hu: 'kicsi, célzott felület kifelé.', en: 'a small, focused surface to the outside.' }],
+    ],
+  },
+  'descriptive-errors': {
+    problem: { hu: '„Valami hiba történt.” – és senki sem tudja, mi, hol, vagy mit kellene tenni.', en: '“Something went wrong.” – and nobody knows what, where, or what to do next.' },
+    analogy: { hu: 'A jó útjelző tábla nem csak annyit mond, hogy „Út lezárva”, hanem azt is, merre van a kerülő.', en: 'A good road sign doesn’t just say “Road closed” – it shows the detour.' },
+    when: [
+      { hu: 'Minden throw és minden felhasználói hibaüzenet megírásakor.', en: 'Every time you write a throw or a user-facing error.' },
+      { hu: 'Validációnál: melyik mező, és mi a baj vele.', en: 'In validation: which field, and what is wrong with it.' },
+    ],
+    pros: [
+      { hu: 'Gyorsabb hibakeresés.', en: 'Faster debugging.' },
+      { hu: 'Kevesebb támogatási kérdés.', en: 'Fewer support questions.' },
+    ],
+    cons: [
+      { hu: 'Több szöveget kell megírni és lefordítani.', en: 'More text to write and translate.' },
+    ],
+    related: [
+      ['read-error', { hu: 'a jó hibaüzenetet könnyű elolvasni.', en: 'a good error message is easy to read.' }],
+      ['fail-fast', { hu: 'a gyors hiba csak érthető üzenettel ér valamit.', en: 'failing fast only helps with a clear message.' }],
+    ],
+  },
+  'red-green-refactor': {
+    problem: { hu: 'A tesztek a végére maradnak, aztán elmaradnak, és a refaktortól mindenki fél.', en: 'Tests are left for the end, then skipped, and everyone fears refactoring.' },
+    analogy: { hu: 'Előbb kitűzöd a célt a térképen, aztán elindulsz, végül kiegyenesíted a kanyargós utat.', en: 'First you pin the destination on the map, then you go, then you straighten the winding route.' },
+    when: [
+      { hu: 'Tiszta logikánál (számítás, formázás, szabályok).', en: 'For pure logic (calculations, formatting, rules).' },
+      { hu: 'Hibajavításnál: előbb egy teszt, ami előhozza a hibát.', en: 'When fixing a bug: first a test that reproduces it.' },
+    ],
+    pros: [
+      { hu: 'Biztos, tesztelt kód.', en: 'Solid, tested code.' },
+      { hu: 'Félelem nélkül refaktorálhatsz.', en: 'You can refactor without fear.' },
+    ],
+    cons: [
+      { hu: 'Eleinte lassabbnak érződik.', en: 'Feels slower at first.' },
+    ],
+    related: [
+      ['feedback', { hu: 'a teszt a leggyorsabb visszajelzés.', en: 'a test is the fastest feedback.' }],
+      ['courage', { hu: 'a zöld tesztek adnak bátorságot.', en: 'green tests give you courage.' }],
+    ],
+  },
+  'vertical-slices': {
+    problem: { hu: 'Hetekig készül az adatbázis, aztán az API, és csak a végén derül ki, hogy a darabok nem illenek össze.', en: 'The database takes weeks, then the API, and only at the end do you find the pieces don’t fit.' },
+    analogy: { hu: 'A tortából szeletet vágsz, nem csak az alsó réteget kínálod fel.', en: 'You serve a slice of cake, not just the bottom layer.' },
+    when: [
+      { hu: 'Új funkciónál, ami több réteget is érint.', en: 'For a new feature that touches several layers.' },
+      { hu: 'Ha korán kell valamit mutatni.', en: 'When you need to show something early.' },
+    ],
+    pros: [
+      { hu: 'Mindig van működő, kipróbálható darab.', en: 'There’s always a working piece to try.' },
+      { hu: 'A gondok korán kiderülnek.', en: 'Problems show up early.' },
+    ],
+    cons: [
+      { hu: 'A rétegek eleinte kevésbé egységesek.', en: 'The layers are less uniform at first.' },
+    ],
+    related: [
+      ['divide-conquer', { hu: 'egy szelet = egy kicsi, kerek lépés.', en: 'one slice = one small, complete step.' }],
+      ['gall', { hu: 'a működő egyszerűből nő a működő bonyolult.', en: 'working complexity grows from working simplicity.' }],
+    ],
+  },
+  'git-50-72': {
+    problem: { hu: 'A git log olvashatatlan: levágott, hosszú címek és „fix”, „wip”, „stuff” üzenetek.', en: 'git log is unreadable: long truncated titles and “fix”, “wip”, “stuff” messages.' },
+    analogy: { hu: 'Az újságcikknek is rövid címe és tördelt szövege van – nem egyetlen végtelen sor.', en: 'A newspaper article has a short headline and wrapped text – not one endless line.' },
+    when: [
+      { hu: 'Minden commitnál.', en: 'With every commit.' },
+      { hu: 'Squash előtt: a végső üzenet legyen rendes.', en: 'Before squashing: make the final message a proper one.' },
+    ],
+    pros: [
+      { hu: 'Olvasható előzmények.', en: 'A readable history.' },
+      { hu: 'Könnyebb visszakeresni, mikor mi változott.', en: 'Easier to find when something changed.' },
+    ],
+    cons: [
+      { hu: 'Rövid címbe néha nehéz belesűríteni a lényeget.', en: 'Squeezing the point into a short title can be hard.' },
+    ],
+    related: [
+      ['commit-often', { hu: 'sok kis commit – sok jó üzenet.', en: 'lots of small commits – lots of good messages.' }],
+      ['communication', { hu: 'a commit-üzenet levél a jövőbeli olvasónak.', en: 'a commit message is a letter to the future reader.' }],
+    ],
+  },
+  murphy: {
+    problem: { hu: 'A kód csak a „boldog utat” kezeli, és az első lassú hálózaton vagy üres listán összeomlik.', en: 'The code only handles the happy path and crashes on the first slow network or empty list.' },
+    analogy: { hu: 'A pirítós mindig a vajas felére esik – ezért van a konyhában törlőrongy.', en: 'Toast always lands butter-side down – that’s why kitchens have a cloth.' },
+    when: [
+      { hu: 'Hálózati kérésnél, fájlkezelésnél, felhasználói bemenetnél.', en: 'For network requests, file handling and user input.' },
+      { hu: 'Üres, hiányzó vagy nagyon hosszú adatnál.', en: 'For empty, missing or very long data.' },
+    ],
+    pros: [
+      { hu: 'Robusztus alkalmazás.', en: 'A robust application.' },
+      { hu: 'Kevesebb éjszakai riasztás.', en: 'Fewer late-night alerts.' },
+    ],
+    cons: [
+      { hu: 'Több kód kell a szélső esetekre.', en: 'More code for edge cases.' },
+    ],
+    related: [
+      ['fail-fast', { hu: 'ha már elromlik, legalább gyorsan és érthetően.', en: 'if it breaks, let it break fast and clearly.' }],
+      ['user-input', { hu: 'a felhasználó lesz a legkreatívabb hibaforrás.', en: 'users will be your most creative source of errors.' }],
+    ],
+  },
+  hofstadter: {
+    problem: { hu: 'A „két óra” két nap lesz, és a határidő előtti éjszaka megy rá.', en: '“Two hours” becomes two days, and the night before the deadline goes with it.' },
+    analogy: { hu: 'A homokóra mindig lassabban fogy, amikor nézed.', en: 'An hourglass always runs slower while you watch it.' },
+    when: [
+      { hu: 'Becsléskor: bontsd kis lépésekre, és adj hozzá tartalékot.', en: 'When estimating: break it into small steps and add a buffer.' },
+      { hu: 'Tervezéskor: hagyj helyet a váratlannak.', en: 'When planning: leave room for the unexpected.' },
+    ],
+    pros: [
+      { hu: 'Reálisabb határidők.', en: 'More realistic deadlines.' },
+      { hu: 'Kevesebb stressz.', en: 'Less stress.' },
+    ],
+    cons: [
+      { hu: 'A tartalék elfogyhat csak azért, mert ott van (Parkinson törvénye).', en: 'A buffer can get used up just because it’s there (Parkinson’s law).' },
+    ],
+    related: [
+      ['divide-conquer', { hu: 'kis lépéseket könnyebb megbecsülni.', en: 'small steps are easier to estimate.' }],
+      ['communication', { hu: 'ha csúszik, szólj korán.', en: 'if it slips, say so early.' }],
+    ],
+  },
+  postel: {
+    problem: { hu: 'Apró formai eltérések (szóköz, nagybetű, vessző) miatt elutasított bemenetek és bosszús felhasználók.', en: 'Inputs rejected over tiny differences (spaces, capitals, commas) and annoyed users.' },
+    analogy: { hu: 'A posta a kézzel címzett borítékot is elfogadja, de szabványos címkével kézbesíti.', en: 'The post office accepts a handwritten envelope, but delivers it with a standard label.' },
+    when: [
+      { hu: 'Felhasználói bemenetnél (telefonszám, ár, dátum).', en: 'For user input (phone numbers, prices, dates).' },
+      { hu: 'API-k között: amit küldesz, pontosan kövesse a formátumot.', en: 'Between APIs: what you send should follow the format exactly.' },
+    ],
+    pros: [
+      { hu: 'Barátságosabb űrlapok.', en: 'Friendlier forms.' },
+      { hu: 'Stabil, kiszámítható kimenet.', en: 'Stable, predictable output.' },
+    ],
+    cons: [
+      { hu: 'A túl laza elfogadás elrejtheti a valódi hibákat.', en: 'Accepting too loosely can hide real mistakes.' },
+    ],
+    related: [
+      ['parse-dont-validate', { hu: 'lazán fogadd, szigorúan parse-old.', en: 'accept loosely, parse strictly.' }],
+      ['user-input', { hu: 'a megengedés nem jelent vak bizalmat.', en: 'being lenient doesn’t mean trusting blindly.' }],
+    ],
+  },
+  gall: {
+    problem: { hu: 'Az első verziót „rendesen” akarod megcsinálni, minden extrával, és sosem lesz kész.', en: 'You want the first version to be “proper”, with every extra, and it never ships.' },
+    analogy: { hu: 'Az erdő sem egyszerre nő ki: egy csemetével kezdődik.', en: 'A forest doesn’t appear all at once: it starts with a seedling.' },
+    when: [
+      { hu: 'Új projekt indításakor.', en: 'When starting a new project.' },
+      { hu: 'Ha a terv már az első verzióhoz is ijesztően nagy.', en: 'When the plan looks scary even for version one.' },
+    ],
+    pros: [
+      { hu: 'Hamar van működő változat.', en: 'You get a working version early.' },
+      { hu: 'Valódi visszajelzés alapján nő tovább.', en: 'It grows based on real feedback.' },
+    ],
+    cons: [
+      { hu: 'Később át kell alakítani azt, ami kinőtte magát.', en: 'You’ll reshape parts that outgrow themselves later.' },
+    ],
+    related: [
+      ['kiss', { hu: 'egyszerűen kezdj.', en: 'start simple.' }],
+      ['yagni', { hu: 'az extrák ráérnek.', en: 'the extras can wait.' }],
+    ],
+  },
 };
 
 /*
@@ -1314,6 +1902,22 @@ window.PRINCIPLES.posters = {
   'commit-often': { title: { hu: 'Mentés', en: 'Save point' }, caption: { hu: 'Ments a főellenség előtt. Mindig.', en: 'Save before the boss fight. Always.' } },
   'read-error': { title: { hu: 'Figyelem', en: 'Attention' }, caption: { hu: 'A lámpa három hete ég. Biztos nem fontos.', en: 'That light has been on for three weeks. Probably nothing.' } },
   'code-for-humans': { title: { hu: 'Olvashatóság', en: 'Readability' }, caption: { hu: 'Ma még érted. Hat hónap múlva egy idegen kódja lesz.', en: 'Today you get it. In six months it’s a stranger’s code.' } },
+  communication: { title: { hu: 'Kommunikáció', en: 'Communication' }, caption: { hu: 'A hibát az első napon megtalálták. Senki sem szólt.', en: 'The bug was found on day one. Nobody mentioned it.' } },
+  feedback: { title: { hu: 'Visszajelzés', en: 'Feedback' }, caption: { hu: 'Minden, amit eldobsz, visszajön. Jobb, ha látod jönni.', en: 'Everything you throw comes back. Better to see it coming.' } },
+  courage: { title: { hu: 'Bátorság', en: 'Courage' }, caption: { hu: '2000 sort töröltem. Az év legjobb commitja.', en: 'Deleted 2,000 lines. Best commit of the year.' } },
+  respect: { title: { hu: 'Tisztelet', en: 'Respect' }, caption: { hu: 'A kódot nézd át, ne azt, aki írta.', en: 'Review the code, not the person who wrote it.' } },
+  'illegal-states': { title: { hu: 'Tiltott állapot', en: 'Illegal states' }, caption: { hu: 'Egyszerre piros és zöld. A típusrendszer előre látta.', en: 'Red and green at once. The type system saw it coming.' } },
+  'parse-dont-validate': { title: 'Parse', caption: { hu: 'Egyszer formázd meg. Utána minden süti csillag.', en: 'Shape it once. Every cookie after that is a star.' } },
+  'tell-dont-ask': { title: { hu: 'Mondd meg', en: 'Tell' }, caption: { hu: 'Ne kérdezd percenként a sütőt, hogy van. Állítsd be az időzítőt.', en: 'Don’t ask the oven how it’s doing every minute. Set the timer.' } },
+  encapsulation: { title: { hu: 'Egységbezárás', en: 'Encapsulation' }, caption: { hu: 'Hogy mi van benne, az senkire sem tartozik. A születésnapig.', en: 'What’s inside is nobody’s business. Until the birthday.' } },
+  'descriptive-errors': { title: { hu: 'Érthető hibák', en: 'Clear errors' }, caption: { hu: 'Nem csak annyi, hogy „Hiba”. Hanem mi, hol, és merre tovább.', en: 'Not just “Error”. What, where, and which way to go.' } },
+  'red-green-refactor': { title: 'TDD', caption: { hu: 'Bukj el szándékosan. Menj át tényleg. Aztán szépítsd.', en: 'Fail on purpose. Pass for real. Then make it pretty.' } },
+  'vertical-slices': { title: { hu: 'Szeletek', en: 'Slices' }, caption: { hu: 'Senki sem kéri csak az alsó réteget. Vágj mindenből egy szeletet.', en: 'Nobody wants just the bottom layer. Cut a slice of everything.' } },
+  'git-50-72': { title: '50/72', caption: { hu: 'Ötven a címnek. Hetvenkettő a történetnek.', en: 'Fifty for the title. Seventy-two for the story.' } },
+  murphy: { caption: { hu: 'Vajas felével fog leesni. Előbb a hibakezelést írd meg.', en: 'It will land butter-side down. Write the error handler first.' } },
+  hofstadter: { caption: { hu: 'Tovább tart, mint gondolod. Akkor is, ha ezt is beleszámoltad.', en: 'It takes longer than you think. Even after you allowed for that.' } },
+  postel: { caption: { hu: 'Fogadd el a gyűrött leveleket. Küldj szépeket.', en: 'Accept the crumpled letters. Send out neat ones.' } },
+  gall: { caption: { hu: 'Minden működő erdő egy működő csemetével kezdődött.', en: 'Every working forest started as one seedling that worked.' } },
 };
 
 /*
@@ -1322,6 +1926,8 @@ window.PRINCIPLES.posters = {
  */
 window.PRINCIPLES.order = [
   'kiss', 'dry', 'yagni', 'boy-scout', 'magic-numbers', 'self-documenting', 'early-return', 'aha', 'dead-code',
-  'premature-optimization', 'rubber-duck', 'user-input', 'fail-fast', 'gigo', 'divide-conquer',
-  'no-copy-paste', 'commit-often', 'read-error', 'code-for-humans',
+  'premature-optimization', 'rubber-duck', 'user-input', 'fail-fast', 'descriptive-errors', 'gigo', 'divide-conquer',
+  'no-copy-paste', 'commit-often', 'git-50-72', 'read-error', 'code-for-humans', 'red-green-refactor', 'vertical-slices',
+  'communication', 'feedback', 'courage', 'respect',
+  'murphy', 'hofstadter', 'postel', 'gall',
 ];

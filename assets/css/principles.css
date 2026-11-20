@@ -543,9 +543,9 @@
 .wheel-block {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 560px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 540px) minmax(0, 1fr);
   align-items: center;
-  gap: 24px 40px;
+  gap: 24px 36px;
 }
 
 .wheel-box {
@@ -581,7 +581,7 @@
 }
 
 .callout {
-  width: min(100%, 250px);
+  width: min(100%, 270px);
 }
 
 .co-head {
@@ -634,6 +634,14 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
+  break-inside: avoid;
+}
+
+/* hosszabb listák két hasábban, hogy a dobozok ne nyúljanak túl a keréken */
+.co-box.is-long {
+  display: block;
+  columns: 2;
+  column-gap: 14px;
 }
 
 .co-box li::before {
@@ -929,7 +937,8 @@
   padding: 8px 10px 0;
   border-top: 4px solid var(--a);
   margin-top: -2px;
-  font: 800 17px/1.15 var(--font-head);
+  font: 800 16px/1.15 var(--font-head);
+  letter-spacing: -0.01em;
   overflow-wrap: break-word;
   hyphens: auto;
 }
