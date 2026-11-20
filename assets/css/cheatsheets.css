@@ -258,16 +258,229 @@
 /* ---------- a felsorolós rész: BLUEPRINT (sötét tervrajz, ágazó vonalak) ---------- */
 
 .view-blueprint .sheet-paper {
-  padding: 30px 28px 34px;
+  padding: 50px 54px 46px;
   color: #e7f0ff;
   background-color: #141b2d;
   background-image:
     linear-gradient(rgba(116, 192, 252, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(116, 192, 252, 0.08) 1px, transparent 1px);
   background-size: 22px 22px;
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-card);
-  box-shadow: 5px 6px 0 var(--shadow);
+  border: 1px solid #0b1020;
+  border-radius: 3px;
+  box-shadow: 0 2px 3px rgba(20, 30, 25, 0.18), 0 14px 30px rgba(20, 30, 25, 0.28);
+}
+
+/* ---------- tervezőasztal: a lap egy rácsos rajzasztalon fekszik ---------- */
+
+#app.desk {
+  overflow-x: clip;
+  background-color: #d8ddd2;
+  background-image:
+    radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.35), transparent 70%),
+    linear-gradient(rgba(60, 80, 68, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(60, 80, 68, 0.09) 1px, transparent 1px),
+    linear-gradient(rgba(60, 80, 68, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(60, 80, 68, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  border-bottom: 2px dashed var(--line);
+}
+
+#app.desk .sheet {
+  padding-block: 58px 70px;
+}
+
+/* ragasztószalag a lap sarkain */
+.bp-tape {
+  position: absolute;
+  z-index: 4;
+  width: 92px;
+  height: 26px;
+  background: rgba(240, 229, 200, 0.82);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  clip-path: polygon(0 8%, 6% 0, 12% 10%, 18% 0, 82% 0, 88% 10%, 94% 0, 100% 8%, 100% 92%, 94% 100%, 88% 90%, 82% 100%, 18% 100%, 12% 90%, 6% 100%, 0 92%);
+  pointer-events: none;
+}
+
+.bp-tape-tl { top: -6px; left: -30px; transform: rotate(-38deg); }
+.bp-tape-tr { top: -6px; right: -30px; transform: rotate(38deg); }
+.bp-tape-bl { bottom: -6px; left: -30px; transform: rotate(38deg); }
+.bp-tape-br { bottom: -6px; right: -30px; transform: rotate(-38deg); }
+
+/* műszaki rajz kerete: két vonal, köztük sávban a zónák jelei */
+.bp-frame {
+  --band: 16px;
+  --fl: rgba(231, 240, 255, 0.36);
+  position: absolute;
+  inset: 12px;
+  pointer-events: none;
+  border: 1.2px solid var(--fl);
+  background:
+    linear-gradient(90deg, var(--fl) 1px, transparent 1px) 0 0 / calc(100% / 8) var(--band) repeat-x,
+    linear-gradient(90deg, var(--fl) 1px, transparent 1px) 0 100% / calc(100% / 8) var(--band) repeat-x,
+    linear-gradient(var(--fl) 1px, transparent 1px) 0 0 / var(--band) calc(100% / 6) repeat-y,
+    linear-gradient(var(--fl) 1px, transparent 1px) 100% 0 / var(--band) calc(100% / 6) repeat-y;
+}
+
+.bp-frame::before {
+  content: "";
+  position: absolute;
+  inset: var(--band);
+  border: 1.2px solid var(--fl);
+}
+
+.bp-zone {
+  position: absolute;
+  color: rgba(231, 240, 255, 0.6);
+  font: 600 10px/1 var(--font-code);
+  transform: translate(-50%, -50%);
+}
+
+.bp-zone-top { top: calc(var(--band) / 2); left: calc(var(--z) * 100%); }
+.bp-zone-bottom { top: calc(100% - var(--band) / 2); left: calc(var(--z) * 100%); }
+.bp-zone-left { top: calc(var(--z) * 100%); left: calc(var(--band) / 2); }
+.bp-zone-right { top: calc(var(--z) * 100%); left: calc(100% - var(--band) / 2); }
+
+/* szövegmező a jobb alsó sarokban */
+.bp-title-block {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 0.9fr;
+  grid-template-areas:
+    "project project sheet"
+    "title title scale"
+    "drawn level level";
+  gap: 1px;
+  width: min(100%, 460px);
+  /* a keret belső sarkába illeszkedik (lap belső margója − keret beljebb húzása − zónasáv) */
+  margin: 44px -26px -17px auto;
+  border: 1.6px solid rgba(231, 240, 255, 0.6);
+  background: rgba(231, 240, 255, 0.35);
+  font-family: var(--font-code);
+}
+
+.tb-cell {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  min-width: 0;
+  padding: 5px 9px 7px;
+  background: #141b2d;
+}
+
+.tb-project { grid-area: project; }
+.tb-sheet { grid-area: sheet; }
+.tb-title { grid-area: title; }
+.tb-scale { grid-area: scale; }
+.tb-drawn { grid-area: drawn; }
+.tb-level { grid-area: level; }
+
+.tb-label {
+  color: #8fa3c4;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tb-value {
+  overflow-wrap: anywhere;
+  color: #f1f5ff;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.tb-title .tb-value {
+  color: var(--c);
+  font: 800 17px/1.15 var(--font-head);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* az asztalon heverő eszközök */
+.desk-tools > * {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* átlátszó műanyag vonalzó a lap tetején, mm-es beosztással */
+.desk-ruler {
+  top: -30px;
+  left: 17%;
+  width: 56%;
+  height: 36px;
+  overflow: hidden;
+  border: 1.5px solid rgba(43, 42, 40, 0.55);
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.7);
+  background-image:
+    repeating-linear-gradient(90deg, rgba(43, 42, 40, 0.85) 0 1.2px, transparent 1.2px 100px),
+    repeating-linear-gradient(90deg, rgba(43, 42, 40, 0.75) 0 1px, transparent 1px 50px),
+    repeating-linear-gradient(90deg, rgba(43, 42, 40, 0.6) 0 1px, transparent 1px 10px);
+  background-repeat: repeat-x;
+  background-size: 100% 16px, 100% 11px, 100% 6px;
+  background-position: 10px 100%, 10px 100%, 10px 100%;
+  box-shadow: 2px 4px 8px rgba(20, 30, 25, 0.2);
+  transform: rotate(-0.8deg);
+}
+
+.desk-ruler span {
+  position: absolute;
+  bottom: 17px;
+  left: calc(10px + var(--n) * 100px);
+  transform: translateX(-50%);
+  color: rgba(43, 42, 40, 0.8);
+  font: 600 10px/1 var(--font-code);
+}
+
+/* 45°-os háromszögvonalzó a bal oldalon */
+.desk-square {
+  bottom: 70px;
+  left: -96px;
+  width: 150px;
+  height: 150px;
+  transform: rotate(14deg);
+  filter: drop-shadow(2px 4px 4px rgba(20, 30, 25, 0.22));
+}
+
+.desk-square path {
+  fill: rgba(150, 205, 240, 0.3);
+  stroke: #4f86b0;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.desk-square .desk-square-ticks {
+  fill: none;
+  stroke-width: 1.4;
+}
+
+/* ceruza a jobb oldalon, félig a lapon */
+.desk-pencil {
+  top: 170px;
+  right: -122px;
+  width: 230px;
+  height: 19px;
+  transform: rotate(-78deg);
+  filter: drop-shadow(2px 4px 3px rgba(20, 30, 25, 0.25));
+}
+
+.desk-pencil * {
+  stroke: rgba(43, 42, 40, 0.55);
+  stroke-width: 0.8;
+}
+
+.pc-body { fill: #f6c945; }
+.pc-light { fill: #ffdc6e; stroke: none !important; }
+.pc-dark { fill: #e0ab2a; stroke: none !important; }
+.pc-wood { fill: #edd2a8; }
+.pc-lead { fill: #3a3a3a; }
+.pc-metal { fill: #c4c8cd; }
+.pc-eraser { fill: #f2a1b3; }
+
+@media (max-width: 1099px) {
+  .desk-tools {
+    display: none;
+  }
 }
 
 .sheet-paper .sheet-count,
@@ -298,14 +511,6 @@
   text-transform: uppercase;
 }
 
-.sheet-top .sheet-name {
-  --stripe: var(--a);
-}
-
-.sheet-top .sheet-name-icon {
-  color: var(--a);
-}
-
 .view-blueprint .sheet-sub {
   text-decoration-color: var(--orange);
 }
@@ -331,13 +536,183 @@
   border-color: #e7f0ff;
 }
 
-/* ahol van poszter, ott a fejléc és a poszter a világos papíron áll, a blueprint lap külön alatta */
-.sheet-top .playground {
-  margin-bottom: 30px;
-}
+/* ---------- a poszter a blueprinten: tervrajz-tábla sarokjelekkel, világító vonalakkal ---------- */
 
 .view-blueprint .playground {
+  --bp-line: rgba(231, 240, 255, 0.5);
+  --bp-faint: rgba(231, 240, 255, 0.18);
+  --bp-glow: rgba(116, 192, 252, 0.16);
+  margin: 6px 4px 40px;
+  padding: 18px 20px 20px;
+  color: #e7f0ff;
+  background: rgba(27, 36, 64, 0.78);
+  border: 1.6px solid var(--bp-line);
+  border-radius: 4px;
+  box-shadow: none;
+  outline: 1px dashed var(--bp-faint);
+  outline-offset: 7px;
+}
+
+/* sarokjelek, mint egy műszaki rajzon */
+.view-blueprint .playground::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  pointer-events: none;
+  --k: linear-gradient(var(--c), var(--c));
+  background:
+    var(--k) top left / 20px 2.5px no-repeat,
+    var(--k) top left / 2.5px 20px no-repeat,
+    var(--k) top right / 20px 2.5px no-repeat,
+    var(--k) top right / 2.5px 20px no-repeat,
+    var(--k) bottom left / 20px 2.5px no-repeat,
+    var(--k) bottom left / 2.5px 20px no-repeat,
+    var(--k) bottom right / 20px 2.5px no-repeat,
+    var(--k) bottom right / 2.5px 20px no-repeat;
+}
+
+.view-blueprint .playground .card-head {
+  margin-bottom: 4px;
+}
+
+.view-blueprint .playground .card-title {
+  font: 800 16px/1.2 var(--font-head);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.view-blueprint .playground .card-title .hl {
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: var(--c);
+}
+
+.view-blueprint .playground .card-title .hl::before {
+  content: "▸ ";
+}
+
+.view-blueprint .pg-hint {
+  color: #b8c7e0;
+}
+
+.view-blueprint .pg-field legend {
+  color: #8fa3c4;
+}
+
+.view-blueprint .pg-option span {
+  border: 1.5px solid var(--bp-line);
+  border-radius: 4px;
+  background: transparent;
+  color: #e7f0ff;
+}
+
+.view-blueprint .pg-option span:hover {
+  background: var(--bp-glow);
+}
+
+.view-blueprint .pg-option input:checked + span {
+  border-color: var(--c);
+  background: var(--c);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--c) 55%, transparent);
+  color: #141b2d;
+}
+
+.view-blueprint .pg-option input:focus-visible + span {
+  outline-color: var(--c);
+}
+
+.view-blueprint .pg-range input,
+.view-blueprint .gen-check input {
+  accent-color: var(--c);
+}
+
+/* a játszótér színpada: finomabb rács, világító körvonalas dobozok */
+.view-blueprint .pg-stage {
+  border: 1.5px dashed var(--bp-line);
+  border-radius: 4px;
+  background-color: rgba(15, 21, 36, 0.6);
+  background-image:
+    linear-gradient(rgba(116, 192, 252, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 192, 252, 0.13) 1px, transparent 1px);
+  background-size: 11px 11px;
+}
+
+.view-blueprint .pg-item {
+  --hue: calc(var(--i) * 45);
+  border: 2px solid hsl(var(--hue) 90% 72%);
+  border-radius: 3px;
+  background: hsl(var(--hue) 90% 70% / 0.16);
+  box-shadow: 0 0 10px hsl(var(--hue) 90% 70% / 0.3), inset 0 0 8px hsl(var(--hue) 90% 70% / 0.15);
+  color: hsl(var(--hue) 95% 84%);
+}
+
+/* a generátorok előnézete: világos rajzlap a táblán (az árnyékok, keretek így látszanak) */
+.view-blueprint .gen-stage {
+  border: 1.5px solid var(--bp-line);
+  border-radius: 4px;
+  background-color: #f3f7fd;
+  background-image:
+    linear-gradient(rgba(28, 126, 214, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 126, 214, 0.1) 1px, transparent 1px);
+  background-size: 14px 14px;
   color: var(--ink);
+}
+
+.view-blueprint .gen-color input {
+  border-color: var(--bp-line);
+}
+
+.view-blueprint .gen-color code {
+  color: #8fa3c4;
+}
+
+.view-blueprint .gen-formats-title {
+  color: #b8c7e0;
+}
+
+.view-blueprint .gen-chip {
+  border: 1.5px solid var(--bp-line);
+  border-radius: 4px;
+  background: transparent;
+  color: #e7f0ff;
+}
+
+.view-blueprint .gen-chip:hover,
+.view-blueprint .gen-chip:focus-visible {
+  background: var(--bp-glow);
+}
+
+.view-blueprint .gen-swatch {
+  border-color: #e7f0ff;
+}
+
+/* a kimenő kód: sötét, szaggatott keretes doboz, a blueprint színeivel */
+.view-blueprint .playground .code-label {
+  color: #8fa3c4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.view-blueprint .playground .code pre {
+  border: 1.5px dashed var(--bp-line);
+  border-radius: 4px;
+  background: rgba(10, 14, 26, 0.75);
+  color: #f1f5ff;
+  scrollbar-color: rgba(231, 240, 255, 0.35) transparent;
+}
+
+.view-blueprint .playground .copy {
+  border-color: var(--bp-line);
+  background: #141b2d;
+  color: #e7f0ff;
+}
+
+.view-blueprint .playground .copy:hover,
+.view-blueprint .playground .copy:focus-visible {
+  border-color: var(--c);
+  background: var(--c);
+  color: #141b2d;
 }
 
 .bp-board {
@@ -465,7 +840,8 @@
 
 .pg-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 380px) 1fr;
+  /* minmax(0, …): a hosszú kódsor ne nyomja ki a dobozt, inkább görgethető legyen */
+  grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
   gap: 22px;
   align-items: start;
 }
@@ -730,7 +1106,32 @@
   }
 
   .view-blueprint .sheet-paper {
-    padding: 22px 14px 26px;
+    padding: 30px 18px 28px;
+  }
+
+  /* keskeny lapon csak egy vékony keret marad, zónajelek nélkül */
+  .bp-frame {
+    inset: 7px;
+    background: none;
+  }
+
+  .bp-frame::before,
+  .bp-zone {
+    display: none;
+  }
+
+  .bp-tape {
+    width: 64px;
+    height: 20px;
+  }
+
+  #app.desk .sheet {
+    padding-block: 30px 40px;
+  }
+
+  .bp-title-block {
+    width: auto;
+    margin: 32px -11px -21px;
   }
 }
 

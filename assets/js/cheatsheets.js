@@ -45,6 +45,11 @@
       'cs.formats': 'Ugyanez a szín (kattints a másoláshoz)',
       'cs.btnLabel': 'Kattints rám',
       'cs.box': 'doboz',
+      'cs.tbProject': 'Projekt',
+      'cs.tbTitle': 'Megnevezés',
+      'cs.tbSheet': 'Lap',
+      'cs.tbScale': 'Lépték',
+      'cs.tbDrawn': 'Rajzolta',
     },
     en: {
       'cs.docTitle': 'Cheat sheets · Rika cheat sheets',
@@ -77,6 +82,11 @@
       'cs.formats': 'The same color (click to copy)',
       'cs.btnLabel': 'Click me',
       'cs.box': 'box',
+      'cs.tbProject': 'Project',
+      'cs.tbTitle': 'Title',
+      'cs.tbSheet': 'Sheet',
+      'cs.tbScale': 'Scale',
+      'cs.tbDrawn': 'Drawn by',
     },
   });
 
@@ -519,8 +529,8 @@
     return posterCard(tx(cfg.name), t('cs.genHint'), controls, h('div', {}, style, stage, extraHost, codeHost));
   }
 
-  /** A világos, kattintgatós kártya a blueprint lap tetején. */
-  const posterCard = (title, hint, controls, output) => h('section', { class: 'card playground no-print', style: '--c:#99e9f2;--a:#0c8599' },
+  /** A kattintgatós tábla a blueprint lap tetején, tervrajz stílusban, a lap saját színével. */
+  const posterCard = (title, hint, controls, output) => h('section', { class: 'card playground no-print' },
     h('header', { class: 'card-head' }, h('h2', { class: 'card-title' }, h('span', { class: 'hl' }, title))),
     h('p', { class: 'pg-hint' }, hint),
     h('div', { class: 'pg-layout' }, controls, output));
@@ -550,11 +560,57 @@
         h('span', { class: 'sheet-count' }, t('cs.entries', { n: countItems(sheet), m: minutes(sheet) })),
         h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => window.print() }, t('cs.print'))));
 
-    // ahol van poszter, ott a fejléc és a poszter külön áll a világos papíron, a sötét blueprint lap alatta
-    const poster = renderPoster(sheet.playground);
+    app.classList.add('desk');
     app.replaceChildren(h('article', { class: 'sheet wrap view-blueprint', style: `--c:${color.c};--a:${color.a}` },
-      poster ? h('div', { class: 'sheet-top' }, head, poster) : null,
-      h('div', { class: 'sheet-paper' }, poster ? null : head, renderBlueprint(sheet))));
+      h('div', { class: 'sheet-paper' },
+        deskTools(),
+        ...['tl', 'tr', 'bl', 'br'].map((corner) => h('span', { class: `bp-tape bp-tape-${corner} no-print`, 'aria-hidden': 'true' })),
+        drawingFrame(),
+        head, renderPoster(sheet.playground), renderBlueprint(sheet), titleBlock(sheet, index))));
+  }
+
+  /* ---------- tervezőasztal: keret zónajelekkel, szövegmező, vonalzó, háromszög, ceruza ---------- */
+
+  /** Műszaki rajz kerete: körben sávban a zónák jelei (fent-lent számok, oldalt betűk). */
+  function drawingFrame() {
+    const zones = (side, n, label) => Array.from({ length: n }, (_, i) =>
+      h('span', { class: `bp-zone bp-zone-${side}`, style: `--z:${((i + 0.5) / n).toFixed(4)}` }, label(i)));
+    const letter = (i) => 'ABCDEF'[i];
+    const number = (i) => String(i + 1);
+    return h('div', { class: 'bp-frame', 'aria-hidden': 'true' },
+      zones('top', 8, number), zones('bottom', 8, number), zones('left', 6, letter), zones('right', 6, letter));
+  }
+
+  /** A szövegmező a lap jobb alsó sarkában, mint egy igazi tervrajzon. */
+  function titleBlock(sheet, index) {
+    const cell = (key, label, value) => h('div', { class: `tb-cell tb-${key}` },
+      h('span', { class: 'tb-label' }, label),
+      h('span', { class: 'tb-value' }, value));
+    return h('footer', { class: 'bp-title-block' },
+      cell('project', t('cs.tbProject'), 'Rika cheat sheets'),
+      cell('sheet', t('cs.tbSheet'), `${index + 1} / ${SHEETS.length}`),
+      cell('title', t('cs.tbTitle'), tx(sheet.title)),
+      cell('scale', t('cs.tbScale'), '1 : 1'),
+      cell('drawn', t('cs.tbDrawn'), 'Rika'),
+      cell('level', t('cs.levels'), t(`cs.level.${sheet.level}`)));
+  }
+
+  /** Az asztalon heverő eszközök (csak díszítés, széles képernyőn). */
+  function deskTools() {
+    const ruler = h('div', { class: 'desk-ruler' },
+      Array.from({ length: 12 }, (_, i) => h('span', { style: `--n:${i}` }, String(i))));
+    const setSquare = svg('svg', { class: 'desk-square', viewBox: '0 0 200 200' },
+      svg('path', { d: 'M8 192V8l184 184Z M40 160V86l74 74Z', 'fill-rule': 'evenodd' }),
+      svg('path', { class: 'desk-square-ticks', d: Array.from({ length: 17 }, (_, i) => `M8 ${20 + i * 10}h${i % 5 === 0 ? 12 : 6}`).join('') }));
+    const pencil = svg('svg', { class: 'desk-pencil', viewBox: '0 0 240 20' },
+      svg('path', { class: 'pc-wood', d: 'M36 2 6 10l30 8Z' }),
+      svg('path', { class: 'pc-lead', d: 'M15 7.6 6 10l9 2.4Z' }),
+      svg('rect', { class: 'pc-body', x: 36, y: 2, width: 166, height: 16 }),
+      svg('rect', { class: 'pc-light', x: 36, y: 2, width: 166, height: 5 }),
+      svg('rect', { class: 'pc-dark', x: 36, y: 13, width: 166, height: 5 }),
+      svg('rect', { class: 'pc-metal', x: 202, y: 1.5, width: 15, height: 17 }),
+      svg('rect', { class: 'pc-eraser', x: 217, y: 2, width: 19, height: 16, rx: 3 }));
+    return h('div', { class: 'desk-tools no-print', 'aria-hidden': 'true' }, ruler, setSquare, pencil);
   }
 
   /* ---------- másolás kattintásra ---------- */
@@ -574,6 +630,7 @@
   /* ---------- útvonal ---------- */
 
   function route() {
+    app.classList.remove('desk');
     const id = decodeURIComponent(location.hash.slice(1));
     if (!id) {
       renderIndex();
