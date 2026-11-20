@@ -810,23 +810,6 @@
     });
   }
 
-  /*
-   * Füzetvonalak: a sortávolságot és a vonalvastagságot a kijelző képpontjaihoz igazítjuk.
-   * Nem egész nagyításnál (pl. 141%) a 32px-es sor nem esik egész képpontra, és a böngésző
-   * soronként másképp rajzolná a vékony vonalat. Így minden vonal pontosan egyforma.
-   * Eredmény: --ruled (sortáv) és --rule-w (vonalvastagság) a :root-on.
-   */
-  function snapRuledLines() {
-    const dpr = window.devicePixelRatio || 1;
-    const line = Math.round(32 * dpr) / dpr;
-    const width = Math.max(1, Math.round(1.25 * dpr)) / dpr;
-    document.documentElement.style.setProperty('--ruled', `${line.toFixed(4)}px`);
-    document.documentElement.style.setProperty('--rule-w', `${width.toFixed(4)}px`);
-    return line;
-  }
-  snapRuledLines();
-  window.addEventListener('resize', snapRuledLines);
-
   /** Ékezet- és kisbetű-független kereséshez. */
   const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
@@ -855,6 +838,5 @@
     codeBlock,
     bindSearchShortcut,
     normalize,
-    snapRuledLines,
   };
 })();

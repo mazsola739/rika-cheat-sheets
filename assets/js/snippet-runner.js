@@ -1,5 +1,5 @@
 /*
- * Snippet-futtató: a post-iten lévő kódot és a példát egy külön Web Workerben futtatja,
+ * Snippet-futtató: a kártyán (vagy kódablakban) lévő kódot és a példát egy külön Web Workerben futtatja,
  * így egy elrontott (pl. végtelen ciklusos) kód sem fagyasztja le az oldalt.
  *
  *  - steps(example):                 a példa szövegéből lépések: { expr, expected }

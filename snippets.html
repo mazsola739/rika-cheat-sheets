@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/snippets.css">
 </head>
-<body class="page-notebook">
+<body>
   <header class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="./"><img class="brand-logo" src="assets/img/logo.webp" alt="Rika cheat sheets" width="2000" height="667"></a>
@@ -47,15 +47,15 @@
         </label>
         <button type="button" class="chip fav-filter" id="fav-filter" aria-pressed="false">★ <span data-i18n="sn.favs">Favorites</span> <span class="chip-count" id="fav-count">0</span></button>
         <div class="seg" id="view-switch" role="group" data-i18n-attr="aria-label:sn.view" aria-label="View">
-          <button type="button" data-view="notebook" data-i18n="sn.view.notebook">Notebook</button>
+          <button type="button" data-view="cards" data-i18n="sn.view.cards">Card box</button>
           <button type="button" data-view="windows" data-i18n="sn.view.windows">Code windows</button>
         </div>
       </div>
-      <ul class="chips cat-chips" id="categories" data-i18n-attr="aria-label:sn.categories" aria-label="Categories"></ul>
       <div class="list-head">
         <p class="result-line" id="result-line" aria-live="polite"></p>
         <nav class="pager" id="pager-top" data-i18n-attr="aria-label:sn.pages" aria-label="Pages" hidden></nav>
       </div>
+      <ul class="chips cat-chips" id="categories" data-i18n-attr="aria-label:sn.categories" aria-label="Categories"></ul>
       <div class="windows" id="windows">
         <noscript><p class="empty">A snippetekhez JavaScript kell. / Snippets need JavaScript.</p></noscript>
       </div>

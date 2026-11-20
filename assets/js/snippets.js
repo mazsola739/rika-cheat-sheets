@@ -49,7 +49,7 @@
       'sn.cat.node': 'Node.js',
       'sn.cat.misc': 'Egyéb',
       'sn.view': 'Nézet',
-      'sn.view.notebook': 'Füzet',
+      'sn.view.cards': 'Kartoték',
       'sn.view.windows': 'Kódablak',
       'sn.pages': 'Oldalak',
       'sn.pageOf': '{p}. oldal a {n}-ből',
@@ -68,6 +68,10 @@
       'sn.noSteps': 'Nincs futtatható példa.',
       'sn.codeLabel': '{name} kódja (átírható)',
       'sn.exampleLabel': '{name} példája (átírható)',
+      'sn.flipBack': 'Példa ↻',
+      'sn.flipFront': '↺ Vissza',
+      'sn.flipBackAria': '{name}: fordítsd meg, a hátán a példa',
+      'sn.flipFrontAria': '{name}: vissza a kártya elejére',
     },
     en: {
       'sn.docTitle': 'JavaScript snippets · Rika cheat sheets',
@@ -98,7 +102,7 @@
       'sn.cat.node': 'Node.js',
       'sn.cat.misc': 'Other',
       'sn.view': 'View',
-      'sn.view.notebook': 'Notebook',
+      'sn.view.cards': 'Card box',
       'sn.view.windows': 'Code windows',
       'sn.pages': 'Pages',
       'sn.pageOf': 'page {p} of {n}',
@@ -117,6 +121,10 @@
       'sn.noSteps': 'There is no example to run.',
       'sn.codeLabel': '{name} code (editable)',
       'sn.exampleLabel': '{name} example (editable)',
+      'sn.flipBack': 'Example ↻',
+      'sn.flipFront': '↺ Front',
+      'sn.flipBackAria': 'Turn {name} over to see the example',
+      'sn.flipFrontAria': 'Turn {name} back to the front',
     },
   });
 
@@ -200,7 +208,7 @@
   const CAT_ORDER = Object.keys(CATEGORIES);
   let favOnly = false;
   let favorites = new Set(store.get(FAV_KEY, []));
-  let view = store.get(VIEW_KEY, 'notebook') === 'windows' ? 'windows' : 'notebook';
+  let view = store.get(VIEW_KEY, 'cards') === 'windows' ? 'windows' : 'cards';
 
   const listEl = document.getElementById('windows');
   const chipsEl = document.getElementById('categories');
@@ -235,7 +243,7 @@
     favFilterEl.setAttribute('aria-pressed', String(favOnly));
   }
 
-  /* ---------- futtatás a post-iten (snippet-runner.js) ---------- */
+  /* ---------- futtatás a kártyán / kódablakban (snippet-runner.js) ---------- */
 
   const RUNNER = window.SnippetRunner;
   // a DOM- és Node-snippetekhez igazi oldal / Node kell, ezek a workerben nem futnak értelmesen
@@ -306,52 +314,71 @@
         runOutput(s)));
   }
 
-  /* Post-it színek és enyhe elfordítás, hogy ne legyen két egyforma egymás mellett. */
-  const POSTITS = ['#fff3a3', '#ffd1e8', '#d3f8c2', '#c9ecff', '#ffe0b8', '#e6d6ff'];
-  const TILTS = [-1.2, 0.9, -0.6, 1.3, -0.9, 0.5, 1];
-  /* A post-it utáni szöveg maradjon a füzetvonalakon: a csomagoló magasságát egész sorokra kerekítjük. */
-  function alignPostits() {
-    const line = parseFloat(getComputedStyle(listEl).getPropertyValue('--ln')) || 32;
-    // a lista teteje essen pontosan egy füzetvonalra, így minden sor a vonalakon ül
-    listEl.style.paddingTop = '0px';
-    const top = listEl.getBoundingClientRect().top + window.scrollY;
-    listEl.style.paddingTop = `${((line - (top % line)) % line).toFixed(4)}px`;
-    listEl.querySelectorAll('.postit-wrap').forEach((wrap) => {
-      wrap.style.minHeight = '';
-      const height = wrap.getBoundingClientRect().height;
-      wrap.style.minHeight = `${(Math.ceil(height / line - 0.01) * line).toFixed(4)}px`;
-    });
+  /** A leírás első mondata a kártya elejére kerül, a többi a hátára. */
+  function splitDescription(paragraphs) {
+    const text = paragraphs.join(' ');
+    const match = text.match(/^(.+?[.!?])\s+(?=[A-Z(`"'])/);
+    return match ? [match[1], text.slice(match[0].length).trim()] : [text, ''];
   }
-  let alignTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(alignTimer);
-    alignTimer = setTimeout(() => view === 'notebook' && alignPostits(), 120);
-  });
-  document.fonts?.ready.then(() => view === 'notebook' && alignPostits());
 
-  /* Füzet nézet: washi tape cím, golyóstollas leírás, a kód post-iten. */
-  function renderNote(s, index) {
+  /*
+   * Kartoték nézet: minden snippet egy vonalas kartotékkártya a dobozban.
+   * Elöl a név, egy mondat és a kód; megfordítva (vagy ▶-re) hátul a példa és az eredmény.
+   */
+  function renderCard(s) {
     const isFav = favorites.has(s.id);
-    return h('article', { class: 'note', id: s.id, style: `--c:${CATEGORIES[s.category]}`, 'aria-labelledby': `t-${s.id}` },
-      h('header', { class: 'note-head' },
-        h('h3', { class: 'note-tape', id: `t-${s.id}` }, h('a', { href: `#${s.id}` }, `${s.title} :`)),
-        h('span', { class: 'note-cat' }, `#${t(`sn.cat.${s.category}`)}`),
-        h('span', { class: 'note-tools' },
+    const [lead, more] = splitDescription(s.description);
+    const hasBack = Boolean(s.example || more);
+    const flipButton = (toBack) => h('button', {
+      type: 'button',
+      class: 'icard-btn flip-btn',
+      'data-flip': toBack ? 'back' : 'front',
+      'aria-label': t(toBack ? 'sn.flipBackAria' : 'sn.flipFrontAria', { name: s.fn }),
+    }, t(toBack ? 'sn.flipBack' : 'sn.flipFront'));
+
+    const front = h('section', { class: 'icard-face icard-front' },
+      h('header', { class: 'icard-head' },
+        h('h3', { class: 'icard-title', id: `t-${s.id}` }, h('a', { href: `#${s.id}` }, s.title)),
+        h('span', { class: 'icard-tools' },
           h('button', {
             type: 'button',
-            class: 'note-btn fav',
+            class: 'icard-btn fav',
             'data-fav': s.id,
             'aria-pressed': String(isFav),
             'aria-label': t(isFav ? 'sn.favRemove' : 'sn.favAdd', { name: s.fn }),
           }, isFav ? '★' : '☆'),
-          runButtons(s, 'note-btn'),
-          h('button', { type: 'button', class: 'note-btn', 'data-copy': s.id, 'aria-label': t('copy.aria', { label: `${s.fn}.js` }) }, t('copy')))),
-      s.description.map((paragraph) => h('p', { class: 'note-desc', lang: 'en' }, paragraph)),
-      h('div', { class: 'postit-wrap' },
-        h('div', { class: 'postit', style: `--pi:${POSTITS[index % POSTITS.length]};--rot:${TILTS[index % TILTS.length]}deg` },
-          h('pre', { class: 'postit-code' }, codePart(s, 'code', s.code)),
-          s.example ? h('pre', { class: 'postit-example' }, codePart(s, 'example', s.example)) : null,
-          runOutput(s))));
+          h('button', { type: 'button', class: 'icard-btn', 'data-copy': s.id, 'aria-label': t('copy.aria', { label: `${s.fn}.js` }) }, t('copy')))),
+      lead ? h('p', { class: 'icard-desc', lang: 'en' }, lead) : null,
+      h('pre', { class: 'icard-code' }, codePart(s, 'code', s.code)),
+      hasBack
+        ? h('footer', { class: 'icard-foot' },
+          isRunnable(s) ? h('button', { type: 'button', class: 'icard-btn run-btn', 'data-run': s.id, 'aria-label': t('sn.runAria', { name: s.fn }), title: t('sn.editHint') }, t('sn.run')) : null,
+          flipButton(true))
+        : null);
+
+    const back = hasBack
+      ? h('section', { class: 'icard-face icard-back', inert: true },
+        h('header', { class: 'icard-head' },
+          h('p', { class: 'icard-title' }, s.title),
+          h('span', { class: 'icard-side' }, t('sn.example'))),
+        more ? h('p', { class: 'icard-more', lang: 'en' }, more) : null,
+        s.example ? h('pre', { class: 'icard-example' }, codePart(s, 'example', s.example)) : null,
+        runOutput(s),
+        h('footer', { class: 'icard-foot' }, runButtons(s, 'icard-btn'), flipButton(false)))
+      : null;
+
+    return h('article', { class: 'icard', id: s.id, style: `--c:${CATEGORIES[s.category]}`, 'aria-labelledby': `t-${s.id}` },
+      h('div', { class: 'icard-inner' }, front, back));
+  }
+
+  /** Megfordítja a kártyát; a nem látszó oldal inert, így se fókusz, se felolvasó nem éri el. */
+  function flipCard(article, toBack, focus = true) {
+    const back = article?.querySelector('.icard-back');
+    if (!back) return;
+    article.classList.toggle('is-flipped', toBack);
+    article.querySelector('.icard-front').inert = toBack;
+    back.inert = !toBack;
+    if (focus) (toBack ? back : article.querySelector('.icard-front')).querySelector('[data-flip]')?.focus({ preventScroll: true });
   }
 
   function renderViewSwitch() {
@@ -419,7 +446,8 @@
 
   function renderList({ scroll = false } = {}) {
     renderViewSwitch();
-    listEl.className = view === 'notebook' ? 'notes' : 'windows';
+    listEl.className = view === 'cards' ? 'cards' : 'windows';
+    document.body.dataset.snView = view;
     const visible = filtered();
     const pages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
     page = Math.min(Math.max(page, 0), pages - 1);
@@ -442,12 +470,10 @@
       if (category === 'all' && (i === 0 || shown[i - 1].category !== s.category)) {
         nodes.push(groupHead(s.category, perCat[s.category], i === 0 && start > 0 && visible[start - 1].category === s.category));
       }
-      nodes.push(view === 'notebook' ? renderNote(s, start + i) : renderWindow(s));
+      nodes.push(view === 'cards' ? renderCard(s) : renderWindow(s));
     });
     listEl.replaceChildren(...nodes);
-    listEl.style.paddingTop = '';
-    if (view === 'notebook') requestAnimationFrame(alignPostits);
-    if (scroll) chipsEl.scrollIntoView({ block: 'start' });
+    if (scroll) resultEl.scrollIntoView({ block: 'start' });
   }
 
   /** Egy snippet oldalára lapoz (pl. #linkről érkezve), és visszaadja az elemét. */
@@ -508,7 +534,6 @@
     const oneLine = expr.replace(/\s+/g, ' ');
     return oneLine.length > 48 ? `${oneLine.slice(0, 46)}…` : oneLine;
   };
-  const realign = () => view === 'notebook' && alignPostits();
 
   async function runSnippet(article) {
     const s = snippetOf(article);
@@ -516,16 +541,17 @@
     const codeEl = article.querySelector('[data-part="code"]');
     const exampleEl = article.querySelector('[data-part="example"]');
     const out = article.querySelector('.run-out');
-    const button = article.querySelector('[data-run]');
+    const buttons = article.querySelectorAll('[data-run]');
     if (!out) return;
+    // a kartotékkártyán az eredmény a hátoldalon van: futtatáskor megfordul
+    if (!article.classList.contains('is-flipped')) flipCard(article, true, false);
     const list = RUNNER.steps(exampleEl ? exampleEl.textContent : s.example);
     out.hidden = false;
     out.replaceChildren(h('li', { class: 'run-line run-wait' }, t('sn.running')));
-    if (button) button.disabled = true;
-    realign();
+    buttons.forEach((button) => { button.disabled = true; });
 
     const result = list.length ? await RUNNER.run(codeEl ? codeEl.textContent : s.code, list) : null;
-    if (button) button.disabled = false;
+    buttons.forEach((button) => { button.disabled = false; });
 
     if (!result) out.replaceChildren(h('li', { class: 'run-line run-val' }, t('sn.noSteps')));
     else if (result.timeout) out.replaceChildren(h('li', { class: 'run-line run-err' }, `⚠ ${t('sn.timeout')}`));
@@ -551,7 +577,6 @@
         h('li', { class: 'run-line run-hint' }, t('sn.editHint')),
       );
     }
-    realign();
   }
 
   function resetSnippet(article) {
@@ -562,26 +587,21 @@
     if (codeEl) codeEl.innerHTML = highlight(s.code);
     if (exampleEl) exampleEl.innerHTML = highlight(s.example);
     article.classList.remove('is-edited');
-    article.querySelector('[data-reset]')?.setAttribute('hidden', '');
+    article.querySelectorAll('[data-reset]').forEach((button) => button.setAttribute('hidden', ''));
     const out = article.querySelector('.run-out');
     if (out) {
       out.hidden = true;
       out.replaceChildren();
     }
-    realign();
   }
 
-  // átírás közben: jelöljük, megjelenik a Visszaállítás, és a füzetvonalak igazodnak
+  // átírás közben: jelöljük, és megjelenik a Visszaállítás
   listEl.addEventListener('input', (event) => {
     const part = event.target.closest?.('[data-part]');
     if (!part) return;
     const article = part.closest('article');
     article.classList.add('is-edited');
-    article.querySelector('[data-reset]')?.removeAttribute('hidden');
-    if (view === 'notebook') {
-      clearTimeout(alignTimer);
-      alignTimer = setTimeout(alignPostits, 150);
-    }
+    article.querySelectorAll('[data-reset]').forEach((button) => button.removeAttribute('hidden'));
   });
 
   // Ctrl+Enter (Macen Cmd+Enter) a kódban vagy a példában: futtatás
@@ -600,6 +620,11 @@
   });
 
   listEl.addEventListener('click', (event) => {
+    const flipBtn = event.target.closest('[data-flip]');
+    if (flipBtn) {
+      flipCard(flipBtn.closest('article'), flipBtn.dataset.flip === 'back');
+      return;
+    }
     const runBtn = event.target.closest('[data-run]');
     if (runBtn) {
       runSnippet(runBtn.closest('article'));

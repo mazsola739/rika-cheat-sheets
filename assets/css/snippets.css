@@ -1,10 +1,10 @@
-/* Snippetek: kódszerkesztő-ablakok kézzel rajzolt kerettel. */
+/* Snippetek: kartondoboz vonalas kartotékkártyákkal, vagy kódszerkesztő-ablakok kézzel rajzolt kerettel. */
 
 .hl-teal {
   --c: var(--teal-l);
 }
 
-/* kategóriák: elválasztófülek a füzetlap tetején (széles képernyőn több sorban, keskenyen oldalra húzható) */
+/* kategóriák: elválasztófülek a doboz tetején (széles képernyőn több sorban, keskenyen oldalra húzható) */
 .cat-chips {
   align-items: flex-end;
   gap: 8px 4px;
@@ -146,13 +146,13 @@
   }
 }
 
-/* csoportcím a "Mind" fülön (két sor magas, hogy a szöveg a füzetvonalakon maradjon) */
+/* csoportcím a "Mind" fülön */
 .group-head {
   column-span: all;
   display: flex;
   align-items: center;
   gap: 12px;
-  height: calc(var(--ln, 32px) * 2);
+  height: 64px;
   margin: 0;
   font: 800 23px/1 var(--font-head);
 }
@@ -343,226 +343,263 @@
   font: 13.5px/1.55 var(--font-code);
 }
 
-/* ---------- az egész oldal egy vonalas füzetlap ---------- */
+/* ---------- KARTOTÉK nézet: kartondoboz, benne vonalas kartotékkártyák ---------- */
 
-.page-notebook {
-  --ln: var(--ruled, 32px); /* JS a kijelző képpontjaihoz igazítja, így minden vonal egyforma */
-  --rw: var(--rule-w, 1px);
-  --pen: #1c3d96; /* golyóstoll-kék */
-  --rule: #93bce6; /* füzetvonal */
-  --margin: #e98585; /* piros margó */
-  --margin-x: 58px;
-  position: relative;
-  background-color: #fdfdfb;
+/* a kategóriafülek a doboz tetején ülnek */
+[data-sn-view="cards"] .cat-chips {
+  margin-bottom: 0;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 22px 20px;
+  padding: 26px 22px 30px;
+  border: 2.5px solid var(--ink);
+  border-top: 0;
+  border-radius: 0 0 16px 14px;
+  background-color: #d4b48a;
   background-image:
-    linear-gradient(90deg, transparent var(--margin-x), var(--margin) var(--margin-x), var(--margin) calc(var(--margin-x) + 2px), transparent calc(var(--margin-x) + 2px)),
-    linear-gradient(180deg, transparent calc(100% - var(--rw)), var(--rule) calc(100% - var(--rw)));
-  background-size: 100% 100%, 100% var(--ln);
-  background-repeat: no-repeat, repeat;
+    repeating-linear-gradient(17deg, rgba(110, 72, 34, 0.06) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(-23deg, rgba(255, 245, 225, 0.08) 0 1px, transparent 1px 7px);
+  box-shadow: inset 0 12px 18px -10px rgba(70, 45, 20, 0.45), 4px 5px 0 var(--shadow);
 }
 
-/* lefűzőlyukak a lap bal szélén */
-.page-notebook::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 14px;
-  width: 26px;
-  pointer-events: none;
-  background: radial-gradient(circle at 13px 13px, var(--paper-2) 0 11px, #d2cbbb 11px 12.5px, transparent 13px) 0 120px / 26px 340px repeat-y;
+/* elválasztólap a "Mind" fülön: a kategória füle és a lap éle */
+.cards .group-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: auto;
+  margin: 4px 0 -8px;
+  border-bottom: 3px solid color-mix(in srgb, var(--c) 75%, #7a5a36);
 }
 
-/* a tartalom a piros margó után kezdődjön (a menü marad, mint a többi oldalon) */
-.page-notebook main .wrap,
-.page-notebook .footer .wrap {
-  padding-left: max(var(--gutter), calc(var(--margin-x) + 20px));
+.cards .group-head:not(:first-child) {
+  margin-top: 18px;
 }
 
-.page-notebook .lead,
-.page-notebook .result-line {
-  color: var(--pen);
+.cards .gh-tape {
+  padding: 7px 18px 5px;
+  border: 2.2px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 10px 12px 0 0;
+  background: var(--c);
+  clip-path: none;
+  transform: none;
+  font: 800 19px/1.1 var(--font-head);
 }
 
-.page-notebook .footer {
-  border-top-color: transparent;
+.cards .gh-count {
+  padding-bottom: 6px;
+  color: #4d3a26;
+  font: 700 18px/1 var(--font-hand);
 }
 
-/* ---------- FÜZET nézet: két hasáb a lapon, washi tape címek, post-it kódok ---------- */
-
-.notes {
-  position: relative;
-  columns: 2 360px;
-  column-gap: 46px;
-  column-rule: 2px solid rgba(43, 42, 40, 0.4);
-}
-
-.note {
-  position: relative;
-  break-inside: avoid;
-  padding-bottom: var(--ln);
+/* a kártya: két oldala ugyanabban a cellában, megfordításkor elfordul */
+.icard {
+  display: grid;
+  perspective: 1600px;
   scroll-margin-top: 20px;
 }
 
-/* kézzel húzott elválasztó vonal (nem foglal helyet, így a szöveg a vonalakon marad) */
-.note::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 18%;
-  bottom: 14px;
-  height: 2px;
-  border-radius: 2px;
-  background: rgba(43, 42, 40, 0.55);
-  transform: rotate(-0.4deg);
+.icard-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.3, 0.7, 0.3, 1);
 }
 
-.note:target,
-.note.flash {
-  background: color-mix(in srgb, var(--c) 18%, transparent);
+.icard.is-flipped .icard-inner {
+  transform: rotateY(180deg);
 }
 
-.note-head {
+/* vonalas kartotéklap: színes csík felül, piros vonal a fejléc alatt, utána kék sorok */
+.icard-face {
+  --lh: 24px;
+  --head: 50px;
+  grid-area: 1 / 1;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0 16px 12px;
+  border-radius: 4px;
+  background-color: #fffef8;
+  background-image:
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(#e8848b, #e8848b),
+    repeating-linear-gradient(transparent 0 calc(var(--lh) - 1px), #bcd5f0 calc(var(--lh) - 1px) var(--lh));
+  background-repeat: no-repeat;
+  background-size: 100% 8px, 100% 2px, 100% calc(100% - var(--head));
+  background-position: 0 0, 0 calc(var(--head) - 2px), 0 var(--head);
+  box-shadow: 0 1px 2px rgba(60, 40, 20, 0.2), 0 8px 14px -6px rgba(60, 40, 20, 0.45);
+  backface-visibility: hidden;
+}
+
+.icard-back {
+  transform: rotateY(180deg);
+  background-color: #fbf9f1;
+}
+
+.icard:target .icard-face,
+.icard.flash .icard-face {
+  box-shadow: 0 0 0 4px var(--c), 0 8px 14px -6px rgba(60, 40, 20, 0.45);
+}
+
+.icard-head {
+  display: flex;
   align-items: center;
-  gap: 0 12px;
-  min-height: var(--ln);
+  gap: 10px;
+  height: var(--head);
+  padding-top: 6px;
 }
 
-.note-tape {
+.icard-title {
+  flex: 1;
+  min-width: 0;
   margin: 0;
-  padding: 0 22px;
-  line-height: var(--ln);
-  font: 700 21px/var(--ln) var(--font-head);
-  background: color-mix(in srgb, var(--c) 92%, transparent);
-  clip-path: polygon(0 0, 100% 0, 96% 25%, 100% 50%, 96% 75%, 100% 100%, 0 100%, 4% 75%, 0 50%, 4% 25%);
-  transform: rotate(-1.2deg);
+  overflow: hidden;
+  font: 800 20px/1.2 var(--font-head);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.note:nth-of-type(even) .note-tape {
-  transform: rotate(0.9deg);
-}
-
-.note-tape a {
+.icard-title a {
   text-decoration: none;
 }
 
-.note-cat {
-  color: #4a64a8;
-  font: 600 14px/var(--ln) var(--font-head);
-}
-
-.note-tools {
+.icard-tools {
   display: inline-flex;
   gap: 6px;
-  margin-left: auto;
 }
 
-.note-btn {
-  height: 26px;
+.icard-side {
+  color: #c2414b;
+  font: 700 15px/1 var(--font-hand);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.icard-btn {
+  height: 28px;
   min-width: 30px;
-  padding: 0 8px;
+  padding: 0 9px;
   border: 1.6px solid var(--ink);
   border-radius: var(--r-small);
   background: var(--card);
   color: var(--ink);
   font: 700 13px/1 var(--font-head);
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.note-btn:hover {
+.icard-btn:hover {
   background: #ffe066;
 }
 
-.note-btn.fav {
+.icard-btn.fav {
   color: var(--ink-faint);
   font-size: 16px;
 }
 
-.note-btn.fav[aria-pressed="true"] {
+.icard-btn.fav[aria-pressed="true"] {
   color: #e67700;
   background: #fff3bf;
 }
 
-/* kézírás golyóstollal */
-.note-desc {
+/* minden sor pontosan egy kartotéksor (24px), így a szöveg és a kód is a vonalakon ül */
+.icard-desc,
+.icard-more {
   margin: 0;
-  color: var(--pen);
-  font-size: 20.5px;
-  line-height: var(--ln);
-  text-shadow: 0 0 0.4px currentColor; /* kicsit "nyomottabb" vonal, mint a tollé */
+  color: #1c3d96;
+  font: 400 18px/var(--lh) var(--font-hand);
 }
 
-/* ---------- post-it a kódnak ---------- */
-
-/* a csomagoló magasságát JS kerekíti 32px többszörösére, így utána újra a vonalakon ül a szöveg */
-.postit-wrap {
-  padding: 8px 6px 12px 2px;
+.icard-more {
+  color: #3b4a6b;
+  font-size: 16.5px;
 }
 
-.postit {
-  position: relative;
-  padding: 18px 16px 14px;
-  background: var(--pi);
-  border-radius: 2px 2px 18px 2px / 2px 2px 10px 2px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 3px 7px 10px -5px rgba(43, 42, 40, 0.4);
-  transform: rotate(var(--rot));
-}
-
-/* ragasztós csík a tetején */
-.postit::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 11px;
-  background: linear-gradient(rgba(0, 0, 0, 0.06), transparent);
-}
-
-/* felhajló sarok */
-.postit::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 0 0 18px 0;
-  background: linear-gradient(135deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, rgba(255, 255, 255, 0.55) 60%, var(--pi) 78%);
-}
-
-.postit pre {
+.icard-code,
+.icard-example {
   margin: 0;
   padding: 0;
   background: none;
   color: #1f2a44;
-  font: 14.5px/1.6 var(--font-code);
+  font: 13.5px/var(--lh) var(--font-code);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+  tab-size: 2;
 }
 
-.postit .postit-example {
-  margin-top: 9px;
-  padding-top: 8px;
-  border-top: 1.6px dashed rgba(31, 42, 68, 0.28);
+.icard-desc + .icard-code,
+.icard-more + .icard-example {
+  margin-top: var(--lh);
+}
+
+.icard-example {
   color: #3b4a6b;
 }
 
-.postit .tok-k { color: #5f3dc4; }
-.postit .tok-f { color: #1864ab; }
-.postit .tok-s { color: #2b8a3e; }
-.postit .tok-n { color: #c2410c; }
-.postit .tok-c { color: #5c6b8a; }
+.icard-face .tok-k { color: #5f3dc4; }
+.icard-face .tok-f { color: #1864ab; }
+.icard-face .tok-s { color: #2b8a3e; }
+.icard-face .tok-n { color: #c2410c; }
+.icard-face .tok-c { color: #5c6b8a; }
 
-/* ---------- ▶ futtatás a post-iten / kódablakban ---------- */
+.icard-face .run-out {
+  margin: var(--lh) 0 0;
+  padding: 0;
+  border: 0;
+  font-size: 13.5px;
+  line-height: var(--lh);
+}
+
+.icard-face .run-hint {
+  margin: 0;
+  font-size: 15px;
+  line-height: var(--lh);
+}
+
+/* lent a gombok: futtatás és megfordítás */
+.icard-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.flip-btn {
+  border-style: dashed;
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icard-inner {
+    transition: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .cards {
+    padding: 18px 12px 22px;
+  }
+
+  .icard-face {
+    padding-inline: 12px;
+  }
+}
+
+/* ---------- ▶ futtatás a kártyán / kódablakban ---------- */
 
 .run-btn {
   background: #d3f9d8;
 }
 
-.note-btn.run-btn:hover,
+.icard-btn.run-btn:hover,
 .win-btn.run-btn:hover {
   background: #b2f2bb;
 }
@@ -665,20 +702,6 @@
   border: 2px solid var(--ink);
   border-radius: var(--r-small);
   background: #fffdf8;
-}
-
-@media (max-width: 760px) {
-  .page-notebook {
-    --margin-x: 30px;
-  }
-
-  .page-notebook::before {
-    display: none;
-  }
-
-  .notes {
-    columns: 1;
-  }
 }
 
 @media (max-width: 760px) {
