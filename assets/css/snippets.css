@@ -556,6 +556,117 @@
 .postit .tok-n { color: #c2410c; }
 .postit .tok-c { color: #5c6b8a; }
 
+/* ---------- ▶ futtatás a post-iten / kódablakban ---------- */
+
+.run-btn {
+  background: #d3f9d8;
+}
+
+.note-btn.run-btn:hover,
+.win-btn.run-btn:hover {
+  background: #b2f2bb;
+}
+
+.run-btn[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.reset-btn {
+  border-style: dashed;
+  color: var(--ink-soft);
+}
+
+/* a .win-btn inline-flex, ezért a hidden-t külön kell érvényesíteni */
+.reset-btn[hidden],
+.run-out[hidden] {
+  display: none;
+}
+
+/* átírható kód és példa: kattintásra szaggatott keret jelzi, hogy szerkeszthető */
+[data-part] {
+  border-radius: 3px;
+  outline: none;
+  caret-color: #1c3d96;
+}
+
+[data-part]:focus {
+  outline: 2px dashed rgba(28, 61, 150, 0.45);
+  outline-offset: 3px;
+}
+
+.win-code [data-part] {
+  caret-color: #fff;
+}
+
+.win-code [data-part]:focus {
+  outline-color: rgba(255, 255, 255, 0.55);
+}
+
+/* az eredmények: soronként a hívás → a kapott érték, egyezésnél zöld pipa */
+.run-out {
+  margin: 9px 0 0;
+  padding: 8px 0 0;
+  border-top: 1.6px dashed rgba(31, 42, 68, 0.28);
+  list-style: none;
+  color: #1c3d96;
+  font: 13.5px/1.55 var(--font-code);
+}
+
+.run-line {
+  overflow-wrap: anywhere;
+}
+
+.run-expr,
+.run-arrow,
+.run-wait {
+  color: #5c6b8a;
+}
+
+.run-value {
+  color: #1c3d96;
+  font-weight: 700;
+}
+
+.run-ok .run-value,
+.run-tick {
+  color: #2b8a3e;
+}
+
+.run-tick {
+  font-weight: 800;
+}
+
+.run-err {
+  color: #c92a2a;
+}
+
+.run-log {
+  padding-left: 14px;
+  color: #5c6b8a;
+  font-style: italic;
+}
+
+.run-log-label {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.run-hint {
+  margin-top: 6px;
+  color: #5c6b8a;
+  font: 400 15px/1.3 var(--font-hand);
+}
+
+/* kódablak nézetben külön kis kártya a kód alatt */
+.window .run-out {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-small);
+  background: #fffdf8;
+}
+
 @media (max-width: 760px) {
   .page-notebook {
     --margin-x: 30px;

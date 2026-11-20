@@ -58,6 +58,17 @@
       'sn.prevPage': 'Előző oldal',
       'sn.nextPage': 'Következő oldal',
       'sn.cont': 'folytatás',
+      'sn.run': '▶ Futtatás',
+      'sn.runAria': '{name} példájának futtatása',
+      'sn.running': 'Fut…',
+      'sn.timeout': 'Túl sokáig futott (végtelen ciklus?), leállítottam.',
+      'sn.reset': 'Visszaállítás',
+      'sn.editHint': 'Átírhatod a kódot és a példát, Ctrl+Enter futtatja.',
+      'sn.console': 'konzol',
+      'sn.matches': 'egyezik a várt eredménnyel',
+      'sn.noSteps': 'Nincs futtatható példa.',
+      'sn.codeLabel': '{name} kódja (átírható)',
+      'sn.exampleLabel': '{name} példája (átírható)',
     },
     en: {
       'sn.docTitle': 'JavaScript snippets · Rika cheat sheets',
@@ -97,6 +108,17 @@
       'sn.prevPage': 'Previous page',
       'sn.nextPage': 'Next page',
       'sn.cont': 'continued',
+      'sn.run': '▶ Run',
+      'sn.runAria': 'Run the {name} example',
+      'sn.running': 'Running…',
+      'sn.timeout': 'It ran too long (an endless loop?), so I stopped it.',
+      'sn.reset': 'Reset',
+      'sn.editHint': 'You can edit the code and the example; Ctrl+Enter runs it.',
+      'sn.console': 'console',
+      'sn.matches': 'matches the expected result',
+      'sn.noSteps': 'There is no example to run.',
+      'sn.codeLabel': '{name} code (editable)',
+      'sn.exampleLabel': '{name} example (editable)',
     },
   });
 
@@ -123,7 +145,7 @@
     const seen = new Set();
 
     return text
-      .split(/^(?=\/\*)/m)
+      .split(/^(?=\/\*\s*\d+\.)/m) // csak a számozott fejlécnél kezdődik új snippet
       .filter((block) => block.startsWith('/*'))
       .map((block) => {
         const close = block.indexOf('*/');
@@ -142,8 +164,8 @@
         const lines = block.slice(close + 2).replace(/^\s*\n/, '').replace(/\s+$/, '').split('\n');
         let split = lines.length;
         while (split > 0 && (lines[split - 1].trim() === '' || lines[split - 1].trim().startsWith('//'))) split--;
-        const code = lines.slice(0, split).join('\n').replace(/\s+$/, '');
-        const example = lines
+        let code = lines.slice(0, split).join('\n').replace(/\s+$/, '');
+        let example = lines
           .slice(split)
           .filter((line) => line.trim())
           .map((line) => {
@@ -151,6 +173,12 @@
             return rest2 === '' || /^\s/.test(rest2) ? `//${rest2}` : rest2;
           })
           .join('\n');
+        // többsoros példa /* … */ megjegyzésben a kód végén: az is a példához tartozik
+        const blockAt = code.lastIndexOf('\n/*');
+        if (blockAt > -1 && code.endsWith('*/')) {
+          example = [code.slice(blockAt + 3, -2).trim(), example].filter(Boolean).join('\n');
+          code = code.slice(0, blockAt).replace(/\s+$/, '');
+        }
 
         // csak a legfelső szintű (sor elején álló) deklarációk számítanak, a függvényen belüliek nem
         const names = [...code.matchAll(/^(?:const|let|var|function)\s+([A-Za-z_$][\w$]*)\s*(?:=|\()/gm)].map((m) => m[1]);
@@ -209,6 +237,48 @@
     favFilterEl.setAttribute('aria-pressed', String(favOnly));
   }
 
+  /* ---------- futtatás a post-iten (snippet-runner.js) ---------- */
+
+  const RUNNER = window.SnippetRunner;
+  // a DOM- és Node-snippetekhez igazi oldal / Node kell, ezek a workerben nem futnak értelmesen
+  const runnableCache = new Map();
+  const isRunnable = (s) => {
+    if (!runnableCache.has(s.id)) {
+      runnableCache.set(s.id, Boolean(RUNNER) && !['dom', 'node'].includes(s.category) && RUNNER.steps(s.example).length > 0);
+    }
+    return runnableCache.get(s.id);
+  };
+  // plaintext-only: csak sima szöveg kerülhet bele (régebbi böngészőben sima contenteditable)
+  const EDIT_MODE = (() => {
+    try {
+      const probe = document.createElement('div');
+      probe.contentEditable = 'plaintext-only';
+      return probe.contentEditable === 'plaintext-only' ? 'plaintext-only' : 'true';
+    } catch {
+      return 'true';
+    }
+  })();
+
+  /** Kód vagy példa: futtatható snippetnél átírható. */
+  const codePart = (s, part, text) => h('code', isRunnable(s)
+    ? {
+      'data-part': part,
+      contenteditable: EDIT_MODE,
+      spellcheck: 'false',
+      'aria-label': t(part === 'code' ? 'sn.codeLabel' : 'sn.exampleLabel', { name: s.fn }),
+      html: highlight(text),
+    }
+    : { html: highlight(text) });
+
+  const runButtons = (s, cls) => (isRunnable(s)
+    ? [
+      h('button', { type: 'button', class: `${cls} run-btn`, 'data-run': s.id, 'aria-label': t('sn.runAria', { name: s.fn }), title: t('sn.editHint') }, t('sn.run')),
+      h('button', { type: 'button', class: `${cls} reset-btn`, 'data-reset': s.id, hidden: true }, t('sn.reset')),
+    ]
+    : []);
+
+  const runOutput = (s) => (isRunnable(s) ? h('ul', { class: 'run-out', 'aria-live': 'polite', hidden: true }) : null);
+
   function renderWindow(s) {
     const isFav = favorites.has(s.id);
     return h('article', { class: 'window', id: s.id, style: `--c:${CATEGORIES[s.category]}`, 'aria-labelledby': `t-${s.id}` },
@@ -222,18 +292,20 @@
           'aria-pressed': String(isFav),
           'aria-label': t(isFav ? 'sn.favRemove' : 'sn.favAdd', { name: s.fn }),
         }, isFav ? '★' : '☆'),
+        runButtons(s, 'win-btn'),
         h('button', { type: 'button', class: 'win-btn', 'data-copy': s.id, 'aria-label': t('copy.aria', { label: `${s.fn}.js` }) }, t('copy'))),
       h('div', { class: 'win-body' },
         h('div', { class: 'win-head' },
           h('h3', { class: 'win-title', id: `t-${s.id}` }, h('a', { href: `#${s.id}` }, s.title)),
           h('span', { class: 'win-cat' }, `#${t(`sn.cat.${s.category}`)}`)),
         s.description.map((paragraph) => h('p', { class: 'win-desc', lang: 'en' }, paragraph)),
-        h('pre', { class: 'win-code' }, h('code', { html: highlight(s.code) })),
+        h('pre', { class: 'win-code' }, codePart(s, 'code', s.code)),
         s.example
           ? h('div', { class: 'win-example' },
             h('span', { class: 'win-label' }, t('sn.example')),
-            h('pre', {}, h('code', { html: highlight(s.example) })))
-          : null));
+            h('pre', {}, codePart(s, 'example', s.example)))
+          : null,
+        runOutput(s)));
   }
 
   /* Post-it színek és enyhe elfordítás, hogy ne legyen két egyforma egymás mellett. */
@@ -274,12 +346,14 @@
             'aria-pressed': String(isFav),
             'aria-label': t(isFav ? 'sn.favRemove' : 'sn.favAdd', { name: s.fn }),
           }, isFav ? '★' : '☆'),
+          runButtons(s, 'note-btn'),
           h('button', { type: 'button', class: 'note-btn', 'data-copy': s.id, 'aria-label': t('copy.aria', { label: `${s.fn}.js` }) }, t('copy')))),
       s.description.map((paragraph) => h('p', { class: 'note-desc', lang: 'en' }, paragraph)),
       h('div', { class: 'postit-wrap' },
         h('div', { class: 'postit', style: `--pi:${POSTITS[index % POSTITS.length]};--rot:${TILTS[index % TILTS.length]}deg` },
-          h('pre', { class: 'postit-code' }, h('code', { html: highlight(s.code) })),
-          s.example ? h('pre', { class: 'postit-example' }, h('code', { html: highlight(s.example) })) : null)));
+          h('pre', { class: 'postit-code' }, codePart(s, 'code', s.code)),
+          s.example ? h('pre', { class: 'postit-example' }, codePart(s, 'example', s.example)) : null,
+          runOutput(s))));
   }
 
   function renderViewSwitch() {
@@ -429,11 +503,121 @@
     renderList();
   });
 
+  /* ---------- futtatás, átírás, visszaállítás ---------- */
+
+  const snippetOf = (article) => snippets.find((x) => x.id === article?.id);
+  const shorten = (expr) => {
+    const oneLine = expr.replace(/\s+/g, ' ');
+    return oneLine.length > 48 ? `${oneLine.slice(0, 46)}…` : oneLine;
+  };
+  const realign = () => view === 'notebook' && alignPostits();
+
+  async function runSnippet(article) {
+    const s = snippetOf(article);
+    if (!s || !RUNNER) return;
+    const codeEl = article.querySelector('[data-part="code"]');
+    const exampleEl = article.querySelector('[data-part="example"]');
+    const out = article.querySelector('.run-out');
+    const button = article.querySelector('[data-run]');
+    if (!out) return;
+    const list = RUNNER.steps(exampleEl ? exampleEl.textContent : s.example);
+    out.hidden = false;
+    out.replaceChildren(h('li', { class: 'run-line run-wait' }, t('sn.running')));
+    if (button) button.disabled = true;
+    realign();
+
+    const result = list.length ? await RUNNER.run(codeEl ? codeEl.textContent : s.code, list) : null;
+    if (button) button.disabled = false;
+
+    if (!result) out.replaceChildren(h('li', { class: 'run-line run-val' }, t('sn.noSteps')));
+    else if (result.timeout) out.replaceChildren(h('li', { class: 'run-line run-err' }, `⚠ ${t('sn.timeout')}`));
+    else if (result.fatal) out.replaceChildren(h('li', { class: 'run-line run-err' }, `⚠ ${result.fatal}`));
+    else {
+      out.replaceChildren(
+        ...list.flatMap((step, i) => {
+          const r = result.results?.[i] || { ok: false, error: '?' };
+          const logs = result.logs?.[i] || [];
+          const ok = RUNNER.stepMatches(r, step, logs);
+          const line = r.ok
+            ? h('li', { class: `run-line ${ok ? 'run-ok' : 'run-val'}` },
+              h('span', { class: 'run-expr' }, shorten(step.expr)),
+              h('span', { class: 'run-arrow', 'aria-hidden': 'true' }, ' → '),
+              h('span', { class: 'run-value' }, r.value),
+              ok ? h('span', { class: 'run-tick', title: t('sn.matches'), 'aria-label': t('sn.matches') }, ' ✓') : null)
+            : h('li', { class: 'run-line run-err' },
+              h('span', { class: 'run-expr' }, shorten(step.expr)),
+              h('span', { class: 'run-arrow', 'aria-hidden': 'true' }, ' → '),
+              `⚠ ${r.error}`);
+          return [line, ...logs.map((text) => h('li', { class: 'run-line run-log' }, h('span', { class: 'run-log-label' }, `${t('sn.console')}: `), text))];
+        }),
+        h('li', { class: 'run-line run-hint' }, t('sn.editHint')),
+      );
+    }
+    realign();
+  }
+
+  function resetSnippet(article) {
+    const s = snippetOf(article);
+    if (!s) return;
+    const codeEl = article.querySelector('[data-part="code"]');
+    const exampleEl = article.querySelector('[data-part="example"]');
+    if (codeEl) codeEl.innerHTML = highlight(s.code);
+    if (exampleEl) exampleEl.innerHTML = highlight(s.example);
+    article.classList.remove('is-edited');
+    article.querySelector('[data-reset]')?.setAttribute('hidden', '');
+    const out = article.querySelector('.run-out');
+    if (out) {
+      out.hidden = true;
+      out.replaceChildren();
+    }
+    realign();
+  }
+
+  // átírás közben: jelöljük, megjelenik a Visszaállítás, és a füzetvonalak igazodnak
+  listEl.addEventListener('input', (event) => {
+    const part = event.target.closest?.('[data-part]');
+    if (!part) return;
+    const article = part.closest('article');
+    article.classList.add('is-edited');
+    article.querySelector('[data-reset]')?.removeAttribute('hidden');
+    if (view === 'notebook') {
+      clearTimeout(alignTimer);
+      alignTimer = setTimeout(alignPostits, 150);
+    }
+  });
+
+  // Ctrl+Enter (Macen Cmd+Enter) a kódban vagy a példában: futtatás
+  listEl.addEventListener('keydown', (event) => {
+    const part = event.target.closest?.('[data-part]');
+    if (part && event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      runSnippet(part.closest('article'));
+    }
+  });
+
+  // szerkesztés után újra színezzük a kódot
+  listEl.addEventListener('focusout', (event) => {
+    const part = event.target.closest?.('[data-part]');
+    if (part && part.closest('article')?.classList.contains('is-edited')) part.innerHTML = highlight(part.textContent);
+  });
+
   listEl.addEventListener('click', (event) => {
+    const runBtn = event.target.closest('[data-run]');
+    if (runBtn) {
+      runSnippet(runBtn.closest('article'));
+      return;
+    }
+    const resetBtn = event.target.closest('[data-reset]');
+    if (resetBtn) {
+      resetSnippet(resetBtn.closest('article'));
+      return;
+    }
     const copyBtn = event.target.closest('[data-copy]');
     if (copyBtn) {
+      // az esetleg átírt kódot másoljuk
       const s = snippets.find((x) => x.id === copyBtn.dataset.copy);
-      if (s) copyText(s.code);
+      const codeEl = copyBtn.closest('article')?.querySelector('[data-part="code"]');
+      if (s) copyText(codeEl ? codeEl.textContent : s.code);
       return;
     }
     const favBtn = event.target.closest('[data-fav]');

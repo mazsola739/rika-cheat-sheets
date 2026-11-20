@@ -509,7 +509,6 @@ This snippet returns all elements of an array except the last one.*/
 
 const initial = arr => arr.slice(0, -1);
 
-//initial([1, 2, 3]); // [1,2]const initial = arr => arr.slice(0, -1);
 //initial([1, 2, 3]); // [1,2]
 
 
@@ -684,7 +683,7 @@ function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-//isNumber('1'); // false
+//isNumber('1'); // true (numeric strings count too)
 //isNumber(1); // true
 
 /*70. isObject #type
@@ -780,8 +779,8 @@ This snippet can be used to check whether a string is upper case.*/
 const isUpperCase = str => str === str.toUpperCase();
 
 //isUpperCase('ABC'); // true
-//isLowerCase('A3@$'); // true
-//isLowerCase('aB4'); // false
+//isUpperCase('A3@$'); // true
+//isUpperCase('aB4'); // false
 
 /*79. isValidJSON #type
 
