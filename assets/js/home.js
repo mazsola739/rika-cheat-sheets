@@ -39,5 +39,6 @@
     },
   });
 
-  mountArt(document.getElementById('hero-art'), { variant: 'full', id: 'home' })(1);
+  // a kezdőlapon az egérrel is lehet "színezni" (a belső oldalakon csak a betöltéskori söprés van)
+  mountArt(document.getElementById('hero-art'), { variant: 'full', id: 'home', peek: true })(1);
 })();

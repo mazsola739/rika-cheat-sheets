@@ -565,16 +565,23 @@
   }
 
   /*
-   * "Színes zseblámpa" a képen (a betöltéskori söprés után kapcsol be):
-   *  - egérrel fölé állva a kép elszürkül, csak a kurzor körül marad színes,
-   *  - kilépéskor vagy kattintásra a szín a kurzor helyéről újra szétárad,
+   * "Színes zseblámpa" a képen (csak a kezdőlapon; a betöltéskori söprés után kapcsol be):
+   *  - ha egérrel a kép fölött mozogsz, lassan elszürkül, csak a kurzor körül marad színes,
+   *  - kilépéskor, kattintásra vagy görgetéskor a szín a kurzor helyéről lassan visszaárad,
+   *  - véletlen ráhúzásra nem indul: kell egy kis idő a kép fölött, és nem görgetés közben,
    *  - érintésnél egy koppintás: egy pillanatra szürke, aztán onnan szétárad a szín.
    * A kör sugara (--r) és helye (--mx, --my) CSS-változó, az átmenetet a base.css adja.
    */
+  const PEEK_HOVER_DELAY = 400; // ms ennyi ideig kell a kép fölött lenni
+  const PEEK_AFTER_SCROLL = 600; // ms ennyivel görgetés után még nem indul
+
   function enableColorPeek(host) {
     const color = host.querySelector('.art-color');
     let ready = false;
-    const setBig = () => host.style.setProperty('--r-big', `${Math.ceil(Math.hypot(host.clientWidth, host.clientHeight) * 1.3)}px`);
+    let hoverSince = 0;
+    let lastScroll = 0;
+    let clickedOff = false;
+    const setBig = () => host.style.setProperty('--r-big', `${Math.ceil(Math.hypot(host.clientWidth, host.clientHeight) * 1.15)}px`);
     const place = (event) => {
       const box = host.getBoundingClientRect();
       host.style.setProperty('--mx', `${Math.round(event.clientX - box.left)}px`);
@@ -590,20 +597,33 @@
     setTimeout(start, 4200); // ha az animationend valamiért elmaradna
     window.addEventListener('resize', () => ready && setBig());
 
+    // görgetéskor visszajön a szín, és egy ideig nem is indul újra
+    window.addEventListener('scroll', () => {
+      lastScroll = performance.now();
+      host.classList.remove('is-peek');
+    }, { passive: true });
+
     host.addEventListener('pointerenter', (event) => {
-      if (!ready || event.pointerType !== 'mouse') return;
-      place(event);
-      host.classList.add('is-peek');
+      if (event.pointerType === 'mouse') hoverSince = performance.now();
     });
     host.addEventListener('pointermove', (event) => {
-      if (event.pointerType === 'mouse') place(event);
+      if (!ready || event.pointerType !== 'mouse') return;
+      place(event);
+      const now = performance.now();
+      if (!clickedOff && !host.classList.contains('is-peek') && now - hoverSince > PEEK_HOVER_DELAY && now - lastScroll > PEEK_AFTER_SCROLL) {
+        host.classList.add('is-peek');
+      }
     });
-    host.addEventListener('pointerleave', () => host.classList.remove('is-peek'));
+    host.addEventListener('pointerleave', () => {
+      host.classList.remove('is-peek');
+      clickedOff = false;
+    });
     host.addEventListener('click', (event) => {
       if (!ready) return;
       place(event);
       if (host.classList.contains('is-peek')) {
         host.classList.remove('is-peek'); // egérkattintás: a szín szétárad a kurzortól
+        clickedOff = true; // és úgy is marad, amíg az egér ki nem megy a képről
         return;
       }
       // érintés: azonnal szürke a koppintás körül, aztán onnan szétárad a szín
@@ -629,7 +649,7 @@
         h('img', { class: 'art-img art-color', src, alt: '' }),
       );
       host.style.setProperty('--gray', grayFor(amount));
-      enableColorPeek(host);
+      if (options.peek) enableColorPeek(host);
     });
     // 0%-nál is maradjon egy csipetnyi szín, ne legyen teljesen fakó
     const grayFor = (p) => (0.78 * (1 - p)).toFixed(3);

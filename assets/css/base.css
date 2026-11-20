@@ -397,25 +397,22 @@ svg {
   initial-value: 0px;
 }
 
-.splash.has-image,
-.has-image {
-  pointer-events: auto;
-}
-
 .has-image.peek-ready {
   --r: var(--r-big, 4000px);
+  pointer-events: auto;
   transition:
-    --r 0.7s cubic-bezier(0.3, 0.7, 0.2, 1),
-    --mx 0.12s linear,
-    --my 0.12s linear;
+    --r 1.4s cubic-bezier(0.25, 0.6, 0.3, 1),
+    --mx 0.2s ease-out,
+    --my 0.2s ease-out;
 }
 
+/* befelé (szürkülés) lassan, hogy egy véletlen ráhúzás ne rántsa szürkébe a képet */
 .has-image.peek-ready.is-peek {
   --r: 130px;
   transition:
-    --r 0.45s cubic-bezier(0.3, 0.7, 0.2, 1),
-    --mx 0.12s linear,
-    --my 0.12s linear;
+    --r 1.6s cubic-bezier(0.45, 0, 0.25, 1),
+    --mx 0.2s ease-out,
+    --my 0.2s ease-out;
 }
 
 .has-image.no-peek-anim {
