@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="sn.docTitle">JavaScript snippets · Rika cheat sheets</title>
+  <meta name="description" data-i18n-attr="content:sn.desc" content="Short, reusable JavaScript snippets grouped by category, with search, favorites and one-click copy.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Shantell+Sans:wght@400..800&display=swap">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/snippets.css">
+</head>
+<body class="page-notebook">
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="./"><img class="brand-logo" src="assets/img/logo.webp" alt="Rika cheat sheets" width="2000" height="667"></a>
+      <nav data-i18n-attr="aria-label:nav.menu" aria-label="Main menu">
+        <ul class="nav-links">
+          <li><a href="roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+          <li><a href="cheatsheets.html" data-i18n="nav.sheets">Cheat sheets</a></li>
+          <li><a href="snippets.html" aria-current="page" data-i18n="nav.snippets">Snippets</a></li>
+          <li><a href="principles.html" data-i18n="nav.principles">Principles</a></li>
+          <li><a href="https://github.com/mazsola739/rika-cheat-sheets">GitHub</a></li>
+          <li><button type="button" class="lang-toggle" data-lang-toggle>HU / EN</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head wrap">
+      <div class="splash" id="splash"></div>
+      <div class="page-head-text">
+        <p class="kicker" data-i18n="sn.kicker">JavaScript in small bites</p>
+        <h1 class="page-title"><span class="hl hl-teal" data-i18n="sn.title">Snippets</span></h1>
+        <p class="lead" data-i18n="sn.lead">Short, reusable functions. Search, copy, use.</p>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="toolbar">
+        <label class="search">
+          <span class="sr-only" data-i18n="sn.searchLabel">Search snippets</span>
+          <input type="search" id="search" autocomplete="off" data-i18n-attr="placeholder:sn.searchPh" placeholder="Search: name, description…">
+          <kbd aria-hidden="true">/</kbd>
+        </label>
+        <button type="button" class="chip fav-filter" id="fav-filter" aria-pressed="false">★ <span data-i18n="sn.favs">Favorites</span> <span class="chip-count" id="fav-count">0</span></button>
+        <div class="seg" id="view-switch" role="group" data-i18n-attr="aria-label:sn.view" aria-label="View">
+          <button type="button" data-view="notebook" data-i18n="sn.view.notebook">Notebook</button>
+          <button type="button" data-view="windows" data-i18n="sn.view.windows">Code windows</button>
+        </div>
+      </div>
+      <ul class="chips cat-chips" id="categories" data-i18n-attr="aria-label:sn.categories" aria-label="Categories"></ul>
+      <div class="list-head">
+        <p class="result-line" id="result-line" aria-live="polite"></p>
+        <nav class="pager" id="pager-top" data-i18n-attr="aria-label:sn.pages" aria-label="Pages" hidden></nav>
+      </div>
+      <div class="windows" id="windows">
+        <noscript><p class="empty">A snippetekhez JavaScript kell. / Snippets need JavaScript.</p></noscript>
+      </div>
+      <nav class="pager pager-bottom" id="pager-bottom" data-i18n-attr="aria-label:sn.pages" aria-label="Pages" hidden></nav>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p data-i18n="footer.tagline">Rika cheat sheets · the more you know, the more colorful it gets</p>
+      <p><a href="https://github.com/mazsola739/rika-cheat-sheets" data-i18n="footer.source">Source on GitHub</a></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/snippets.js"></script>
+</body>
+</html>

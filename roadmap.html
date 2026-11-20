@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="rm.docTitle">Frontend Roadmap · Rika cheat sheets</title>
+  <meta name="description" data-i18n-attr="content:rm.desc" content="A frontend roadmap you can tick off: mark what you already know and download your progress as an image or a checklist.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Shantell+Sans:wght@400..800&display=swap">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/roadmap.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="./"><img class="brand-logo" src="assets/img/logo.webp" alt="Rika cheat sheets" width="2000" height="667"></a>
+      <nav data-i18n-attr="aria-label:nav.menu" aria-label="Main menu">
+        <ul class="nav-links">
+          <li><a href="roadmap.html" aria-current="page" data-i18n="nav.roadmap">Roadmap</a></li>
+          <li><a href="cheatsheets.html" data-i18n="nav.sheets">Cheat sheets</a></li>
+          <li><a href="snippets.html" data-i18n="nav.snippets">Snippets</a></li>
+          <li><a href="principles.html" data-i18n="nav.principles">Principles</a></li>
+          <li><a href="https://github.com/mazsola739/rika-cheat-sheets">GitHub</a></li>
+          <li><button type="button" class="lang-toggle" data-lang-toggle>HU / EN</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head wrap">
+      <div class="splash" id="splash"></div>
+      <div class="page-head-text">
+        <p class="kicker" data-i18n="rm.kicker">Frontend · my learning map</p>
+        <h1 class="page-title"><span class="hl hl-green">Roadmap</span></h1>
+        <p class="lead" data-i18n="rm.lead">Tick off what you already know. The more you know, the more colorful it gets.</p>
+      </div>
+    </section>
+
+    <section class="wrap actions" aria-labelledby="actions-title">
+      <div class="actions-box">
+        <h2 id="actions-title" class="actions-title"><span class="hl" data-i18n="rm.actions">Save &amp; download</span></h2>
+        <div class="progress-row">
+          <span class="progress-label" data-i18n="rm.progress">Progress</span>
+          <div class="track" id="track" role="progressbar" data-i18n-attr="aria-label:rm.progressAria" aria-label="Overall progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span class="track-cover" id="track-cover"></span>
+          </div>
+          <span class="total" id="total-count">0 / 0</span>
+        </div>
+        <p class="actions-hint" data-i18n="rm.hint">Your ticks stay in this browser automatically. To use them on another device, save a .json backup and load it there.</p>
+        <div class="btns" id="actions">
+          <button type="button" class="btn btn-primary" data-action="png" data-i18n="rm.png">Download image (.png)</button>
+          <button type="button" class="btn" data-action="md" data-i18n="rm.md">Checklist (.md)</button>
+          <button type="button" class="btn" data-action="json" data-i18n="rm.json">Backup (.json)</button>
+          <button type="button" class="btn" data-action="import" data-i18n="rm.import">Load (.json)</button>
+          <button type="button" class="btn btn-ghost" data-action="reset" data-i18n="rm.reset">Reset</button>
+        </div>
+        <input type="file" id="import-file" accept=".json,application/json" hidden>
+        <ul class="legend" data-i18n-attr="aria-label:rm.legend" aria-label="Legend">
+          <li class="level-must"><span class="dot"></span><span data-i18n="rm.level.must">Must know</span></li>
+          <li class="level-good"><span class="dot"></span><span data-i18n="rm.level.good">Good to know</span></li>
+          <li class="level-extra"><span class="dot"></span><span data-i18n="rm.level.extra">Optional extra</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="road wrap" id="road">
+      <noscript><p class="empty">A roadmaphoz JavaScript kell. / The roadmap needs JavaScript.</p></noscript>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p data-i18n="footer.tagline">Rika cheat sheets · the more you know, the more colorful it gets</p>
+      <p><a href="https://github.com/mazsola739/rika-cheat-sheets" data-i18n="footer.source">Source on GitHub</a></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/roadmap-data.js"></script>
+  <script src="assets/js/roadmap.js"></script>
+</body>
+</html>

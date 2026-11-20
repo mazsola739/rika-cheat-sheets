@@ -1,0 +1,90 @@
+# Rika cheat sheets
+
+![Rika cheat sheets](assets/img/logo.webp)
+
+Kézzel rajzolt frontend puskák, újrahasznosítható JavaScript snippetek és egy pipálható tanulási roadmap.
+*Hand-drawn frontend cheat sheets, reusable JavaScript snippets and a learning roadmap you can tick off.*
+
+**Élő oldal / Live:** https://mazsola739.github.io/rika-cheat-sheets/
+
+| Oldal | Mit tud |
+| --- | --- |
+| [Roadmap](roadmap.html) | 4 szakasz, 126 pont. Pipálás, a haladás a böngészőben marad. Letöltés képként (`.png`), checklistként (`.md`), mentésként (`.json`), és visszatöltés. |
+| [Cheat sheetek](cheatsheets.html) | 8 puska (Flexbox, Grid, CSS szelektorok, tömbmetódusok, async, DOM, Git, React hookok). Poszter / füzet / blueprint nézet, Flexbox és Grid játszótér, kattintásra másolás, nyomtatás. |
+| [Snippetek](snippets.html) | 167 JavaScript snippet füzetlapon, post-iteken (vagy kódablakokban): kategóriafülek, a „Mind” fülön kategóriánként csoportosítva, oldalanként 10 (lapozóval), keresés (`/`), kedvencek, másolás. |
+| [Elvek](principles.html) | 34 fejlesztési alapelv hat csoportban (alapelvek, gondolkodás és hibakeresés, munkamódszer, SOLID, tervezés, frontend – pl. KISS, DRY, YAGNI, Early Return, Rubber Duck, GIGO, Commit Often) katalógusban, a [refactoring.guru](https://refactoring.guru/) elrendezésének mintájára: oldalsáv fa-menüvel, szivárványkerék, képes csempék. Minden elvhez saját plakát-mém, probléma és megoldás kóddal, hasonlat, mikor használd, előnyök és hátrányok, kapcsolódó elvek. |
+
+Minden oldal magyarul és angolul is olvasható (HU / EN kapcsoló a menüben).
+
+## Helyi futtatás
+
+Nincs build lépés, sima HTML + CSS + JavaScript. A snippet-oldal `fetch`-csel tölti be a forrást, ezért
+egy kis webszerver kell (a fájl dupla kattintással megnyitva nem működik):
+
+```bash
+python -m http.server 5500
+```
+
+Aztán: http://localhost:5500
+
+## Szerkezet
+
+```
+index.html            kezdőlap
+roadmap.html          pipálható roadmap
+cheatsheets.html      cheat sheetek (#flexbox, #grid, …)
+snippets.html         snippetek
+principles.html       elvek (KISS, YAGNI, SOLID…)
+404.html
+assets/
+  css/                base.css (közös) + oldalankénti stílus
+  js/                 common.js (közös: nyelv, illusztráció, kódkiemelés, másolás)
+                      roadmap-data.js, cheatsheets-data.js, principles-data.js  ← a tartalom
+                      principles-scenes.js  ← a plakát-mémek saját rajzai (SVG)
+  img/                ide jöhet egy saját agy-kép (lásd ott a README-t)
+snippets/
+  snippets.js         ← a snippetek forrása, ezt olvassa az oldal
+  *.js, array/*.js    a régi, külön fájlokba szedett snippetek
+```
+
+## Új tartalom hozzáadása
+
+**Snippet:** írd a `snippets/snippets.js` végére (a `//Synopsis` sor elé), ugyanabban a formában:
+
+```js
+/*128. myFunction #array
+
+Rövid leírás, akár több bekezdésben.*/
+
+const myFunction = arr => arr.filter(Boolean);
+
+//myFunction([0, 1, false, 2]); // [1, 2]
+```
+
+A `#kategória` lehet: `array`, `string`, `number`, `date`, `dom`, `object`, `function`, `type`, `node`.
+A végén lévő `//` sorokból lesz a „Példa” blokk.
+
+**Cheat sheet:** új objektum az `assets/js/cheatsheets-data.js` tömbjébe. Egy sor: `['kód', { hu: '…', en: '…' }]`.
+
+**Elv:** új kártya az `assets/js/principles-data.js` `cards` tömbjébe (`big`, `name`, `group`, `summary`, `why`, `bad`, `good`, `watch`). Ugyanazzal az `id`-vel jöhet a hosszabb leírás a `guide` listába (`problem`, `analogy`, `when`, `pros`, `cons`, `related`), a plakát szövege a `posters` listába (`title`, `caption`), a csoporton belüli helye az `order` listába, a kép pedig az `assets/js/principles-scenes.js`-be (egy függvény, ami 400 × 300-as SVG-t ad vissza).
+
+**Roadmap pont:** `assets/js/roadmap-data.js`. Egy pont: `['kulcs', 'magyar', 'english', 'good']`.
+A kulcsot ne nevezd át később, mert ahhoz kötődik a mentett pipa.
+
+## Tervben
+
+- **Tervezési minták** (design patterns) cheat sheet, a [refactoring.guru](https://refactoring.guru/design-patterns)
+  alapján, pl. [Factory Method](https://refactoring.guru/design-patterns/factory-method). A részleteket még kifejtem.
+
+## Közzététel (GitHub Pages)
+
+Settings → Pages → *Deploy from a branch* → `main` / `(root)`. A `.nojekyll` fájl miatt a GitHub
+nem futtat rajta Jekyllt, a fájlok úgy mennek ki, ahogy vannak.
+
+## Forrás és licenc
+
+Az 1–127. snippet a [30 seconds of code](https://www.30secondsofcode.org/) projektből származik
+([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)), Fatos Morina gyűjtésén keresztül.
+A 128–167. snippet ehhez az oldalhoz készült.
+Betűtípusok: [Patrick Hand](https://fonts.google.com/specimen/Patrick+Hand) és
+[Shantell Sans](https://fonts.google.com/specimen/Shantell+Sans) (Google Fonts, OFL).

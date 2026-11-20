@@ -1,0 +1,577 @@
+/* Snippetek: kódszerkesztő-ablakok kézzel rajzolt kerettel. */
+
+.hl-teal {
+  --c: var(--teal-l);
+}
+
+/* kategóriák: elválasztófülek a füzetlap tetején (széles képernyőn több sorban, keskenyen oldalra húzható) */
+.cat-chips {
+  align-items: flex-end;
+  gap: 8px 4px;
+  margin-bottom: 16px;
+  padding: 6px 2px 0;
+  border-bottom: 2.5px solid var(--ink);
+}
+
+.cat-chips li {
+  flex: none;
+}
+
+.cat-chips .chip {
+  --c: var(--cat-c, #ffec99);
+  gap: 5px;
+  min-height: 36px;
+  padding: 6px 11px 5px;
+  border-bottom-width: 0;
+  border-radius: 12px 14px 0 0 / 10px 12px 0 0;
+  background: color-mix(in srgb, var(--c) 30%, var(--card));
+  box-shadow: none;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.cat-chips .chip:hover {
+  background: color-mix(in srgb, var(--c) 55%, var(--card));
+  transform: translateY(-2px);
+}
+
+.cat-chips .chip[aria-pressed="true"] {
+  background: var(--c);
+  box-shadow: none;
+  transform: translateY(-3px);
+  padding-bottom: 8px;
+  margin-bottom: -3px;
+}
+
+@media (max-width: 760px) {
+  .cat-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-top: 8px;
+    scrollbar-width: thin;
+  }
+}
+
+.cat-chips .chip-swatch {
+  display: none;
+}
+
+/* találatszám + lapozó egy sorban a lista fölött */
+.list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+  margin: 0 0 18px;
+}
+
+.list-head .result-line {
+  margin: 0;
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.pager[hidden] {
+  display: none;
+}
+
+.pg {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border: 2px solid transparent;
+  border-radius: 50% 45% 52% 48%;
+  background: none;
+  color: var(--pen, var(--ink));
+  font: 700 18px/1 var(--font-hand);
+  cursor: pointer;
+}
+
+.pg:hover:not([disabled]) {
+  border-color: var(--ink-faint);
+}
+
+.pg[aria-current="page"] {
+  border-color: var(--pen, var(--ink));
+  background: #ffec99;
+}
+
+.pg[disabled] {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.pg-step {
+  font: 800 22px/1 var(--font-head);
+}
+
+.pg-gap {
+  padding: 0 2px;
+  color: var(--ink-faint);
+}
+
+.pager-bottom {
+  justify-content: center;
+  margin: 6px 0 10px;
+}
+
+.pager-bottom .pg {
+  min-width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
+
+/* keskenyen fent csak a nyilak (az oldalszám a találatsorban van), lent kisebb gombok */
+@media (max-width: 560px) {
+  #pager-top .pg:not(.pg-step),
+  #pager-top .pg-gap {
+    display: none;
+  }
+
+  .pager {
+    gap: 2px;
+  }
+
+  .pager-bottom .pg {
+    min-width: 32px;
+    height: 36px;
+    padding: 0 4px;
+    font-size: 18px;
+  }
+}
+
+/* csoportcím a "Mind" fülön (két sor magas, hogy a szöveg a füzetvonalakon maradjon) */
+.group-head {
+  column-span: all;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: calc(var(--ln, 32px) * 2);
+  margin: 0;
+  font: 800 23px/1 var(--font-head);
+}
+
+.gh-tape {
+  padding: 5px 18px;
+  background: color-mix(in srgb, var(--c) 80%, transparent);
+  clip-path: polygon(0 0, 100% 0, 97% 25%, 100% 50%, 97% 75%, 100% 100%, 0 100%, 3% 75%, 0 50%, 3% 25%);
+  transform: rotate(-1deg);
+}
+
+.gh-count {
+  color: var(--pen, var(--ink-faint));
+  font: 400 18px/1 var(--font-hand);
+}
+
+.fav-filter[aria-pressed="true"] {
+  --c: #ffe066;
+}
+
+.result-line {
+  margin: 0 0 18px;
+  color: var(--ink-soft);
+}
+
+.toolbar .seg {
+  margin-left: auto;
+}
+
+.windows {
+  columns: 2 440px;
+  column-gap: 26px;
+}
+
+/* ---------- ablak ---------- */
+
+.window {
+  --c: #ffec99;
+  --a: var(--ink);
+  break-inside: avoid;
+  margin: 0 0 26px;
+  overflow: hidden;
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: 14px 8px 12px 9px / 9px 12px 8px 14px;
+  box-shadow: 5px 6px 0 var(--shadow);
+  scroll-margin-top: 20px;
+}
+
+.window:target,
+.window.flash {
+  box-shadow: 0 0 0 4px var(--c), 5px 6px 0 var(--shadow);
+}
+
+.win-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 12px;
+  border-bottom: 2.5px solid var(--ink);
+  background: var(--c);
+}
+
+.win-dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.win-dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.6px var(--ink);
+}
+
+.win-dots i:nth-child(1) { background: #ff6b6b; }
+.win-dots i:nth-child(2) { background: #ffd43b; }
+.win-dots i:nth-child(3) { background: #69db7c; }
+
+.win-file {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: 600 14px/1.2 var(--font-code);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.win-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 30px;
+  padding: 0 9px;
+  border: 1.8px solid var(--ink);
+  border-radius: var(--r-small);
+  background: var(--card);
+  color: var(--ink);
+  font: 700 13px/1 var(--font-head);
+  cursor: pointer;
+}
+
+.win-btn:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.fav {
+  font-size: 17px;
+  color: var(--ink-faint);
+}
+
+.fav[aria-pressed="true"] {
+  color: #e67700;
+  background: #fff3bf;
+}
+
+.win-body {
+  padding: 12px 16px 16px;
+}
+
+.win-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.win-title {
+  margin: 0;
+  font: 800 22px/1.2 var(--font-head);
+}
+
+.win-title a {
+  text-decoration: none;
+}
+
+.win-cat {
+  color: var(--ink-faint);
+  font: 600 14px/1.2 var(--font-head);
+}
+
+.win-desc {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  font-size: 18px;
+}
+
+/* sötét kódmező, mint egy szerkesztőben */
+.win-code {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-small);
+  background: #262523;
+  color: #f1ede4;
+  font: 14px/1.6 var(--font-code);
+  tab-size: 2;
+}
+
+.win-code .tok-k { color: #b197fc; }
+.win-code .tok-s { color: #8ce99a; }
+.win-code .tok-n { color: #ffc078; }
+.win-code .tok-c { color: #a8a29a; }
+.win-code .tok-f { color: #74c0fc; }
+
+.win-example {
+  margin-top: 10px;
+}
+
+.win-label {
+  display: inline-block;
+  margin-bottom: 4px;
+  font: 700 14px/1 var(--font-head);
+  color: var(--ink-soft);
+}
+
+.win-example pre {
+  margin: 0;
+  padding: 9px 12px;
+  overflow-x: auto;
+  border: 2px dashed var(--line);
+  border-radius: var(--r-small);
+  background: var(--code-bg);
+  font: 13.5px/1.55 var(--font-code);
+}
+
+/* ---------- az egész oldal egy vonalas füzetlap ---------- */
+
+.page-notebook {
+  --ln: var(--ruled, 32px); /* JS a kijelző képpontjaihoz igazítja, így minden vonal egyforma */
+  --rw: var(--rule-w, 1px);
+  --pen: #1c3d96; /* golyóstoll-kék */
+  --rule: #93bce6; /* füzetvonal */
+  --margin: #e98585; /* piros margó */
+  --margin-x: 58px;
+  position: relative;
+  background-color: #fdfdfb;
+  background-image:
+    linear-gradient(90deg, transparent var(--margin-x), var(--margin) var(--margin-x), var(--margin) calc(var(--margin-x) + 2px), transparent calc(var(--margin-x) + 2px)),
+    linear-gradient(180deg, transparent calc(100% - var(--rw)), var(--rule) calc(100% - var(--rw)));
+  background-size: 100% 100%, 100% var(--ln);
+  background-repeat: no-repeat, repeat;
+}
+
+/* lefűzőlyukak a lap bal szélén */
+.page-notebook::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 14px;
+  width: 26px;
+  pointer-events: none;
+  background: radial-gradient(circle at 13px 13px, var(--paper-2) 0 11px, #d2cbbb 11px 12.5px, transparent 13px) 0 120px / 26px 340px repeat-y;
+}
+
+/* a tartalom a piros margó után kezdődjön (a menü marad, mint a többi oldalon) */
+.page-notebook main .wrap,
+.page-notebook .footer .wrap {
+  padding-left: max(var(--gutter), calc(var(--margin-x) + 20px));
+}
+
+.page-notebook .lead,
+.page-notebook .result-line {
+  color: var(--pen);
+}
+
+.page-notebook .footer {
+  border-top-color: transparent;
+}
+
+/* ---------- FÜZET nézet: két hasáb a lapon, washi tape címek, post-it kódok ---------- */
+
+.notes {
+  position: relative;
+  columns: 2 360px;
+  column-gap: 46px;
+  column-rule: 2px solid rgba(43, 42, 40, 0.4);
+}
+
+.note {
+  position: relative;
+  break-inside: avoid;
+  padding-bottom: var(--ln);
+  scroll-margin-top: 20px;
+}
+
+/* kézzel húzott elválasztó vonal (nem foglal helyet, így a szöveg a vonalakon marad) */
+.note::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 18%;
+  bottom: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(43, 42, 40, 0.55);
+  transform: rotate(-0.4deg);
+}
+
+.note:target,
+.note.flash {
+  background: color-mix(in srgb, var(--c) 18%, transparent);
+}
+
+.note-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 12px;
+  min-height: var(--ln);
+}
+
+.note-tape {
+  margin: 0;
+  padding: 0 22px;
+  line-height: var(--ln);
+  font: 700 21px/var(--ln) var(--font-head);
+  background: color-mix(in srgb, var(--c) 92%, transparent);
+  clip-path: polygon(0 0, 100% 0, 96% 25%, 100% 50%, 96% 75%, 100% 100%, 0 100%, 4% 75%, 0 50%, 4% 25%);
+  transform: rotate(-1.2deg);
+}
+
+.note:nth-of-type(even) .note-tape {
+  transform: rotate(0.9deg);
+}
+
+.note-tape a {
+  text-decoration: none;
+}
+
+.note-cat {
+  color: #4a64a8;
+  font: 600 14px/var(--ln) var(--font-head);
+}
+
+.note-tools {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.note-btn {
+  height: 26px;
+  min-width: 30px;
+  padding: 0 8px;
+  border: 1.6px solid var(--ink);
+  border-radius: var(--r-small);
+  background: var(--card);
+  color: var(--ink);
+  font: 700 13px/1 var(--font-head);
+  cursor: pointer;
+}
+
+.note-btn:hover {
+  background: #ffe066;
+}
+
+.note-btn.fav {
+  color: var(--ink-faint);
+  font-size: 16px;
+}
+
+.note-btn.fav[aria-pressed="true"] {
+  color: #e67700;
+  background: #fff3bf;
+}
+
+/* kézírás golyóstollal */
+.note-desc {
+  margin: 0;
+  color: var(--pen);
+  font-size: 20.5px;
+  line-height: var(--ln);
+  text-shadow: 0 0 0.4px currentColor; /* kicsit "nyomottabb" vonal, mint a tollé */
+}
+
+/* ---------- post-it a kódnak ---------- */
+
+/* a csomagoló magasságát JS kerekíti 32px többszörösére, így utána újra a vonalakon ül a szöveg */
+.postit-wrap {
+  padding: 8px 6px 12px 2px;
+}
+
+.postit {
+  position: relative;
+  padding: 18px 16px 14px;
+  background: var(--pi);
+  border-radius: 2px 2px 18px 2px / 2px 2px 10px 2px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 3px 7px 10px -5px rgba(43, 42, 40, 0.4);
+  transform: rotate(var(--rot));
+}
+
+/* ragasztós csík a tetején */
+.postit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 11px;
+  background: linear-gradient(rgba(0, 0, 0, 0.06), transparent);
+}
+
+/* felhajló sarok */
+.postit::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 0 0 18px 0;
+  background: linear-gradient(135deg, transparent 48%, rgba(0, 0, 0, 0.1) 50%, rgba(255, 255, 255, 0.55) 60%, var(--pi) 78%);
+}
+
+.postit pre {
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: #1f2a44;
+  font: 14.5px/1.6 var(--font-code);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.postit .postit-example {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1.6px dashed rgba(31, 42, 68, 0.28);
+  color: #3b4a6b;
+}
+
+.postit .tok-k { color: #5f3dc4; }
+.postit .tok-f { color: #1864ab; }
+.postit .tok-s { color: #2b8a3e; }
+.postit .tok-n { color: #c2410c; }
+.postit .tok-c { color: #5c6b8a; }
+
+@media (max-width: 760px) {
+  .page-notebook {
+    --margin-x: 30px;
+  }
+
+  .page-notebook::before {
+    display: none;
+  }
+
+  .notes {
+    columns: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .windows {
+    columns: 1;
+  }
+}

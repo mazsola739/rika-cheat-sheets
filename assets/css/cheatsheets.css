@@ -1,0 +1,622 @@
+/* Cheat sheetek: lista + három nézet (poszter, füzet, blueprint) + játszótér. */
+
+.hl-orange {
+  --c: var(--orange-l);
+}
+
+/* ---------- lista ---------- */
+
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 24px;
+}
+
+.sheet-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.sheet-card:hover {
+  transform: translate(-2px, -2px) rotate(-0.4deg);
+  box-shadow: 7px 8px 0 var(--shadow);
+  text-decoration: none;
+}
+
+.sheet-intro {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.sheet-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 4px 0 0;
+  color: var(--ink-faint);
+  font-size: 16px;
+}
+
+.sheet-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  color: var(--teal);
+  font: 600 14px/1.3 var(--font-head);
+}
+
+.sheet-open {
+  margin-top: auto;
+  align-self: flex-end;
+  font: 700 16px/1 var(--font-head);
+  color: var(--a);
+}
+
+/* ---------- egy sheet: fejléc ---------- */
+
+.sheet {
+  padding-block: 26px 10px;
+}
+
+.sheet-paper {
+  position: relative;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 10px;
+  font: 600 16px/1 var(--font-head);
+  text-decoration: none;
+}
+
+.sheet-head {
+  margin-bottom: 26px;
+}
+
+.sheet-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 18px;
+  margin: 0;
+  font: 800 clamp(36px, 6vw, 64px)/1.05 var(--font-head);
+}
+
+.sheet-name {
+  color: var(--a);
+  text-shadow: 3px 3px 0 var(--c);
+}
+
+.sheet-sub {
+  font-size: 0.55em;
+  letter-spacing: 0.04em;
+  text-decoration: underline wavy var(--orange) 3px;
+  text-underline-offset: 8px;
+}
+
+.sheet-head .sheet-intro {
+  max-width: 60ch;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.sheet-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 16px;
+}
+
+.sheet-count {
+  color: var(--ink-faint);
+  font-size: 16px;
+}
+
+/* ---------- kattintható kód ---------- */
+
+.cs-code {
+  display: inline-block;
+  max-width: 100%;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  cursor: copy;
+  transition: background 0.15s;
+}
+
+.cs-code:hover,
+.cs-code:focus-visible {
+  background: color-mix(in srgb, var(--c) 55%, transparent);
+}
+
+.cs-multi {
+  display: block;
+  margin: 2px 0;
+  padding: 8px 10px;
+  overflow-x: auto;
+  white-space: pre;
+  background: var(--code-bg);
+  border: 1.6px dashed var(--line);
+}
+
+.cs-note {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+/* ---------- POSZTER nézet ---------- */
+
+.cs-sections {
+  columns: 3 300px;
+  column-gap: 24px;
+}
+
+.cs-section {
+  break-inside: avoid;
+  margin: 0 0 24px;
+}
+
+.view-poster .cs-section {
+  padding: 14px 16px 16px;
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-card);
+  box-shadow: 4px 5px 0 var(--shadow);
+}
+
+.cs-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font: 700 22px/1.2 var(--font-head);
+}
+
+.cs-items {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-items li {
+  position: relative;
+  min-width: 0;
+  padding-left: 20px;
+}
+
+.cs-items li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--a);
+}
+
+/* ---------- FÜZET nézet: vonalas lap, piros margó, lyukak, washi tape ---------- */
+
+.view-notebook .sheet-paper {
+  padding: 28px 28px 20px 92px;
+  background-color: #fdfdfb;
+  background-image:
+    linear-gradient(90deg, transparent 70px, #f2a5a5 70px, #f2a5a5 72px, transparent 72px),
+    repeating-linear-gradient(180deg, transparent 0 31px, #c5dcef 31px 32px);
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 1px 0 #fff inset, 4px 6px 0 var(--shadow);
+}
+
+/* lefűzőlyukak */
+.view-notebook .sheet-paper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 22px;
+  width: 26px;
+  background: radial-gradient(circle at 13px 13px, var(--paper) 0 11px, #d9d3c5 11px 12.5px, transparent 13px) 0 60px / 26px 260px repeat-y;
+}
+
+.view-notebook .badge {
+  display: none;
+}
+
+.view-notebook .tape {
+  display: inline-block;
+  padding: 3px 22px;
+  margin: 0;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--c) 85%, transparent);
+  clip-path: polygon(0 0, 100% 0, 96% 25%, 100% 50%, 96% 75%, 100% 100%, 0 100%, 4% 75%, 0 50%, 4% 25%);
+  transform: rotate(-1.2deg);
+}
+
+.view-notebook .cs-section:nth-child(even) .tape {
+  transform: rotate(1deg);
+}
+
+.view-notebook .cs-section {
+  padding-bottom: 18px;
+  border-bottom: 2px solid color-mix(in srgb, var(--ink) 55%, transparent);
+  border-radius: 0 0 40% 60% / 0 0 4px 3px;
+}
+
+.view-notebook .cs-items {
+  gap: 4px;
+}
+
+.view-notebook .cs-items li {
+  min-height: 32px;
+}
+
+.view-notebook .cs-items li::before {
+  top: 10px;
+}
+
+/* ---------- BLUEPRINT nézet: sötét tervrajz, ágazó vonalak ---------- */
+
+.view-blueprint .sheet-paper {
+  padding: 30px 28px 34px;
+  color: #e7f0ff;
+  background-color: #141b2d;
+  background-image:
+    linear-gradient(rgba(116, 192, 252, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 192, 252, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-card);
+  box-shadow: 5px 6px 0 var(--shadow);
+}
+
+.view-blueprint .back,
+.view-blueprint .sheet-count,
+.view-blueprint .sheet-intro {
+  color: #b8c7e0;
+}
+
+.view-blueprint .sheet-head {
+  text-align: center;
+}
+
+.view-blueprint .sheet-title {
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.view-blueprint .sheet-name {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--c);
+  background: repeating-linear-gradient(-45deg, var(--c) 0 2px, transparent 2px 6px);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.view-blueprint .sheet-sub {
+  color: #fff;
+  text-decoration-color: var(--orange);
+}
+
+.view-blueprint .sheet-intro {
+  margin-inline: auto;
+}
+
+.view-blueprint .sheet-tools {
+  justify-content: center;
+}
+
+.view-blueprint .sheet-tools .level {
+  background: #fff;
+}
+
+.view-blueprint .btn-ghost {
+  color: #e7f0ff;
+  border-color: #e7f0ff;
+}
+
+.view-blueprint .playground {
+  color: var(--ink);
+}
+
+.bp-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  align-items: center;
+  gap: 0 70px;
+}
+
+.bp-curves {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.bp-curves path {
+  fill: none;
+  stroke-width: 1.6;
+  opacity: 0.75;
+}
+
+.bp-hub {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 130px;
+  padding: 16px;
+  border: 2.5px solid var(--c);
+  border-radius: 14px;
+  outline: 2px dashed color-mix(in srgb, var(--c) 60%, transparent);
+  outline-offset: 6px;
+  background: #1b2440;
+  text-align: center;
+}
+
+.bp-hub-title {
+  font: 800 24px/1.15 var(--font-head);
+  color: #fff;
+}
+
+.bp-rows {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bp-section {
+  margin-top: 14px;
+  padding-left: 22px;
+  color: var(--n);
+  font: 800 13px/1 var(--font-head);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bp-section:first-child {
+  margin-top: 0;
+}
+
+.bp-row {
+  display: grid;
+  grid-template-columns: 12px minmax(160px, 290px) 28px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.bp-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--n);
+  box-shadow: 0 0 8px var(--n);
+}
+
+.bp-label {
+  color: var(--n);
+  font: 600 15.5px/1.25 var(--font-head);
+}
+
+.bp-dash {
+  border-top: 2px dashed rgba(231, 240, 255, 0.35);
+}
+
+.view-blueprint .cs-code {
+  color: #f1f5ff;
+}
+
+.view-blueprint .cs-code:hover,
+.view-blueprint .cs-code:focus-visible {
+  background: rgba(116, 192, 252, 0.16);
+}
+
+.view-blueprint .cs-multi {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(231, 240, 255, 0.2);
+}
+
+.view-blueprint .tok-k { color: #b197fc; }
+.view-blueprint .tok-s { color: #8ce99a; }
+.view-blueprint .tok-n { color: #ffc078; }
+.view-blueprint .tok-c { color: #8fa3c4; }
+.view-blueprint .tok-f { color: #74c0fc; }
+
+/* ---------- játszótér ---------- */
+
+.playground {
+  margin-bottom: 28px;
+}
+
+.pg-hint {
+  margin: 0 0 12px;
+  color: var(--ink-soft);
+}
+
+.pg-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 380px) 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.pg-controls {
+  display: grid;
+  gap: 12px;
+}
+
+.pg-field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.pg-field legend {
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pg-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pg-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pg-option span {
+  display: inline-block;
+  padding: 4px 9px;
+  border: 1.8px solid var(--ink);
+  border-radius: var(--r-small);
+  background: var(--card);
+  font: 13px/1.3 var(--font-code);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.pg-option span:hover {
+  background: var(--hover);
+}
+
+.pg-option input:checked + span {
+  background: var(--c);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.pg-option input:focus-visible + span {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.pg-range {
+  display: grid;
+  gap: 2px;
+  font-size: 17px;
+}
+
+.pg-range input {
+  accent-color: var(--teal);
+}
+
+.pg-stage {
+  min-height: 250px;
+  padding: 14px;
+  border: 2.5px dashed var(--ink-soft);
+  border-radius: var(--r-small);
+  background: repeating-linear-gradient(45deg, transparent 0 9px, rgba(43, 42, 40, 0.04) 9px 10px), var(--card);
+  overflow: auto;
+}
+
+.pg-item {
+  display: grid;
+  place-items: center;
+  min-width: var(--w);
+  min-height: var(--h);
+  padding: 4px 8px;
+  border: 2px solid var(--ink);
+  border-radius: 8px 5px 9px 6px;
+  background: hsl(calc(var(--i) * 45) 85% 78%);
+  font: 800 18px/1 var(--font-head);
+}
+
+.pg-code .code {
+  margin-top: 12px;
+}
+
+/* ---------- reszponzív ---------- */
+
+@media (max-width: 860px) {
+  .pg-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bp-board {
+    grid-template-columns: 1fr;
+  }
+
+  .bp-hub,
+  .bp-curves {
+    display: none;
+  }
+
+  .bp-row {
+    grid-template-columns: 12px 1fr;
+    gap: 4px 10px;
+  }
+
+  .bp-dash {
+    display: none;
+  }
+
+  .bp-row .cs-code {
+    grid-column: 2;
+  }
+
+  .view-notebook .sheet-paper {
+    padding: 22px 16px 16px 58px;
+    background-image:
+      linear-gradient(90deg, transparent 44px, #f2a5a5 44px, #f2a5a5 46px, transparent 46px),
+      repeating-linear-gradient(180deg, transparent 0 31px, #c5dcef 31px 32px);
+  }
+
+  .view-notebook .sheet-paper::before {
+    left: 10px;
+    width: 22px;
+  }
+
+  .view-blueprint .sheet-paper {
+    padding: 22px 14px 26px;
+  }
+}
+
+/* ---------- nyomtatás ---------- */
+
+@media print {
+  .sheet {
+    padding: 0;
+  }
+
+  .cs-sections {
+    columns: 3;
+    column-gap: 14px;
+    font-size: 12px;
+  }
+
+  .cs-code {
+    font-size: 11px;
+  }
+
+  .view-blueprint .sheet-paper {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

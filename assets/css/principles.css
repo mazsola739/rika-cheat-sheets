@@ -1,0 +1,845 @@
+/*
+ * Elvek oldal. Csak a fejléc alatti rész más: a refactoring.guru katalógusát idéző elrendezés
+ * (piros oldalsáv fa-menüvel, képes csempék, ikonos szakaszok), saját plakát-mémekkel.
+ * A fejléc, a menü és az agyas kép ugyanaz, mint a többi oldalon.
+ */
+
+.hl-purple {
+  --c: #d0bfff;
+}
+
+.ps-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.guru {
+  --guru: #cf4630;
+  --guru-dark: #a8341f;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+  padding-bottom: 48px;
+  scroll-margin-top: 12px;
+}
+
+.guru-main {
+  min-width: 0;
+}
+
+.guru-main.swap > * {
+  animation: guru-in 0.3s ease-out;
+}
+
+@keyframes guru-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ---------- oldalsáv ---------- */
+
+.side {
+  position: sticky;
+  top: 14px;
+  max-height: calc(100vh - 28px);
+  overflow: auto;
+  background: var(--guru);
+  color: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-card);
+  box-shadow: 5px 6px 0 var(--shadow);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+}
+
+.side-toggle {
+  display: none;
+}
+
+.side-body {
+  padding: 14px 10px 16px;
+}
+
+.side-brand {
+  margin: 0 0 8px;
+  padding: 2px 10px 10px;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+  font: 800 24px/1.1 var(--font-head);
+}
+
+.side-tree,
+.side-tree ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 8px 5px 9px 6px;
+  color: #fff;
+  text-decoration: none;
+  font: 700 16px/1.25 var(--font-head);
+}
+
+.side-link:hover {
+  background: rgba(255, 255, 255, 0.16);
+  text-decoration: none;
+}
+
+.side-link:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -2px;
+}
+
+.side-link[aria-current="page"] {
+  background: var(--guru-dark);
+}
+
+.side-top {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.side-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.side-group {
+  margin-top: 10px;
+}
+
+.side-group-link {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.side-group ul {
+  margin: 2px 0 0 15px;
+  padding-left: 6px;
+  border-left: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.side-item {
+  padding-block: 3px;
+  font: 400 17.5px/1.2 var(--font-hand);
+}
+
+.side-item[aria-current="page"]::before {
+  content: "→";
+  margin-right: -2px;
+  font-family: var(--font-head);
+  font-weight: 800;
+}
+
+.g-dot {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.side .g-dot {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+/* ---------- közös: cím, morzsamenü, szakaszok ---------- */
+
+.crumbs {
+  margin: 0 0 6px;
+  color: var(--ink-faint);
+  font: 600 15px/1.3 var(--font-head);
+}
+
+.crumbs a {
+  color: var(--ink-soft);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.a-title {
+  margin: 0;
+  font: 800 clamp(40px, 5.6vw, 66px)/1.04 var(--font-head);
+  letter-spacing: -0.01em;
+}
+
+.a-title:focus {
+  outline: none;
+}
+
+.a-lead {
+  max-width: 62ch;
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 20px;
+}
+
+.aka {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: 18px;
+}
+
+.aka strong {
+  color: var(--ink);
+  font: 800 15px var(--font-head);
+}
+
+.a-sec {
+  margin-top: 34px;
+}
+
+.a-sec > p,
+.a-sec li {
+  max-width: 68ch;
+}
+
+.a-sec > p {
+  margin: 0 0 12px;
+}
+
+.a-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font: 800 27px/1.15 var(--font-head);
+}
+
+.a-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border: 2px solid var(--ink);
+  border-radius: 50% 46% 52% 44%;
+  background: var(--c);
+}
+
+.gicon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.intent {
+  color: #1c3d96;
+  font-size: 22px;
+  line-height: 1.38;
+}
+
+/* ---------- plakát-mém: fekete keret, kép, nagy talpas cím, egy mondat ---------- */
+
+.poster-fig {
+  margin: 22px 0 6px;
+}
+
+.poster {
+  width: min(100%, 520px);
+  margin-inline: auto;
+  padding: 6.5% 7.5% 5%;
+  background: #0f110e;
+  border-radius: 3px;
+  box-shadow: 6px 7px 0 var(--shadow), 0 0 0 2px var(--ink);
+  color: #ece8df;
+  text-align: center;
+}
+
+.poster-frame {
+  border: 2px solid #d9d5cc;
+  box-shadow: 0 0 0 3px #0f110e, 0 0 0 4px #4a4842;
+}
+
+.poster-pic {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+
+.poster-title {
+  margin: 0.55em 4% 0;
+  padding-bottom: 0.12em;
+  border-bottom: 1px solid #8d887d;
+  color: #e7e2f0;
+  font-family: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
+  font-size: clamp(30px, 6vw, 50px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.poster-title.is-long {
+  font-size: clamp(22px, 4.2vw, 36px);
+}
+
+.poster-cap {
+  margin: 0.6em 0 0;
+  color: #e2ded5;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  font-size: clamp(13.5px, 1.7vw, 16px);
+  line-height: 1.35;
+}
+
+/* ---------- probléma / megoldás: kód kis arcokkal ---------- */
+
+.prow {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  max-width: 760px;
+  padding: 8px;
+  border: 2px solid var(--ink);
+  border-radius: 10px 6px 12px 7px;
+}
+
+.prow-bad {
+  background: #fff0f0;
+}
+
+.prow-good {
+  background: #effbef;
+}
+
+.prow .code {
+  margin: 0;
+}
+
+.prow .code pre {
+  font-size: 13.5px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* a másológomb a címke sorában, így nem takarja a kódot */
+.prow .copy {
+  top: -3px;
+  right: 0;
+  padding: 2px 8px;
+}
+
+.prow-bad .code-label {
+  color: #c92a2a;
+}
+
+.prow-good .code-label {
+  color: #2b8a3e;
+}
+
+.face {
+  width: 44px;
+  height: 44px;
+  margin-top: 16px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.face-nope circle {
+  fill: #ffd6d6;
+}
+
+.face-yep circle {
+  fill: #c9f2cf;
+}
+
+.face-yep .mouth {
+  fill: #fff;
+}
+
+/* ---------- hasonlat, mikor, előnyök/hátrányok, kapcsolatok ---------- */
+
+.a-sec > p.analogy {
+  max-width: 64ch;
+  padding: 12px 16px;
+  border: 2px dashed var(--ink-faint);
+  border-radius: var(--r-small);
+  background: var(--card);
+  font-size: 20px;
+}
+
+.when,
+.pc-list {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.when li,
+.pc-list li {
+  position: relative;
+  padding-left: 30px;
+}
+
+.when li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.18em;
+  width: 15px;
+  height: 21px;
+  background: #f59f00;
+  clip-path: polygon(62% 0, 8% 58%, 44% 58%, 32% 100%, 92% 38%, 56% 38%);
+}
+
+.a-sec > p.watch {
+  padding: 8px 12px;
+  border-left: 4px solid var(--a);
+  background: color-mix(in srgb, var(--c) 45%, transparent);
+  font-size: 18px;
+}
+
+.watch strong {
+  font-family: var(--font-head);
+}
+
+.pc {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 30px;
+  max-width: 800px;
+}
+
+.pc h4 {
+  margin: 0 0 8px;
+  font: 800 17px/1.2 var(--font-head);
+}
+
+.pros h4 {
+  color: #2b8a3e;
+}
+
+.cons h4 {
+  color: #c92a2a;
+}
+
+.pc-list li::before {
+  position: absolute;
+  left: 4px;
+  top: -0.05em;
+  font: 800 21px/1.2 var(--font-head);
+}
+
+.pros li::before {
+  content: "✓";
+  color: #2b8a3e;
+}
+
+.cons li::before {
+  content: "✗";
+  color: #c92a2a;
+}
+
+.rel {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.rel-link {
+  font-family: var(--font-head);
+  font-weight: 800;
+  text-decoration: underline 2.5px dotted var(--guru);
+  text-underline-offset: 4px;
+}
+
+.rel-link:hover {
+  background: var(--c);
+}
+
+.pn {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 800px;
+  margin-top: 44px;
+}
+
+.pn-link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 12px 16px;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-btn);
+  background: var(--card);
+  box-shadow: 3px 3px 0 var(--ink);
+  text-decoration: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.pn-link:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+  background: var(--c);
+  text-decoration: none;
+}
+
+.pn-next {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.pn-link small {
+  color: var(--ink-faint);
+  font: 700 14px/1.2 var(--font-head);
+}
+
+.pn-link strong {
+  font: 800 22px/1.15 var(--font-head);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- katalógus: kerék + csoportok képes csempékkel ---------- */
+
+.cat-wheel {
+  max-width: 560px;
+  margin: 18px auto 0;
+}
+
+.wheel svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.slices {
+  transform-origin: 0 0;
+  animation: wheel-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes wheel-in {
+  from {
+    transform: rotate(-50deg) scale(0.85);
+    opacity: 0;
+  }
+}
+
+.slice {
+  cursor: pointer;
+  outline: none;
+}
+
+.slice-g {
+  transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.slice path {
+  fill: var(--slice);
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: filter 0.2s;
+}
+
+.slice:hover .slice-g,
+.slice:focus-visible .slice-g,
+.slice.is-active .slice-g {
+  transform: translate(var(--dx), var(--dy));
+}
+
+.slice:hover path {
+  filter: brightness(1.1) saturate(1.1);
+}
+
+.slice.is-active path {
+  stroke-width: 4;
+}
+
+.slice:focus-visible path {
+  stroke: var(--teal);
+  stroke-width: 5;
+}
+
+.slice text {
+  fill: #fff;
+  font-family: var(--font-head);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  paint-order: stroke;
+  stroke: rgba(30, 28, 26, 0.6);
+  stroke-width: 3.2px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.group-band {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.group-label {
+  font: 800 14px var(--font-head);
+  letter-spacing: 0.14em;
+}
+
+.center circle {
+  fill: var(--card);
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.center-big {
+  fill: var(--ink);
+  font-family: var(--font-head);
+  font-weight: 800;
+}
+
+.center-count {
+  fill: var(--ink-faint);
+  font: 700 15px var(--font-head);
+}
+
+.wheel-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font: 700 15px/1.3 var(--font-head);
+}
+
+.wheel-legend a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+}
+
+.wheel-legend a:hover {
+  text-decoration: underline;
+}
+
+.wheel-hint {
+  margin: 8px 0 0;
+  color: var(--ink-faint);
+  font-size: 16px;
+  text-align: center;
+}
+
+.cat-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+  gap: 38px 30px;
+  margin-top: 36px;
+}
+
+.cat-group {
+  scroll-margin-top: 14px;
+}
+
+.cat-group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font: 800 26px/1.15 var(--font-head);
+}
+
+.cat-group-count {
+  padding: 1px 9px;
+  border: 1.8px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font: 700 13px/1.4 var(--font-head);
+}
+
+.cat-group-desc {
+  margin: 6px 0 14px;
+  color: var(--ink-soft);
+  font-size: 18px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-small);
+  background: var(--card);
+  box-shadow: 3px 3px 0 var(--shadow);
+  text-decoration: none;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.tile:hover,
+.tile:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--ink);
+  text-decoration: none;
+}
+
+.tile-art {
+  display: block;
+  border-bottom: 2px solid var(--ink);
+  background: #0f110e;
+}
+
+.tile-pic {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+
+.tile-big {
+  padding: 8px 10px 0;
+  border-top: 4px solid var(--a);
+  margin-top: -2px;
+  font: 800 17px/1.15 var(--font-head);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.tile-name {
+  padding: 3px 10px 10px;
+  color: var(--ink-faint);
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+/* ---------- keskenyebb képernyő: a menü lenyíló sáv a tartalom fölött ---------- */
+
+@media (max-width: 960px) {
+  .guru {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .side {
+    position: relative;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .side-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    border: 0;
+    background: none;
+    color: #fff;
+    font: 800 18px/1.2 var(--font-head);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .side-toggle:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: -5px;
+    border-radius: 14px;
+  }
+
+  .side-burger {
+    width: 20px;
+    height: 15px;
+    flex: none;
+    background:
+      linear-gradient(#fff 0 0) top / 100% 2.5px no-repeat,
+      linear-gradient(#fff 0 0) center / 100% 2.5px no-repeat,
+      linear-gradient(#fff 0 0) bottom / 100% 2.5px no-repeat;
+  }
+
+  .side-current {
+    margin-left: auto;
+    padding: 2px 12px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.2);
+    font: 400 17px/1.3 var(--font-hand);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+  }
+
+  .side-body {
+    display: none;
+    padding-top: 0;
+  }
+
+  .side.is-open .side-body {
+    display: block;
+  }
+
+  .side-brand {
+    display: none;
+  }
+
+  .side-tree {
+    columns: 2 220px;
+    column-gap: 16px;
+  }
+
+  .side-tree > li {
+    break-inside: avoid;
+  }
+}
+
+@media (max-width: 560px) {
+  .pc,
+  .pn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pn-next {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .a-h {
+    font-size: 23px;
+  }
+
+  .poster {
+    padding: 7% 6% 6%;
+  }
+}

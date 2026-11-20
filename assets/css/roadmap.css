@@ -1,0 +1,558 @@
+/* Roadmap oldal: kanyargós út, rajta a témák dobozai, két oldalra ágazó pipálható "levelekkel". */
+
+/* ---------- haladássáv (a Mentés & letöltés dobozban) ---------- */
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 10px;
+}
+
+.progress-label {
+  font: 700 16px/1 var(--font-head);
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  max-width: 560px;
+  height: 18px;
+  overflow: hidden;
+  border: 2.2px solid var(--ink);
+  border-radius: 10px 6px 9px 7px;
+  background: var(--rainbow);
+}
+
+/* a még meg nem tanult rész: vonalkázott skicc takarja a szivárványt */
+.track-cover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: repeating-linear-gradient(-45deg, transparent 0 5px, var(--hatch) 5px 7px) var(--card);
+  transition: width 0.45s ease;
+}
+
+.total {
+  font: 700 16px/1 var(--font-head);
+  white-space: nowrap;
+}
+
+/* ---------- fejléc kiegészítők ---------- */
+
+.hl-green {
+  --c: #b2f2bb;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 2px dashed var(--line);
+  padding-left: 0;
+  list-style: none;
+  font-size: 18px;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actions {
+  position: relative;
+  z-index: 1;
+}
+
+.actions-box {
+  max-width: 800px;
+  padding: 16px 20px 18px;
+  border: 2.5px dashed var(--ink-soft);
+  border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+}
+
+.actions-title {
+  --c: #ffec99;
+  margin: 0 0 4px;
+  font: 800 22px/1.2 var(--font-head);
+}
+
+.actions-hint {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+}
+
+/* ---------- az út ---------- */
+
+.road {
+  position: relative;
+  padding-top: 8px;
+  padding-bottom: 56px;
+}
+
+/* kanyargós gerinc: hullámvonal, ami függőlegesen ismétlődik */
+.road::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 84px;
+  left: 50%;
+  width: 24px;
+  margin-left: -12px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='160'%3E%3Cpath d='M12 0C20 40 20 40 12 80S4 120 12 160' fill='none' stroke='%231c7ed6' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E") repeat-y top center;
+  opacity: 0.8;
+}
+
+.stage-banner {
+  position: relative;
+  z-index: 2;
+  width: fit-content;
+  max-width: 100%;
+  margin: 50px auto 22px;
+  padding: 12px 26px 14px;
+  text-align: center;
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-card);
+  box-shadow: 4px 5px 0 var(--shadow);
+}
+
+.stage-kicker {
+  margin: 0;
+  font: 700 14px/1.2 var(--font-head);
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.stage-banner h2 {
+  margin: 4px 0 2px;
+  font: 800 clamp(30px, 4vw, 40px)/1.1 var(--font-head);
+}
+
+.stage-sub {
+  margin: 0 0 10px;
+  color: var(--ink-soft);
+}
+
+.mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font: 700 15px/1 var(--font-head);
+}
+
+.mini-bar {
+  width: 160px;
+  height: 11px;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: 6px 4px 7px 3px;
+  background: var(--card);
+}
+
+.mini-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--a);
+  transition: width 0.45s ease;
+}
+
+/* ---------- egy ág: levelek | téma | levelek ---------- */
+
+.branch {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, 220px) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 64px;
+  margin: 26px 0;
+}
+
+.branch-lines {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.branch-lines path {
+  fill: none;
+  stroke: var(--a);
+  stroke-width: 2.6;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.leaves {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leaves-left {
+  grid-column: 1;
+  grid-row: 1;
+  align-items: flex-end;
+}
+
+.leaves-right {
+  grid-column: 3;
+  grid-row: 1;
+  align-items: flex-start;
+}
+
+/* a téma doboza az úton */
+.topic {
+  position: relative;
+  z-index: 2;
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 12px 14px 10px;
+  text-align: center;
+  background: color-mix(in srgb, var(--c) var(--pct, 25%), var(--card));
+  border: 3px solid var(--ink);
+  border-radius: var(--r-card);
+  box-shadow: 4px 5px 0 var(--shadow);
+  transition: background 0.4s ease;
+}
+
+.topic .badge {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+}
+
+.topic-title {
+  margin: 0;
+  font: 800 20px/1.2 var(--font-head);
+}
+
+.count {
+  font: 700 14px/1 var(--font-head);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.branch.complete .topic {
+  background: var(--c);
+}
+
+.branch.complete .count {
+  color: var(--a);
+}
+
+/* ---------- levél: pipálható kis doboz ---------- */
+
+.leaf {
+  max-width: 100%;
+}
+
+.leaf label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 10px 6px 8px;
+  background: var(--card);
+  border: 2.2px solid var(--ink);
+  border-radius: 10px 6px 9px 7px / 7px 9px 6px 10px;
+  box-shadow: 2px 3px 0 var(--shadow);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.leaf label:hover {
+  transform: translateY(-1px);
+}
+
+.level-extra.leaf label {
+  border-style: dashed;
+  border-color: var(--ink-faint);
+  box-shadow: none;
+}
+
+.leaf input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.leaf input:checked ~ .text {
+  font-weight: 400;
+}
+
+.leaf label:has(input:checked) {
+  background: color-mix(in srgb, var(--c) 80%, var(--card));
+}
+
+.box {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 2.2px solid var(--ink);
+  border-radius: 5px 7px 4px 6px / 6px 4px 7px 5px;
+  background: var(--card);
+}
+
+.leaf input:focus-visible + .box {
+  outline: 3px solid var(--a);
+  outline-offset: 2px;
+}
+
+/* a pipa "berajzolódik" */
+.tick {
+  width: 26px;
+  max-width: none;
+  height: 26px;
+  margin: -5px -3px 0 0;
+  overflow: visible;
+  fill: none;
+  stroke: var(--a);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 34;
+  stroke-dashoffset: 34;
+  transition: stroke-dashoffset 0.28s ease-out;
+}
+
+.leaf input:checked + .box .tick {
+  stroke-dashoffset: 0;
+}
+
+.text {
+  min-width: 0;
+  font-size: 17.5px;
+  line-height: 1.25;
+}
+
+.level-extra .text {
+  color: var(--ink-soft);
+}
+
+.leaf .dot {
+  width: 9px;
+  height: 9px;
+}
+
+/* ---------- KÉSZ! pecsét és fröccs ---------- */
+
+.stamp {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  padding: 2px 9px;
+  border: 2.5px solid var(--a);
+  border-radius: 6px 10px 5px 9px;
+  background: var(--card);
+  color: var(--a);
+  font: 800 15px/1.2 var(--font-head);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: rotate(10deg) scale(0);
+  transition: transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1), opacity 0.2s;
+  pointer-events: none;
+}
+
+.branch.complete .stamp {
+  opacity: 1;
+  transform: rotate(10deg) scale(1);
+}
+
+.burst {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--col);
+  pointer-events: none;
+  animation: burst 0.9s ease-out forwards;
+}
+
+@keyframes burst {
+  from {
+    transform: translate(0, 0) scale(0.3);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--dx), var(--dy)) scale(1);
+    opacity: 0;
+  }
+}
+
+.end {
+  position: relative;
+  z-index: 2;
+  width: fit-content;
+  margin: 48px auto 0;
+  padding: 10px 28px;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: 4px 5px 0 var(--shadow);
+  font: 700 22px/1.2 var(--font-head);
+}
+
+/* ---------- közepes szélesség: ugyanaz a kétoldalas fa, csak tömörebben ---------- */
+
+@media (max-width: 1000px) and (min-width: 641px) {
+  .branch {
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 150px) minmax(0, 1fr);
+    column-gap: 30px;
+    margin: 22px 0;
+  }
+
+  .topic {
+    padding: 10px 8px 8px;
+  }
+
+  .topic-title {
+    font-size: 16px;
+  }
+
+  .leaves {
+    gap: 6px;
+  }
+
+  .leaf label {
+    gap: 6px;
+    padding: 4px 8px 4px 6px;
+  }
+
+  .text {
+    font-size: 15px;
+  }
+
+  .box {
+    width: 17px;
+    height: 17px;
+  }
+
+  .tick {
+    width: 22px;
+    height: 22px;
+  }
+
+  .leaf .dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* ---------- keskeny képernyő: fa-lista (téma, alatta behúzott ágak) ---------- */
+
+@media (max-width: 640px) {
+  .road::before {
+    display: none;
+  }
+
+  .stage-banner {
+    margin: 34px 0 16px;
+    padding: 10px 16px 12px;
+    text-align: left;
+  }
+
+  .mini {
+    justify-content: flex-start;
+  }
+
+  .mini-bar {
+    width: 120px;
+  }
+
+  .branch {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 22px 0 26px;
+  }
+
+  .branch .leaves {
+    align-items: flex-start;
+  }
+
+  .branch .topic {
+    order: -1;
+  }
+
+  .branch-lines {
+    display: none;
+  }
+
+  .topic {
+    width: fit-content;
+    max-width: 100%;
+    justify-items: start;
+    margin-left: 14px;
+    text-align: left;
+  }
+
+  /* függőleges szaggatott "törzs" és vízszintes ágak a levelekhez */
+  .leaves {
+    align-items: flex-start;
+    margin-left: 34px;
+    padding: 0 0 0 26px;
+    border-left: 2.6px dashed var(--a);
+  }
+
+  .leaves-left {
+    padding-top: 14px;
+  }
+
+  .leaves-right {
+    padding-top: 8px;
+  }
+
+  .leaf {
+    position: relative;
+  }
+
+  .leaf::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -26px;
+    width: 22px;
+    border-top: 2.6px dashed var(--a);
+  }
+
+  .end {
+    margin: 40px 0 0;
+  }
+}
+
+@media print {
+  .actions {
+    display: none;
+  }
+}

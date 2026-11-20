@@ -2,7 +2,7 @@ Under construction =D
 
 
 
-/*1. all
+/*1. all #array
 
 This snippet returns true if the predicate function returns true for all elements in a collection and false otherwise. You can omit the second 
 argument fn if you want to use Boolean as a default value.*/
@@ -12,7 +12,7 @@ const all = (arr, fn = Boolean) => arr.every(fn);
 //all([4, 2, 3], x => x > 1); // true
 //all([1, 2, 3]); // true
 
-/*2. allEqual
+/*2. allEqual #array
 
 This snippet checks whether all elements of the array are equal.*/
 
@@ -21,7 +21,7 @@ const allEqual = arr => arr.every(val => val === arr[0]);
 //allEqual([1, 2, 3, 4, 5, 6]); // false
 //allEqual([1, 1, 1, 1]); // true
 
-/*3. approximatelyEqual
+/*3. approximatelyEqual #number
 
 This snippet checks whether two numbers are approximately equal to each other, with a small difference.*/
 
@@ -29,7 +29,7 @@ const approximatelyEqual = (v1, v2, epsilon = 0.001) => Math.abs(v1 - v2) < epsi
 
 //approximatelyEqual(Math.PI / 2.0, 1.5708); // true
 
-/*4. arrayToCSV
+/*4. arrayToCSV #array
 
 This snippet converts the elements that don’t have commas or double quotes to strings with comma-separated values.*/
 
@@ -39,7 +39,7 @@ const arrayToCSV = (arr, delimiter = ',') =>
 //arrayToCSV([['a', 'b'], ['c', 'd']]); // '"a","b"\n"c","d"'
 //arrayToCSV([['a', 'b'], ['c', 'd']], ';'); // '"a";"b"\n"c";"d"'
 
-/*5. arrayToHtmlList
+/*5. arrayToHtmlList #dom
 
 This snippet converts the elements of an array into <li> tags and appends them to the list of the given ID.*/
 
@@ -51,7 +51,7 @@ const arrayToHtmlList = (arr, listID) =>
   
 //arrayToHtmlList(['item 1', 'item 2'], 'myListID');
 
-/*6. attempt
+/*6. attempt #function
 
 This snippet executes a function, returning either the result or the caught error object.*/
 
@@ -69,7 +69,7 @@ const attempt = (fn, ...args) => {
 if (elements instanceof Error) elements = []; // elements = []*/
 
 
-/*7. average
+/*7. average #number
 
 This snippet returns the average of two or more numerical values.*/
 
@@ -79,7 +79,7 @@ const average = (...nums) => nums.reduce((acc, val) => acc + val, 0) / nums.leng
 //average(...[1, 2, 3]); // 2
 //average(1, 2, 3); // 2
 
-/*8. averageBy
+/*8. averageBy #number
 
 This snippet returns the average of an array after initially doing the mapping of each element to a value using a given function.*/
 
@@ -90,7 +90,7 @@ const averageBy = (arr, fn) =>
 //averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], o => o.n); // 5
 //averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], 'n'); // 5
 
-/*9. bifurcate
+/*9. bifurcate #array
 
 This snippet splits values into two groups and then puts a truthy element of filter in the first group, and in the second group otherwise.
 
@@ -102,7 +102,7 @@ const bifurcate = (arr, filter) =>
 //bifurcate(['beep', 'boop', 'foo', 'bar'], [true, true, false, true]); 
 // [ ['beep', 'boop', 'bar'], ['foo'] ]
 
-/*10. bifurcateBy
+/*10. bifurcateBy #array
 
 This snippet splits values into two groups, based on a predicate function. If the predicate function returns a truthy value, the element will be 
 placed in the first group. Otherwise, it will be placed in the second group.
@@ -116,7 +116,7 @@ const bifurcateBy = (arr, fn) =>
 // [ ['beep', 'boop', 'bar'], ['foo'] ]
 
 
-/*11. bottomVisible
+/*11. bottomVisible #dom
 
 This snippet checks whether the bottom of a page is visible.*/
 
@@ -126,7 +126,7 @@ const bottomVisible = () =>
 
 //bottomVisible(); // true
 
-/*12. byteSize
+/*12. byteSize #string
 
 This snippet returns the length of a string in bytes.*/
 
@@ -135,7 +135,7 @@ const byteSize = str => new Blob([str]).size;
 //byteSize('😀'); // 4
 //byteSize('Hello World'); // 11
 
-/*13. capitalize
+/*13. capitalize #string
 
 This snippet capitalizes the first letter of a string.*/
 
@@ -145,7 +145,7 @@ const capitalize = ([first, ...rest]) =>
 //capitalize('fooBar'); // 'FooBar'
 //capitalize('fooBar', true); // 'FooBar'
 
-/*14. capitalizeEveryWord
+/*14. capitalizeEveryWord #string
 
 This snippet capitalizes the first letter of every word in a given string.*/
 
@@ -153,7 +153,7 @@ const capitalizeEveryWord = str => str.replace(/\b[a-z]/g, char => char.toUpperC
 
 //capitalizeEveryWord('hello world!'); // 'Hello World!'
 
-/*15. castArray
+/*15. castArray #array
 
 This snippet converts a non-array value into array.*/
 
@@ -162,7 +162,7 @@ const castArray = val => (Array.isArray(val) ? val : [val]);
 //castArray('foo'); // ['foo']
 //castArray([1]); // [1]
 
-/*16. compact
+/*16. compact #array
 
 This snippet removes false values from an array.*/
 
@@ -171,7 +171,7 @@ const compact = arr => arr.filter(Boolean);
 //compact([0, 1, false, 2, '', 3, 'a', 'e' * 23, NaN, 's', 34]); 
 // [ 1, 2, 3, 'a', 's', 34 ]
 
-/*17. countOccurrences
+/*17. countOccurrences #array
 
 This snippet counts the occurrences of a value in an array.*/
 
@@ -179,7 +179,7 @@ const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 :
 
 //countOccurrences([1, 1, 2, 1, 2, 3], 1); // 3
 
-/*18. Create Directory
+/*18. Create Directory #node
 
 This snippet uses existsSync() to check whether a directory exists and then mkdirSync() to create it if it doesn’t.*/
 
@@ -189,7 +189,7 @@ const createDirIfNotExists = dir => (!fs.existsSync(dir) ? fs.mkdirSync(dir) : u
 //createDirIfNotExists('test'); 
 // creates the directory 'test', if it doesn't exist
 
-/*19. currentURL
+/*19. currentURL #dom
 
 This snippet returns the current URL.*/
 
@@ -197,7 +197,7 @@ const currentURL = () => window.location.href;
 
 //currentURL(); // 'https://medium.com/@fatosmorina'
 
-/*20. dayOfYear
+/*20. dayOfYear #date
 
 This snippet gets the day of the year from a Date object.*/
 
@@ -206,7 +206,7 @@ const dayOfYear = date =>
 
 //dayOfYear(new Date()); // 272
 
-/*21. decapitalize
+/*21. decapitalize #string
 
 This snippet turns the first letter of a string into lowercase.*/
 
@@ -217,7 +217,7 @@ const decapitalize = ([first, ...rest]) =>
 //decapitalize('FooBar'); // 'fooBar'
 
 
-/*22. deepFlatten
+/*22. deepFlatten #array
 
 This snippet flattens an array recursively.*/
 
@@ -225,7 +225,7 @@ const deepFlatten = arr => [].concat(...arr.map(v => (Array.isArray(v) ? deepFla
 
 //deepFlatten([1, [2], [[3], 4], 5]); // [1,2,3,4,5]
 
-/*23. default
+/*23. default #object
 
 This snippet assigns default values for all properties in an object that are undefined.*/
 
@@ -233,7 +233,7 @@ const defaults = (obj, ...defs) => Object.assign({}, obj, ...defs.reverse(), obj
 
 //defaults({ a: 1 }, { b: 2 }, { b: 6 }, { a: 3 }); // { a: 1, b: 2 }
 
-/*24. defer
+/*24. defer #function
 
 This snippet delays the execution of a function until the current call stack is cleared.*/
 
@@ -241,7 +241,7 @@ const defer = (fn, ...args) => setTimeout(fn, 1, ...args);
 
 //defer(console.log, 'a'), console.log('b'); // logs 'b' then 'a'
 
-/*25. degreesToRads
+/*25. degreesToRads #number
 
 This code snippet can be used to convert a value from degrees to radians.*/
 
@@ -249,7 +249,7 @@ const degreesToRads = deg => (deg * Math.PI) / 180.0;
 
 //degreesToRads(90.0); // ~1.5708
 
-/*26. difference
+/*26. difference #array
 
 This snippet finds the difference between two arrays.*/
 
@@ -260,7 +260,7 @@ const difference = (a, b) => {
 
 //difference([1, 2, 3], [1, 2, 4]); // [3]
 
-/*27. differenceBy
+/*27. differenceBy #array
 
 This method returns the difference between two arrays, after applying a given function to each element of both lists.*/
 
@@ -272,7 +272,7 @@ const differenceBy = (a, b, fn) => {
 //differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor); // [1.2]
 //differenceBy([{ x: 2 }, { x: 1 }], [{ x: 1 }], v => v.x); // [ { x: 2 } ]
 
-/*28. differenceWith
+/*28. differenceWith #array
 
 This snippet removes the values for which the comparator function returns false.*/
 
@@ -281,7 +281,7 @@ const differenceWith = (arr, val, comp) => arr.filter(a => val.findIndex(b => co
 //differenceWith([1, 1.2, 1.5, 3, 0], [1.9, 3, 0], (a, b) => Math.round(a) === Math.round(b)); 
 // [1, 1.2]
 
-/*29. digitize
+/*29. digitize #number
 
 This snippet gets a number as input and returns an array of its digits.*/
 
@@ -289,7 +289,7 @@ const digitize = n => [...`${n}`].map(i => parseInt(i));
 
 //digitize(431); // [4, 3, 1]
 
-/*30. distance
+/*30. distance #number
 
 This snippet returns the distance between two points by calculating the Euclidean distance.*/
 
@@ -297,7 +297,7 @@ const distance = (x0, y0, x1, y1) => Math.hypot(x1 - x0, y1 - y0);
 
 //distance(1, 1, 2, 3); // 2.23606797749979
 
-/*31. Drop Elements
+/*31. Drop Elements #array
 
 This snippet returns a new array with n elements removed from the left.*/
 
@@ -307,7 +307,7 @@ const drop = (arr, n = 1) => arr.slice(n);
 //drop([1, 2, 3], 2); // [3]
 //drop([1, 2, 3], 42); // []
 
-/*32. dropRight
+/*32. dropRight #array
 
 This snippet returns a new array with n elements removed from the right.*/
 
@@ -317,7 +317,7 @@ const dropRight = (arr, n = 1) => arr.slice(0, -n);
 //dropRight([1, 2, 3], 2); // [1]
 //dropRight([1, 2, 3], 42); // []
 
-/*33. dropRightWhile
+/*33. dropRightWhile #array
 
 This snippet removes elements from the right side of an array until the passed function returns true.*/
 
@@ -329,7 +329,7 @@ const dropRightWhile = (arr, func) => {
 
 //dropRightWhile([1, 2, 3, 4], n => n < 3); // [1, 2]
 
-/*34. dropWhile
+/*34. dropWhile #array
 
 This snippet removes elements from an array until the passed function returns true.*/
 
@@ -341,7 +341,7 @@ const dropWhile = (arr, func) => {
 //dropWhile([1, 2, 3, 4], n => n >= 3); // [3,4]
 
 
-/*35. elementContains
+/*35. elementContains #dom
 
 This snippet checks whether the parent element contains the child.*/
 
@@ -350,15 +350,15 @@ const elementContains = (parent, child) => parent !== child && parent.contains(c
 //elementContains(document.querySelector('head'), document.querySelector('title')); // true
 //elementContains(document.querySelector('body'), document.querySelector('body')); // false
 
-/*36. Filter Duplicate Elements
+/*36. Filter Duplicate Elements #array
 
 This snippet removes duplicate values in an array.*/
 
-const filterNonUnique = arr => [ …new Set(arr)];
+const filterNonUnique = arr => [...new Set(arr)];
 
 //filterNonUnique([1, 2, 2, 3, 4, 4, 5]); // [1, 2, 3, 4, 5]
 
-/*37. findKey
+/*37. findKey #object
 
 This snippet returns the first key that satisfies a given function.*/
 
@@ -374,7 +374,7 @@ const findKey = (obj, fn) => Object.keys(obj).find(key => fn(obj[key], key, obj)
 ); // 'barney'*/
 
 
-/*38. findLast
+/*38. findLast #array
 
 This snippet returns the last element for which a given function returns a truthy value.*/
 
@@ -383,7 +383,7 @@ const findLast = (arr, fn) => arr.filter(fn).pop();
 //findLast([1, 2, 3, 4], n => n % 2 === 1); // 3
 
 
-/*39. flatten
+/*39. flatten #array
 
 This snippet flattens an array up to a specified depth using recursion.*/
 
@@ -394,7 +394,7 @@ const flatten = (arr, depth = 1) =>
 //flatten([1, [2], 3, 4]); // [1, 2, 3, 4]
 //flatten([1, [2, [3, [4, 5], 6], 7], 8], 2); // [1, 2, 3, [4, 5], 6, 7, 8]
 
-/*40. forEachRight
+/*40. forEachRight #array
 
 This snippet executes a function for each element of an array starting from the array’s last element.*/
 
@@ -406,7 +406,7 @@ const forEachRight = (arr, callback) =>
     
 //forEachRight([1, 2, 3, 4], val => console.log(val)); // '4', '3', '2', '1'
 
-/*41. forOwn
+/*41. forOwn #object
 
 This snippet iterates on each property of an object and iterates a callback for each one respectively.*/
 
@@ -414,7 +414,7 @@ const forOwn = (obj, fn) => Object.keys(obj).forEach(key => fn(obj[key], key, ob
 
 //forOwn({ foo: 'bar', a: 1 }, v => console.log(v)); // 'bar', 1
 
-/*42. functionName
+/*42. functionName #function
 
 This snippet prints the name of a function into the console.*/
 
@@ -424,7 +424,7 @@ const functionName = fn => (console.debug(fn.name), fn);
 //functionName(Math.max); // max (logged in debug channel of console)
 
 
-/*43. Get Time From Date
+/*43. Get Time From Date #date
 
 This snippet can be used to get the time from a Date object as a string.*/
 
@@ -433,7 +433,7 @@ const getColonTimeFromDate = date => date.toTimeString().slice(0, 8);
 //getColonTimeFromDate(new Date()); // "08:38:00"
 
 
-/*44. Get Days Between Dates
+/*44. Get Days Between Dates #date
 
 This snippet can be used to find the difference in days between two dates.*/
 
@@ -442,7 +442,7 @@ const getDaysDiffBetweenDates = (dateInitial, dateFinal) =>
   
 //getDaysDiffBetweenDates(new Date('2019-01-13'), new Date('2019-01-15')); // 2
 
-/*45. getStyle
+/*45. getStyle #dom
 
 This snippet can be used to get the value of a CSS rule for a particular element.*/
 
@@ -450,7 +450,7 @@ const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName];
 
 //getStyle(document.querySelector('p'), 'font-size'); // '16px'
 
-/*46. getType
+/*46. getType #type
 
 This snippet can be used to get the type of a value.*/
 
@@ -459,7 +459,7 @@ const getType = v =>
   
 //getType(new Set([1, 2, 3])); // 'set'
 
-/*47. hasClass
+/*47. hasClass #dom
 
 This snippet checks whether an element has a particular class.*/
 
@@ -467,7 +467,7 @@ const hasClass = (el, className) => el.classList.contains(className);
 
 //hasClass(document.querySelector('p.special'), 'special'); // true
 
-/*48. head
+/*48. head #array
 
 This snippet returns the head of a list.*/
 
@@ -475,7 +475,7 @@ const head = arr => arr[0];
 
 //head([1, 2, 3]); // 1
 
-/*49. hide
+/*49. hide #dom
 
 This snippet can be used to hide all elements specified.*/
 
@@ -483,7 +483,7 @@ const hide = (...el) => [...el].forEach(e => (e.style.display = 'none'));
 
 //hide(document.querySelectorAll('img')); // Hides all <img> elements on the page
 
-/*50. httpsRedirect
+/*50. httpsRedirect #dom
 
 This snippet can be used to redirect from HTTP to HTTPS in a particular domain.*/
 
@@ -494,7 +494,7 @@ const httpsRedirect = () => {
 
 //httpsRedirect(); // If you are on http://mydomain.com, you are redirected to https://mydomain.com
 
-/*51. indexOfAll
+/*51. indexOfAll #array
 
 This snippet can be used to get all indexes of a value in an array, which returns an empty array, in case this value is not included in it.*/
 
@@ -503,7 +503,7 @@ const indexOfAll = (arr, val) => arr.reduce((acc, el, i) => (el === val ? [...ac
 //indexOfAll([1, 2, 3, 1, 2, 3], 1); // [0,3]
 //indexOfAll([1, 2, 3], 4); // []
 
-/*52. initial
+/*52. initial #array
 
 This snippet returns all elements of an array except the last one.*/
 
@@ -513,7 +513,7 @@ const initial = arr => arr.slice(0, -1);
 //initial([1, 2, 3]); // [1,2]
 
 
-/*53. insertAfter
+/*53. insertAfter #dom
 
 This snippet can be used to insert an HTML string after the end of a particular element.*/
 
@@ -521,7 +521,7 @@ const insertAfter = (el, htmlString) => el.insertAdjacentHTML('afterend', htmlSt
 
 insertAfter(document.getElementById('myId'), '<p>after</p>'); // <div id="myId">...</div> <p>after</p>
 
-/*54. insertBefore
+/*54. insertBefore #dom
 
 This snippet can be used to insert an HTML string before a particular element.*/
 
@@ -529,7 +529,7 @@ const insertBefore = (el, htmlString) => el.insertAdjacentHTML('beforebegin', ht
 
 //insertBefore(document.getElementById('myId'), '<p>before</p>'); // <p>before</p> <div id="myId">...</div>
 
-/*55. intersection
+/*55. intersection #array
 
 This snippet can be used to get an array with elements that are included in two other arrays.*/
 
@@ -540,7 +540,7 @@ const intersection = (a, b) => {
 
 //intersection([1, 2, 3], [4, 3, 2]); // [2, 3]
 
-/*56. intersectionBy
+/*56. intersectionBy #array
 
 This snippet can be used to return a list of elements that exist in both arrays, after a particular function has been executed to each element of both arrays.*/
 
@@ -551,7 +551,7 @@ const intersectionBy = (a, b, fn) => {
 
 //intersectionBy([2.1, 1.2], [2.3, 3.4], Math.floor); // [2.1]
 
-/*57. intersectionWith
+/*57. intersectionWith #array
 
 This snippet can be used to return a list of elements that exist in both arrays by using a comparator function.*/
 
@@ -559,7 +559,7 @@ const intersectionWith = (a, b, comp) => a.filter(x => b.findIndex(y => comp(x, 
 
 //intersectionWith([1, 1.2, 1.5, 3, 0], [1.9, 3, 0, 3.9], (a, b) => Math.round(a) === Math.round(b)); // [1.5, 3, 0]
 
-/*58. is
+/*58. is #type
 
 This snippet can be used to check if a value is of a particular type.*/
 
@@ -579,7 +579,7 @@ const is = (type, val) => ![, null].includes(val) && val.constructor === type;
 //is(Boolean, true); // true
 //is(Boolean, new Boolean(true)); // true
 
-/*59. isAfterDate
+/*59. isAfterDate #date
 
 This snippet can be used to check whether a date is after another date.*/
 
@@ -587,7 +587,7 @@ const isAfterDate = (dateA, dateB) => dateA > dateB;
 
 //isAfterDate(new Date(2010, 10, 21), new Date(2010, 10, 20)); // true
 
-/*60. isAnagram
+/*60. isAnagram #string
 
 This snippet can be used to check whether a particular string is an anagram with another string.*/
 
@@ -604,7 +604,7 @@ const isAnagram = (str1, str2) => {
 
 //isAnagram('iceman', 'cinema'); // true
 
-/*61. isArrayLike
+/*61. isArrayLike #type
 
 This snippet can be used to check if a provided argument is iterable like an array.*/
 
@@ -614,7 +614,7 @@ const isArrayLike = obj => obj != null && typeof obj[Symbol.iterator] === 'funct
 //isArrayLike('abc'); // true
 //isArrayLike(null); // false
 
-/*62. isBeforeDate
+/*62. isBeforeDate #date
 
 This snippet can be used to check whether a date is before another date.*/
 
@@ -622,7 +622,7 @@ const isBeforeDate = (dateA, dateB) => dateA < dateB;
 
 //isBeforeDate(new Date(2010, 10, 20), new Date(2010, 10, 21)); // true
 
-/*63. isBoolean
+/*63. isBoolean #type
 
 This snippet can be used to check whether an argument is a boolean.*/
 
@@ -631,7 +631,7 @@ const isBoolean = val => typeof val === 'boolean';
 //isBoolean(null); // false
 //isBoolean(false); // true
 
-/*64. isBrowser
+/*64. isBrowser #dom
 
 This snippet can be used to determine whether the current runtime environment is a browser. This is helpful for avoiding errors when running 
 front-end modules on the server (Node).*/
@@ -641,7 +641,7 @@ const isBrowser = () => ![typeof window, typeof document].includes('undefined');
 //isBrowser(); // true (browser)
 //isBrowser(); // false (Node)
 
-/*65. isBrowserTabFocused
+/*65. isBrowserTabFocused #dom
 
 This snippet can be used to determine whether the browser tab is focused.*/
 
@@ -649,7 +649,7 @@ const isBrowserTabFocused = () => !document.hidden;
 
 //isBrowserTabFocused(); // true
 
-/*66. isLowerCase
+/*66. isLowerCase #string
 
 This snippet can be used to determine whether a string is lower case.*/
 
@@ -659,7 +659,7 @@ const isLowerCase = str => str === str.toLowerCase();
 //isLowerCase('a3@$'); // true
 //isLowerCase('Ab4'); // false
 
-/*67. isNil
+/*67. isNil #type
 
 This snippet can be used to check whether a value is null or undefined.*/
 
@@ -668,7 +668,7 @@ const isNil = val => val === undefined || val === null;
 //isNil(null); // true
 //isNil(undefined); // true
 
-/*68. isNull
+/*68. isNull #type
 
 This snippet can be used to check whether a value is null.*/
 
@@ -676,7 +676,7 @@ const isNull = val => val === null;
 
 //isNull(null); // true
 
-/*69. isNumber
+/*69. isNumber #type
 
 This snippet can be used to check whether a provided value is a number.*/
 
@@ -687,7 +687,7 @@ function isNumber(n) {
 //isNumber('1'); // false
 //isNumber(1); // true
 
-/*70. isObject
+/*70. isObject #type
 
 This snippet can be used to check whether a provided value is an object. It uses the Object constructor to create an object wrapper for the given value.
 
@@ -702,7 +702,7 @@ const isObject = obj => obj === Object(obj);
 //isObject({}); // true
 //isObject(true); // false
 
-/*71. isObjectLike
+/*71. isObjectLike #type
 
 This snippet can be used to check if a value is not null and that its typeof is “object”.*/
 
@@ -714,7 +714,7 @@ const isObjectLike = val => val !== null && typeof val === 'object';
 //isObjectLike(null); // false
 
 
-/*72. isPlainObject
+/*72. isPlainObject #type
 
 This snippet checks whether a value is an object created by the Object constructor.*/
 
@@ -723,7 +723,7 @@ const isPlainObject = val => !!val && typeof val === 'object' && val.constructor
 //isPlainObject({ a: 1 }); // true
 //isPlainObject(new Map()); // false
 
-/*73. isPromiseLike
+/*73. isPromiseLike #type
 
 This snippet checks whether an object looks like a Promise.*/
 
@@ -740,7 +740,7 @@ const isPromiseLike = obj =>
 //isPromiseLike(null); // false
 //isPromiseLike({}); // false
 
-/*74. isSameDate
+/*74. isSameDate #date
 
 This snippet can be used to check whether two dates are equal.*/
 
@@ -748,7 +748,7 @@ const isSameDate = (dateA, dateB) => dateA.toISOString() === dateB.toISOString()
 
 //isSameDate(new Date(2010, 10, 20), new Date(2010, 10, 20)); // true
 
-/*75. isString
+/*75. isString #type
 
 This snippet can be used to check whether an argument is a string.*/
 
@@ -756,7 +756,7 @@ const isString = val => typeof val === 'string';
 
 //isString('10'); // true
 
-/*76. isSymbol
+/*76. isSymbol #type
 
 This snippet can be used to check whether an argument is a symbol.*/
 
@@ -764,7 +764,7 @@ const isSymbol = val => typeof val === 'symbol';
 
 //isSymbol(Symbol('x')); // true
 
-/*77. isUndefined
+/*77. isUndefined #type
 
 This snippet can be used to check whether a value is undefined.*/
 
@@ -772,7 +772,7 @@ const isUndefined = val => val === undefined;
 
 //isUndefined(undefined); // true
 
-/*78. isUpperCase
+/*78. isUpperCase #string
 
 This snippet can be used to check whether a string is upper case.*/
 
@@ -783,7 +783,7 @@ const isUpperCase = str => str === str.toUpperCase();
 //isLowerCase('A3@$'); // true
 //isLowerCase('aB4'); // false
 
-/*79. isValidJSON
+/*79. isValidJSON #type
 
 This snippet can be used to check whether a string is a valid JSON.*/
 
@@ -800,7 +800,7 @@ const isValidJSON = str => {
 //isValidJSON('{"name":"Adam",age:"20"}'); // false
 //isValidJSON(null); // true
 
-/*80. last
+/*80. last #array
 
 This snippet returns the last element of an array.*/
 
@@ -808,7 +808,7 @@ const last = arr => arr[arr.length - 1];
 
 //last([1, 2, 3]); // 3
 
-/*81. matches
+/*81. matches #object
 
 This snippet compares two objects to determine if the first one contains the same property values as the second one.*/
 
@@ -819,7 +819,7 @@ const matches = (obj, source) =>
 //matches({ age: 25, hair: 'long', beard: true }, { hair: 'long', beard: true }); // true
 //matches({ hair: 'long', beard: true }, { age: 25, hair: 'long', beard: true }); // false
 
-/*82. maxDate
+/*82. maxDate #date
 
 This snippet can be used to get the latest date.*/
 
@@ -833,7 +833,7 @@ const maxDate = (...dates) => new Date(Math.max.apply(null, ...dates));
 ];
 maxDate(array); // 2018-03-11T22:00:00.000Z*/
 
-/*83. maxN
+/*83. maxN #array
 
 This snippet returns the n largest elements from a list. If n is greater than or equal to the list’s length, then it will return the 
 original list (sorted in descending order).*/
@@ -843,7 +843,7 @@ const maxN = (arr, n = 1) => [...arr].sort((a, b) => b - a).slice(0, n);
 //maxN([1, 2, 3]); // [3]
 //maxN([1, 2, 3], 2); // [3,2]
 
-/*84. minDate
+/*84. minDate #date
 
 This snippet can be used to get the earliest date.*/
 
@@ -857,7 +857,7 @@ const minDate = (...dates) => new Date(Math.min.apply(null, ...dates));
 ];
 minDate(array); // 2016-01-08T22:00:00.000Z*/
 
-/*85. minN
+/*85. minN #array
 
 This snippet returns the n smallest elements from a list. If n is greater than or equal to the list’s length, then it will return the original 
 list (sorted in ascending order).*/
@@ -867,7 +867,7 @@ const similarity = (arr, values) => arr.filter(v => values.includes(v));
 //similarity([1, 2, 3], [1, 2, 4]); // [1, 2]
 
 
-/*86. negate
+/*86. negate #function
 
 This snippet can be used to apply the not operator (!) to a predicate function with its arguments.*/
 
@@ -876,7 +876,7 @@ const negate = func => (...args) => !func(...args);
 //[1, 2, 3, 4, 5, 6].filter(negate(n => n % 2 === 0)); // [ 1, 3, 5 ]                                                    
                                                     
 
-/*87. nodeListToArray
+/*87. nodeListToArray #dom
 
 This snippet can be used to convert a nodeList to an array.*/
 
@@ -885,7 +885,7 @@ const nodeListToArray = nodeList => [...nodeList];
 //nodeListToArray(document.childNodes); // [ <!DOCTYPE html>, html ]
 
 
-/*88. pad
+/*88. pad #string
 
 This snippet can be used to pad a string on both sides with a specified character if it is shorter than the specified length.*/
 
@@ -897,7 +897,7 @@ const pad = (str, length, char = ' ') =>
 //pad('foobar', 3); // 'foobar'
 
 
-/*89. radsToDegrees
+/*89. radsToDegrees #number
 
 This snippet can be used to convert an angle from radians to degrees.*/
 
@@ -906,7 +906,7 @@ const radsToDegrees = rad => (rad * 180.0) / Math.PI;
 
 //radsToDegrees(Math.PI / 2); // 90
 
-/*90. Random Hexadecimal Color Code
+/*90. Random Hexadecimal Color Code #number
 
 This snippet can be used to generate a random hexadecimal color code.*/
 
@@ -920,7 +920,7 @@ const randomHexColorCode = () => {
 
 
 
-/*91. randomIntArrayInRange
+/*91. randomIntArrayInRange #number
 
 This snippet can be used to generate an array with n random integers in a specified range.*/
 
@@ -931,7 +931,7 @@ const randomIntArrayInRange = (min, max, n = 1) =>
 //randomIntArrayInRange(12, 35, 10); // [ 34, 14, 27, 17, 30, 27, 20, 26, 21, 14 ]
 
 
-/*92. randomIntegerInRange
+/*92. randomIntegerInRange #number
 
 This snippet can be used to generate a random integer in a specified range.*/
 
@@ -941,7 +941,7 @@ const randomIntegerInRange = (min, max) => Math.floor(Math.random() * (max - min
 //randomIntegerInRange(0, 5); // 3
 
 
-/*93. randomNumberInRange
+/*93. randomNumberInRange #number
 
 This snippet can be used to return a random number in a specified range.*/
 
@@ -950,7 +950,7 @@ const randomNumberInRange = (min, max) => Math.random() * (max - min) + min;
 //randomNumberInRange(2, 10); // 6.0211363285087005
 
 
-/*94. readFileLines
+/*94. readFileLines #node
 
 This snippet can be used to read a file by getting an array of lines from a file.*/
 
@@ -965,7 +965,7 @@ const readFileLines = filename =>
 //console.log(arr); // ['line1', 'line2', 'line3']
 
 
-/*95. Redirect to a URL
+/*95. Redirect to a URL #dom
 
 This snippet can be used to do a redirect to a specified URL.*/
 
@@ -975,7 +975,7 @@ const redirect = (url, asLink = true) =>
 //redirect('https://google.com');
 
 
-/*96. reverse
+/*96. reverse #string
 
 This snippet can be used to reverse a string.*/
 
@@ -985,7 +985,7 @@ const reverseString = str => [...str].reverse().join('');
 //reverseString('foobar'); // 'raboof'
 
 
-/*97. round
+/*97. round #number
 
 This snippet can be used to round a number to a specified number of digits.*/
 
@@ -994,7 +994,7 @@ const round = (n, decimals = 0) => Number(`${Math.round(`${n}e${decimals}`)}e-${
 
 //round(1.005, 2); // 1.01
 
-/*98. runPromisesInSeries
+/*98. runPromisesInSeries #function
 
 This snippet can be used to run an array of promises in series.*/
 
@@ -1006,7 +1006,7 @@ const delay = d => new Promise(r => setTimeout(r, d));
 // Executes each promise sequentially, taking a total of 3 seconds to complete
 
 
-/*99. sample
+/*99. sample #array
 
 This snippet can be used to get a random number from an array.*/
 
@@ -1016,7 +1016,7 @@ const sample = arr => arr[Math.floor(Math.random() * arr.length)];
 //sample([3, 7, 9, 11]); // 9
 
 
-/*100. sampleSize
+/*100. sampleSize #array
 
 This snippet can be used to get n random elements from unique positions from an array up to the size of the array. Elements in the array 
 are shuffled using the Fisher-Yates algorithm.*/
@@ -1034,7 +1034,7 @@ const sampleSize = ([...arr], n = 1) => {
 //sampleSize([1, 2, 3], 4); // [2,3,1]
 
 
-/*101. scrollToTop
+/*101. scrollToTop #dom
 
 This snippet can be used to do a smooth scroll to the top of the current page.*/
 
@@ -1050,7 +1050,7 @@ const scrollToTop = () => {
 
 
 
-/*102. serializeCookie
+/*102. serializeCookie #dom
 
 This snippet can be used to serialize a cookie name-value pair into a Set-Cookie header string.*/
 
@@ -1059,7 +1059,7 @@ const serializeCookie = (name, val) => `${encodeURIComponent(name)}=${encodeURIC
 //serializeCookie('foo', 'bar'); // 'foo=bar'
 
 
-/*103. setStyle
+/*103. setStyle #dom
 
 This snippet can be used to set the value of a CSS rule for a particular element.*/
 
@@ -1068,7 +1068,7 @@ const setStyle = (el, ruleName, val) => (el.style[ruleName] = val);
 //setStyle(document.querySelector('p'), 'font-size', '20px');
 // The first <p> element on the page will have a font-size of 20px
 
-/*104. shallowClone
+/*104. shallowClone #object
 
 This snippet can be used to create a shallow clone of an object.*/
 
@@ -1078,7 +1078,7 @@ const shallowClone = obj => Object.assign({}, obj);
 //const b = shallowClone(a); // a !== b
 
 
-/*105. show
+/*105. show #dom
 
 This snippet can be used to show all the elements specified.*/
 
@@ -1088,7 +1088,7 @@ const show = (...el) => [...el].forEach(e => (e.style.display = ''));
 //show(...document.querySelectorAll('img')); // Shows all <img> elements on the page
 
 
-/*106. shuffle
+/*106. shuffle #array
 
 This snippet can be used to order the elements of an array randomly using the Fisher-Yates algorithm.*/
                                                     
@@ -1106,7 +1106,7 @@ const shuffle = ([...arr]) => {
 //shuffle(foo); // [2, 3, 1], foo = [1, 2, 3]                                                    
 
                                                     
-/*107. similarity
+/*107. similarity #array
 
 This snippet can be used to return an array of elements that appear in two arrays.*/
 
@@ -1115,7 +1115,7 @@ const similarity = (arr, values) => arr.filter(v => values.includes(v));
 //similarity([1, 2, 3], [1, 2, 4]); // [1, 2]
 
 
-/*108. sleep
+/*108. sleep #function
 
 This snippet can be used to delay the execution of an asynchronous function by putting it into sleep.*/
 
@@ -1129,7 +1129,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 }*/
 
 
-/*109. smoothScroll
+/*109. smoothScroll #dom
 
 This snippet can be used to smoothly scroll the element on which it is called into the visible area of the browser window.*/
 
@@ -1142,7 +1142,7 @@ const smoothScroll = element =>
 //smoothScroll('.fooBar'); // scrolls smoothly to the first element with a class of fooBar
 
 
-/*110. sortCharactersInString
+/*110. sortCharactersInString #string
 
 This snippet can be used to alphabetically sort the characters in a string.*/
 
@@ -1151,7 +1151,7 @@ const sortCharactersInString = str => [...str].sort((a, b) => a.localeCompare(b)
 //sortCharactersInString('cabbage'); // 'aabbceg'
 
 
-/*111. splitLines
+/*111. splitLines #string
 
 This snippet can be used to split a multi-line string into an array of lines.*/
 
@@ -1160,7 +1160,7 @@ const splitLines = str => str.split(/\r?\n/);
 //splitLines('This\nis a\nmultiline\nstring.\n'); // ['This', 'is a', 'multiline', 'string.' , '']
 
 
-/*112. stripHTMLTags
+/*112. stripHTMLTags #string
 
 This snippet can be used to remove HTML/XML tags from a string.*/
 
@@ -1169,7 +1169,7 @@ const stripHTMLTags = str => str.replace(/<[^>]*>/g, '');
 //stripHTMLTags('<p><em>lorem</em> <strong>ipsum</strong></p>'); // 'lorem ipsum'
 
 
-/*113. sum
+/*113. sum #number
 
 This snippet can be used to find the sum of two or more numbers or arrays.*/
 
@@ -1178,7 +1178,7 @@ const sum = (...arr) => [...arr].reduce((acc, val) => acc + val, 0);
 //sum(1, 2, 3, 4); // 10
 //sum(...[1, 2, 3, 4]); // 10                                                    
                                                     
-/*114. tail
+/*114. tail #array
 
 This snippet can be used to get an array with all the elements of an array except for the first one. If the array has only one element, 
 then that an array with that element will be returned instead.*/
@@ -1190,7 +1190,7 @@ const tail = arr => (arr.length > 1 ? arr.slice(1) : arr);
 //tail([1]); // [1]
 
 
-/*115. take
+/*115. take #array
 
 This snippet can be used to get an array with n elements removed from the beginning.*/
 
@@ -1200,7 +1200,7 @@ const take = (arr, n = 1) => arr.slice(0, n);
 //take([1, 2, 3], 0); // []
 
 
-/*116. takeRight
+/*116. takeRight #array
 
 This snippet can be used to get an array with n elements removed from the end.*/
 
@@ -1211,7 +1211,7 @@ const takeRight = (arr, n = 1) => arr.slice(arr.length - n, arr.length);
 //takeRight([1, 2, 3]); // [3]
                                                     
                                                     
-/*117. timeTaken
+/*117. timeTaken #function
 
 This snippet can be used to find out the time it takes to execute a function.*/
                                                     
@@ -1224,7 +1224,7 @@ const timeTaken = callback => {
 
 //timeTaken(() => Math.pow(2, 10)); // 1024, (logged): timeTaken: 0.02099609375ms                                                    
                                                     
-/*118. times
+/*118. times #function
 
 This snippet can be used to iterate over a callback n times.*/
                                                     
@@ -1238,7 +1238,7 @@ times(5, i => (output += i));
 //console.log(output); // 01234                                                    
                                                     
                                                     
-/*119. toCurrency
+/*119. toCurrency #number
 
 This snippet can be used to format a number like a currency.*/
                                                     
@@ -1252,7 +1252,7 @@ const toCurrency = (n, curr, LanguageFormat = undefined) =>
 //toCurrency(322342436423.2435, 'JPY', 'fi'); // 322 342 436 423 ¥ | currency: Japanese Yen | currencyLangFormat: Finnish                                                    
                                                     
                                                     
-/*120. toDecimalMark
+/*120. toDecimalMark #number
 
 This snippet uses the toLocaleString() function to convert float-point arithmetic to the decimal mark form by using a number to make a comma-separated string.*/
 
@@ -1262,7 +1262,7 @@ const toDecimalMark = num => num.toLocaleString('en-US');
 //toDecimalMark(12305030388.9087); // "12,305,030,388.909"
 
 
-/*121. toggleClass
+/*121. toggleClass #dom
 
 This snippet can be used to toggle a class for an element.*/
 
@@ -1270,7 +1270,7 @@ const toggleClass = (el, className) => el.classList.toggle(className);
 
 //toggleClass(document.querySelector('p.special'), 'special'); // The paragraph will not have the 'special' class anymore
 
-/*122. tomorrow
+/*122. tomorrow #date
 
 This snippet can be used to get a string representation of tomorrow’s date.*/
 
@@ -1283,7 +1283,7 @@ const tomorrow = () => {
 //tomorrow(); // 2019-09-08 (if current date is 2018-09-08)
 
 
-/*123. unfold
+/*123. unfold #array
 
 This snippet can be used to build an array using an iterator function and an initial seed value.*/
 
@@ -1299,7 +1299,7 @@ var f = n => (n > 50 ? false : [-n, n + 10]);
 //unfold(f, 10); // [-10, -20, -30, -40, -50]
 
 
-/*124. union
+/*124. union #array
 
 This snippet can be used to find the union of two arrays, resulting in an array that has elements that come from both arrays but that do not repeat.*/
 
@@ -1307,7 +1307,7 @@ const union = (a, b) => Array.from(new Set([...a, ...b]));
 
 //union([1, 2, 3], [4, 3, 2]); // [1,2,3,4]
 
-/*125. uniqueElements
+/*125. uniqueElements #array
 
 This snippet uses ES6 Set and the …rest operator to get every element only once.*/
 
@@ -1315,7 +1315,7 @@ const uniqueElements = arr => [...new Set(arr)];
 
 //uniqueElements([1, 2, 2, 3, 4, 4, 5]); // [1, 2, 3, 4, 5]
 
-/*126. validateNumber
+/*126. validateNumber #number
 
 This snippet can be used to check whether a value is a number.*/
 
@@ -1323,7 +1323,7 @@ const validateNumber = n => !isNaN(parseFloat(n)) && isFinite(n) && Number(n) ==
 
 //validateNumber('10'); // true
 
-/*127. words
+/*127. words #string
 
 This snippet converts a string into an array of words.*/
 
@@ -1333,6 +1333,472 @@ const words = (str, pattern = /[^a-zA-Z-]+/) => str.split(pattern).filter(Boolea
 //words('I love javaScript!!'); // ["I", "love", "javaScript"]
 //words('python, javaScript & coffee'); // ["python", "javaScript", "coffee"]
 
+/*128. chunk #array
+
+This snippet splits an array into smaller arrays of the given size. The last chunk gets whatever is left.*/
+
+const chunk = (arr, size) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+    arr.slice(i * size, i * size + size)
+  );
+
+//chunk([1, 2, 3, 4, 5], 2); // [[1, 2], [3, 4], [5]]
+
+/*129. range #array
+
+This snippet creates an array of numbers from start up to (but not including) end, with an optional step.*/
+
+const range = (start, end, step = 1) =>
+  Array.from({ length: Math.max(Math.ceil((end - start) / step), 0) }, (_, i) => start + i * step);
+
+//range(0, 5); // [0, 1, 2, 3, 4]
+//range(0, 10, 3); // [0, 3, 6, 9]
+
+/*130. groupBy #array
+
+This snippet groups the elements of an array into an object, using the value returned by fn as the key.*/
+
+const groupBy = (arr, fn) =>
+  arr.reduce((acc, item) => {
+    const key = fn(item);
+    (acc[key] ||= []).push(item);
+    return acc;
+  }, {});
+
+//groupBy([6.1, 4.2, 6.3], Math.floor); // { 4: [4.2], 6: [6.1, 6.3] }
+//groupBy(['one', 'two', 'three'], s => s.length); // { 3: ['one', 'two'], 5: ['three'] }
+
+/*131. uniqueBy #array
+
+This snippet removes duplicates from an array, comparing the values returned by fn instead of the items themselves.*/
+
+const uniqueBy = (arr, fn) => {
+  const seen = new Set();
+  return arr.filter(item => {
+    const key = fn(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+//uniqueBy([{ id: 1 }, { id: 2 }, { id: 1 }], x => x.id); // [{ id: 1 }, { id: 2 }]
+
+/*132. countBy #array
+
+This snippet counts the elements of an array, grouped by the value returned by fn.*/
+
+const countBy = (arr, fn) =>
+  arr.reduce((acc, item) => {
+    const key = fn(item);
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+
+//countBy(['apple', 'avocado', 'banana'], s => s[0]); // { a: 2, b: 1 }
+
+/*133. zip #array
+
+This snippet pairs up the elements of two arrays by their index. Extra elements of the longer array are dropped.*/
+
+const zip = (a, b) => a.slice(0, Math.min(a.length, b.length)).map((item, i) => [item, b[i]]);
+
+//zip(['a', 'b', 'c'], [1, 2, 3]); // [['a', 1], ['b', 2], ['c', 3]]
+
+/*134. sumBy #number
+
+This snippet adds up the values returned by fn for every element of an array.*/
+
+const sumBy = (arr, fn) => arr.reduce((total, item) => total + fn(item), 0);
+
+//sumBy([{ price: 4 }, { price: 6 }], x => x.price); // 10
+
+/*135. clamp #number
+
+This snippet keeps a number between a minimum and a maximum value.*/
+
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
+//clamp(15, 0, 10); // 10
+//clamp(-3, 0, 10); // 0
+//clamp(5, 0, 10); // 5
+
+/*136. lerp #number
+
+This snippet returns the value that is t of the way between a and b, where t goes from 0 to 1. Handy for animations.*/
+
+const lerp = (a, b, t) => a + (b - a) * t;
+
+//lerp(0, 100, 0.25); // 25
+//lerp(10, 20, 0.5); // 15
+
+/*137. percentOf #number
+
+This snippet tells you what percentage part is of total, rounded to the given number of decimals.*/
+
+const percentOf = (part, total, decimals = 0) => +((part / total) * 100).toFixed(decimals);
+
+//percentOf(50, 200); // 25
+//percentOf(1, 3, 1); // 33.3
+
+/*138. formatBytes #number
+
+This snippet turns a number of bytes into a human readable string, like 1.5 KB or 5 MB.*/
+
+const formatBytes = (bytes, decimals = 1) => {
+  if (bytes === 0) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+  return `${+(bytes / 1024 ** i).toFixed(decimals)} ${units[i]}`;
+};
+
+//formatBytes(1536); // '1.5 KB'
+//formatBytes(5242880); // '5 MB'
+
+/*139. slugify #string
+
+This snippet turns any text into a URL-friendly slug. Accents are removed too, so it works with Hungarian text.*/
+
+const slugify = str =>
+  str
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+//slugify('Árvíztűrő tükörfúrógép!'); // 'arvizturo-tukorfurogep'
+//slugify('  Hello World  '); // 'hello-world'
+
+/*140. truncate #string
+
+This snippet shortens a string to the given length and puts an ellipsis at the end if it had to cut it.*/
+
+const truncate = (str, length) => (str.length > length ? `${str.slice(0, length - 1)}…` : str);
+
+//truncate('Frontend is fun', 9); // 'Frontend…'
+//truncate('Hi', 9); // 'Hi'
+
+/*141. camelCase #string
+
+This snippet converts a string with spaces, dashes or underscores to camelCase.*/
+
+const camelCase = str =>
+  str.toLowerCase().replace(/[-_\s]+(.)?/g, (_, chr) => (chr ? chr.toUpperCase() : ''));
+
+//camelCase('background-color'); // 'backgroundColor'
+//camelCase('hello world'); // 'helloWorld'
+
+/*142. kebabCase #string
+
+This snippet converts camelCase or spaced text to kebab-case, the way CSS properties are written.*/
+
+const kebabCase = str =>
+  str
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+
+//kebabCase('backgroundColor'); // 'background-color'
+//kebabCase('Hello World'); // 'hello-world'
+
+/*143. escapeHTML #string
+
+This snippet escapes the characters that mean something in HTML, so text typed by a user can be shown safely.*/
+
+const escapeHTML = str => str.replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`);
+
+//escapeHTML('<b>Tom & Jerry</b>'); // '&#60;b&#62;Tom &#38; Jerry&#60;/b&#62;'
+
+/*144. countWords #string
+
+This snippet counts the words in a string.*/
+
+const countWords = str => str.trim().split(/\s+/).filter(Boolean).length;
+
+//countWords('  The more you know  '); // 4
+//countWords(''); // 0
+
+/*145. initials #string
+
+This snippet returns the uppercase initials of a name. Great for avatar placeholders.*/
+
+const initials = name =>
+  name
+    .trim()
+    .split(/\s+/)
+    .map(part => part[0].toUpperCase())
+    .join('');
+
+//initials('ada lovelace'); // 'AL'
+
+/*146. uuid #string
+
+This snippet generates a random, unique id with the built-in crypto API.*/
+
+const uuid = () => crypto.randomUUID();
+
+//uuid(); // '3b241101-e2bb-4255-8caf-4136c566a962'
+
+/*147. isWeekend #date
+
+This snippet checks whether a date falls on a Saturday or a Sunday.*/
+
+const isWeekend = (date = new Date()) => [0, 6].includes(date.getDay());
+
+//isWeekend(new Date(2026, 10, 21)); // true (Saturday)
+//isWeekend(new Date(2026, 10, 23)); // false (Monday)
+
+/*148. addDays #date
+
+This snippet returns a new date that is the given number of days later, or earlier with a negative number.*/
+
+const addDays = (date, days) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
+
+//addDays(new Date(2026, 0, 30), 3); // 2 February 2026
+
+/*149. formatDate #date
+
+This snippet formats a date for the given language with the built-in Intl API.*/
+
+const formatDate = (date, locale = 'en-GB') =>
+  new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(date);
+
+//formatDate(new Date(2026, 10, 20)); // '20 November 2026'
+//formatDate(new Date(2026, 10, 20), 'hu-HU'); // '2026. november 20.'
+
+/*150. timeAgo #date
+
+This snippet describes how long ago a date was, like "3 days ago" or "yesterday", with Intl.RelativeTimeFormat.*/
+
+const timeAgo = (date, locale = 'en') => {
+  const seconds = Math.round((date - Date.now()) / 1000);
+  const units = [['year', 31536000], ['month', 2592000], ['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]];
+  const [unit, size] = units.find(([, s]) => Math.abs(seconds) >= s) || units[units.length - 1];
+  return new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(Math.round(seconds / size), unit);
+};
+
+//timeAgo(new Date(Date.now() - 3 * 86400000)); // '3 days ago'
+//timeAgo(new Date(Date.now() - 86400000)); // 'yesterday'
+
+/*151. pick #object
+
+This snippet creates a new object that has only the listed keys.*/
+
+const pick = (obj, keys) => Object.fromEntries(keys.filter(key => key in obj).map(key => [key, obj[key]]));
+
+//pick({ a: 1, b: 2, c: 3 }, ['a', 'c']); // { a: 1, c: 3 }
+
+/*152. omit #object
+
+This snippet creates a new object without the listed keys.*/
+
+const omit = (obj, keys) => Object.fromEntries(Object.entries(obj).filter(([key]) => !keys.includes(key)));
+
+//omit({ a: 1, b: 2, c: 3 }, ['b']); // { a: 1, c: 3 }
+
+/*153. deepClone #object
+
+This snippet makes a deep copy of an object or array, so changing the copy never changes the original.*/
+
+const deepClone = value => structuredClone(value);
+
+//const copy = deepClone({ user: { name: 'Rika' } });
+//copy.user.name = 'Ada'; // the original still says 'Rika'
+
+/*154. isEmpty #type
+
+This snippet checks whether a value is empty: null, undefined, an empty string, array, Map, Set or object.*/
+
+const isEmpty = value => {
+  if (value == null) return true;
+  if (typeof value === 'string' || Array.isArray(value)) return value.length === 0;
+  if (value instanceof Map || value instanceof Set) return value.size === 0;
+  return typeof value === 'object' && Object.keys(value).length === 0;
+};
+
+//isEmpty([]); // true
+//isEmpty({}); // true
+//isEmpty(''); // true
+//isEmpty({ a: 1 }); // false
+
+/*155. debounce #function
+
+This snippet waits until fn has not been called for ms milliseconds, and only then runs it. Perfect for search boxes and resize events.*/
+
+const debounce = (fn, ms = 300) => {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), ms);
+  };
+};
+
+//const onSearch = debounce(text => console.log(text), 500);
+//input.addEventListener('input', e => onSearch(e.target.value));
+
+/*156. throttle #function
+
+This snippet lets fn run at most once every ms milliseconds, no matter how often it is called. Good for scroll handlers.*/
+
+const throttle = (fn, ms = 200) => {
+  let last = 0;
+  return (...args) => {
+    const now = Date.now();
+    if (now - last >= ms) {
+      last = now;
+      fn(...args);
+    }
+  };
+};
+
+//window.addEventListener('scroll', throttle(() => console.log(window.scrollY), 250));
+
+/*157. once #function
+
+This snippet makes sure fn runs only the first time. Later calls just return the first result.*/
+
+const once = fn => {
+  let called = false;
+  let result;
+  return (...args) => {
+    if (!called) {
+      called = true;
+      result = fn(...args);
+    }
+    return result;
+  };
+};
+
+//const init = once(() => console.log('Hello!'));
+//init(); // logs 'Hello!'
+//init(); // does nothing
+
+/*158. memoize #function
+
+This snippet remembers the results of a one-argument function, so a slow calculation runs only once for each input.*/
+
+const memoize = fn => {
+  const cache = new Map();
+  return arg => {
+    if (!cache.has(arg)) cache.set(arg, fn(arg));
+    return cache.get(arg);
+  };
+};
+
+//const square = memoize(n => n * n);
+//square(9); // 81 (calculated)
+//square(9); // 81 (from the cache)
+
+/*159. pipe #function
+
+This snippet chains functions from left to right: the result of each one goes into the next.*/
+
+const pipe = (...fns) => value => fns.reduce((acc, fn) => fn(acc), value);
+
+//const shout = pipe(s => s.trim(), s => s.toUpperCase(), s => `${s}!`);
+//shout('  hello '); // 'HELLO!'
+
+/*160. retry #function
+
+This snippet calls an async function again if it fails, up to the given number of attempts, with a short pause between tries.*/
+
+const retry = async (fn, attempts = 3, delay = 500) => {
+  for (let i = 1; ; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (i >= attempts) throw err;
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+};
+
+//const data = await retry(() => fetch('/api/data').then(res => res.json()));
+
+/*161. fetchJSON #function
+
+This snippet fetches a URL and returns the parsed JSON. Unlike plain fetch, it also throws an error for 404 and 500 responses.*/
+
+const fetchJSON = async (url, options) => {
+  const res = await fetch(url, options);
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return res.json();
+};
+
+//const users = await fetchJSON('/api/users');
+
+/*162. copyToClipboard #dom
+
+This snippet copies a piece of text to the clipboard. It returns a promise, so you can show a message when it is done.*/
+
+const copyToClipboard = text => navigator.clipboard.writeText(text);
+
+//copyToClipboard('Hello!').then(() => alert('Copied!'));
+
+/*163. getQueryParam #dom
+
+This snippet reads one parameter from a URL, for example ?page=2.*/
+
+const getQueryParam = (name, url = window.location.href) => new URL(url).searchParams.get(name);
+
+//getQueryParam('page', 'https://example.com/?page=2'); // '2'
+//getQueryParam('missing', 'https://example.com/'); // null
+
+/*164. prefersDarkMode #dom
+
+This snippet checks whether the user's operating system is set to dark mode.*/
+
+const prefersDarkMode = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+//prefersDarkMode(); // true or false
+
+/*165. isInViewport #dom
+
+This snippet checks whether an element is completely visible in the browser window.*/
+
+const isInViewport = el => {
+  const { top, left, bottom, right } = el.getBoundingClientRect();
+  return top >= 0 && left >= 0 && bottom <= window.innerHeight && right <= window.innerWidth;
+};
+
+//isInViewport(document.querySelector('h1')); // true
+
+/*166. onClickOutside #dom
+
+This snippet runs a callback when the user clicks anywhere outside an element, for example to close a dropdown. It returns a function that stops listening.*/
+
+const onClickOutside = (el, callback) => {
+  const handler = e => {
+    if (!el.contains(e.target)) callback(e);
+  };
+  document.addEventListener('click', handler);
+  return () => document.removeEventListener('click', handler);
+};
+
+//const stop = onClickOutside(menu, () => menu.classList.remove('open'));
+//stop(); // stop listening
+
+/*167. localStorage JSON #dom
+
+These two helpers save and load any value in localStorage as JSON. Loading never throws: you get the fallback value instead.*/
+
+const saveJSON = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+const loadJSON = (key, fallback = null) => {
+  try {
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+//saveJSON('settings', { theme: 'light' });
+//loadJSON('settings'); // { theme: 'light' }
 
 //Synopsis
 

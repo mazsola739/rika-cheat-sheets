@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="home.docTitle">Rika cheat sheets · frontend cheat sheets, snippets, roadmap</title>
+  <meta name="description" data-i18n-attr="content:home.desc" content="Hand-drawn frontend cheat sheets, reusable JavaScript snippets and a learning roadmap you can tick off.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Shantell+Sans:wght@400..800&display=swap">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="./"><img class="brand-logo" src="assets/img/logo.webp" alt="Rika cheat sheets" width="2000" height="667"></a>
+      <nav data-i18n-attr="aria-label:nav.menu" aria-label="Main menu">
+        <ul class="nav-links">
+          <li><a href="roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+          <li><a href="cheatsheets.html" data-i18n="nav.sheets">Cheat sheets</a></li>
+          <li><a href="snippets.html" data-i18n="nav.snippets">Snippets</a></li>
+          <li><a href="principles.html" data-i18n="nav.principles">Principles</a></li>
+          <li><a href="https://github.com/mazsola739/rika-cheat-sheets">GitHub</a></li>
+          <li><button type="button" class="lang-toggle" data-lang-toggle>HU / EN</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="hero-art" id="hero-art"></div>
+      <div class="hero-text">
+        <p class="kicker" data-i18n="home.kicker">Left brain: logic. Right brain: creativity. Frontend: both.</p>
+        <h1 class="hero-title"><img class="hero-logo" src="assets/img/logo.webp" alt="Rika cheat sheets" width="2000" height="667"></h1>
+        <p class="lead" data-i18n="home.lead">Hand-drawn frontend cheat sheets, reusable JavaScript snippets and a roadmap you can tick off. The more you know, the more colorful it gets.</p>
+        <div class="btns hero-btns">
+          <a class="btn btn-primary" href="roadmap.html" data-i18n="home.ctaRoadmap">Start the roadmap</a>
+          <a class="btn" href="cheatsheets.html" data-i18n="home.ctaSheets">Cheat sheets</a>
+          <a class="btn" href="snippets.html" data-i18n="home.ctaSnippets">Snippets</a>
+          <a class="btn" href="principles.html" data-i18n="home.ctaPrinciples">Principles</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap tips" aria-labelledby="tips-title">
+      <h2 id="tips-title" class="tips-title"><span class="hl" data-i18n="home.tipsTitle">Little tricks</span></h2>
+      <ul class="tips-list">
+        <li><kbd>/</kbd> <span data-i18n="home.tip1">jump to search</span></li>
+        <li><code>Copy</code> <span data-i18n="home.tip2">click any code to copy it</span></li>
+        <li><span class="tip-badge">HU / EN</span> <span data-i18n="home.tip3">switch language in the menu</span></li>
+        <li><span class="tip-badge">.png .md .json</span> <span data-i18n="home.tip4">download and re-load your roadmap</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p data-i18n="footer.tagline">Rika cheat sheets · the more you know, the more colorful it gets</p>
+      <p><a href="https://github.com/mazsola739/rika-cheat-sheets" data-i18n="footer.source">Source on GitHub</a></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/home.js"></script>
+</body>
+</html>
