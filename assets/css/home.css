@@ -52,6 +52,17 @@
   margin-top: 22px;
 }
 
+/* kis kézírásos megjegyzés a gombok alatt: honnan indult a gyűjtemény */
+.origin-note {
+  display: inline-block;
+  margin: 22px 0 0;
+  padding: 4px 16px;
+  color: #1c3d96;
+  font-size: 20px;
+  background: linear-gradient(176deg, transparent 8%, #ffec99 12%, #ffec99 86%, transparent 92%);
+  transform: rotate(-1.5deg);
+}
+
 .tips {
   margin-top: 46px;
 }

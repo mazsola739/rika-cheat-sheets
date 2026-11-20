@@ -5,6 +5,12 @@
 Kézzel rajzolt frontend puskák, újrahasznosítható JavaScript snippetek és egy pipálható tanulási roadmap.
 *Hand-drawn frontend cheat sheets, reusable JavaScript snippets and a learning roadmap you can tick off.*
 
+> A gyűjteményt még noob koromban kezdtem: ami megtetszett vagy amit végre megértettem, azt ide írtam fel.
+> Azóta nő, és lassan saját oldal lett belőle.
+>
+> *I started collecting these back in my noob days: whatever I liked or finally understood went in here.
+> It kept growing, and slowly turned into a site of its own.*
+
 **Élő oldal / Live:** https://mazsola739.github.io/rika-cheat-sheets/
 
 | Oldal | Mit tud |
