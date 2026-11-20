@@ -1,40 +1,36 @@
 /*
- * Cheat sheetek: lista (#) és egy-egy sheet (#flexbox) három nézetben:
- *  - poster:    kézzel rajzolt kártyák számozott, filctollas címekkel
- *  - notebook:  vonalas füzetlap, washi tape címkékkel
- *  - blueprint: sötét tervrajz, középső dobozból ágazó vonalakkal
+ * Cheat sheetek: lista (#) és egy-egy sheet (#flexbox).
+ * Egy sheet felépítése:
+ *  - fent a kattintgatós „poszter”: elrendezés-játszótér (flexbox, grid) vagy CSS-generátor
+ *    (színek, gradiens, árnyék, keret, gomb) – csúszkák, élő előnézet, másolható CSS,
+ *  - alatta a felsorolós rész blueprint stílusban: sötét tervrajz, középső dobozból ágazó vonalak.
  * Tartalom: cheatsheets-data.js
  */
 (() => {
   'use strict';
 
-  const { h, svg, t, tx, addStrings, store, highlight, copyText, codeBlock, mountArt, normalize, bindSearchShortcut, PALETTE } = window.Rika;
+  const { h, svg, t, tx, addStrings, highlight, copyText, codeBlock, mountArt, normalize, bindSearchShortcut, PALETTE } = window.Rika;
   const SHEETS = window.CHEATSHEETS;
-  const VIEW_KEY = 'rika-cheat-sheets:sheets:view';
-  const VIEWS = ['poster', 'notebook', 'blueprint'];
   const NEON = ['#69db7c', '#ffa94d', '#ffd43b', '#b197fc', '#74c0fc', '#f783ac', '#63e6be', '#ff8787'];
 
   addStrings({
     hu: {
       'cs.docTitle': 'Cheat sheetek · Rika cheat sheets',
-      'cs.desc': 'Kézzel rajzolt frontend puskák: Flexbox, Grid, CSS, JavaScript, DOM, Git, React – másolható kóddal.',
+      'cs.desc': 'Frontend puskák blueprint stílusban, kattintgatós CSS-generátorokkal: Flexbox, Grid, színek, árnyékok, JavaScript, Git, React.',
       'cs.kicker': 'Frontend puskák',
       'cs.title': 'Cheat sheetek',
-      'cs.lead': 'Egy oldalon a lényeg. Kattints egy kódra, és már másolhatod is.',
+      'cs.lead': 'Egy oldalon a lényeg. Ahol lehet kattintgatni, ott fent egy játszótér, alatta a lista – kattints egy kódra, és már másolhatod is.',
       'cs.searchLabel': 'Keresés a cheat sheetek között',
-      'cs.searchPh': 'Keresés: flex, map, git…',
+      'cs.searchPh': 'Keresés: flex, gradient, regex…',
       'cs.all': 'Mind',
       'cs.levels': 'Szint',
       'cs.level.kezdo': 'Kezdő',
       'cs.level.kozep': 'Középhaladó',
       'cs.level.halado': 'Haladó',
       'cs.entries': '{n} sor · kb. {m} perc',
+      'cs.interactive': 'kattintgatós',
       'cs.open': 'Megnyitom →',
       'cs.back': '← Összes cheat sheet',
-      'cs.view': 'Nézet',
-      'cs.view.poster': 'Poszter',
-      'cs.view.notebook': 'Füzet',
-      'cs.view.blueprint': 'Blueprint',
       'cs.print': 'Nyomtatás / PDF',
       'cs.copyHint': 'Kattints a kódra a másoláshoz.',
       'cs.none': 'Nincs ilyen cheat sheet. Próbálj más szót.',
@@ -42,30 +38,31 @@
       'cs.sheet': 'CHEAT SHEET',
       'cs.pg': 'játszótér',
       'cs.pgHint': 'Kattintgass, és figyeld, hogyan változik az elrendezés és a kód.',
+      'cs.genHint': 'Húzd a csúszkákat, válassz színt – az előnézet és a CSS azonnal változik.',
       'cs.pgItems': 'Elemek száma',
       'cs.pgGap': 'Térköz',
       'cs.pgCode': 'Ez a CSS',
+      'cs.formats': 'Ugyanez a szín (kattints a másoláshoz)',
+      'cs.btnLabel': 'Kattints rám',
+      'cs.box': 'doboz',
     },
     en: {
       'cs.docTitle': 'Cheat sheets · Rika cheat sheets',
-      'cs.desc': 'Hand-drawn frontend cheat sheets: Flexbox, Grid, CSS, JavaScript, DOM, Git, React – with copyable code.',
+      'cs.desc': 'Frontend cheat sheets in blueprint style, with clickable CSS generators: Flexbox, Grid, colors, shadows, JavaScript, Git, React.',
       'cs.kicker': 'Frontend cheat sheets',
       'cs.title': 'Cheat sheets',
-      'cs.lead': 'The essentials on one page. Click any code to copy it.',
+      'cs.lead': 'The essentials on one page. Where you can click around, there’s a playground on top and the list below – click any code to copy it.',
       'cs.searchLabel': 'Search cheat sheets',
-      'cs.searchPh': 'Search: flex, map, git…',
+      'cs.searchPh': 'Search: flex, gradient, regex…',
       'cs.all': 'All',
       'cs.levels': 'Level',
       'cs.level.kezdo': 'Beginner',
       'cs.level.kozep': 'Intermediate',
       'cs.level.halado': 'Advanced',
       'cs.entries': '{n} lines · about {m} min',
+      'cs.interactive': 'clickable',
       'cs.open': 'Open →',
       'cs.back': '← All cheat sheets',
-      'cs.view': 'View',
-      'cs.view.poster': 'Poster',
-      'cs.view.notebook': 'Notebook',
-      'cs.view.blueprint': 'Blueprint',
       'cs.print': 'Print / PDF',
       'cs.copyHint': 'Click any code to copy it.',
       'cs.none': 'No cheat sheet like that. Try another word.',
@@ -73,14 +70,17 @@
       'cs.sheet': 'CHEAT SHEET',
       'cs.pg': 'playground',
       'cs.pgHint': 'Click around and watch the layout and the code change.',
+      'cs.genHint': 'Drag the sliders, pick colors – the preview and the CSS change right away.',
       'cs.pgItems': 'Items',
       'cs.pgGap': 'Gap',
       'cs.pgCode': 'The CSS',
+      'cs.formats': 'The same color (click to copy)',
+      'cs.btnLabel': 'Click me',
+      'cs.box': 'box',
     },
   });
 
   const app = document.getElementById('app');
-  let view = VIEWS.includes(store.get(VIEW_KEY, 'poster')) ? store.get(VIEW_KEY, 'poster') : 'poster';
   let level = 'all';
   let query = '';
 
@@ -92,7 +92,7 @@
     ...sheet.sections.flatMap((s) => [tx(s.title), ...s.items.flatMap(([code, note]) => [code, tx(note)])]),
   ].join(' '));
 
-  /* ---------- lista ---------- */
+  /* ---------- lista: dossziéfüles kártyák ---------- */
 
   function renderIndex() {
     document.title = t('cs.docTitle');
@@ -132,21 +132,22 @@
     draw();
   }
 
-  function sheetCard(sheet, index) {
+  function sheetCard(sheet) {
     const color = PALETTE[SHEETS.indexOf(sheet) % PALETTE.length];
     return h('a', { class: 'card sheet-card', href: `#${sheet.id}`, style: `--c:${color.c};--a:${color.a}` },
-      h('header', { class: 'card-head' },
-        h('span', { class: 'badge', 'aria-hidden': 'true' }, String(SHEETS.indexOf(sheet) + 1)),
-        h('h2', { class: 'card-title' }, h('span', { class: 'hl' }, tx(sheet.title)))),
+      h('h2', { class: 'sheet-tab' },
+        h('span', { class: 'sheet-tab-title' }, tx(sheet.title)),
+        h('span', { class: 'sheet-icon', 'aria-hidden': 'true' }, sheet.icon || '')),
       h('p', { class: 'sheet-intro' }, tx(sheet.intro)),
       h('p', { class: 'sheet-meta' },
         h('span', { class: `level level-${sheet.level}` }, t(`cs.level.${sheet.level}`)),
+        sheet.playground ? h('span', { class: 'sheet-play' }, `▶ ${t('cs.interactive')}`) : null,
         h('span', {}, t('cs.entries', { n: countItems(sheet), m: minutes(sheet) }))),
       h('p', { class: 'sheet-tags' }, sheet.tags.map((tag) => h('span', {}, `#${tag}`))),
       h('span', { class: 'sheet-open' }, t('cs.open')));
   }
 
-  /* ---------- egy sheet ---------- */
+  /* ---------- kattintható kód ---------- */
 
   function codeNode(code, lang) {
     const multi = code.includes('\n');
@@ -161,20 +162,7 @@
     });
   }
 
-  function renderPosterOrNotebook(sheet) {
-    return h('div', { class: 'cs-sections' },
-      sheet.sections.map((section, i) => {
-        const color = PALETTE[i % PALETTE.length];
-        return h('section', { class: 'cs-section', style: `--c:${color.c};--a:${color.a}` },
-          h('h2', { class: 'cs-title' },
-            h('span', { class: 'badge', 'aria-hidden': 'true' }, String(i + 1)),
-            h('span', { class: 'hl tape' }, tx(section.title))),
-          h('ul', { class: 'cs-items' },
-            section.items.map(([code, note]) => h('li', {},
-              codeNode(code, sheet.lang),
-              note ? h('span', { class: 'cs-note' }, tx(note)) : null))));
-      }));
-  }
+  /* ---------- a felsorolós rész: blueprint ---------- */
 
   function renderBlueprint(sheet) {
     const rows = [];
@@ -192,7 +180,9 @@
     const curves = svg('svg', { class: 'bp-curves', 'aria-hidden': 'true' });
     const board = h('div', { class: 'bp-board' },
       curves,
-      h('div', { class: 'bp-hub' }, h('span', { class: 'bp-hub-title' }, tx(sheet.title))),
+      h('div', { class: 'bp-hub' },
+        sheet.icon ? h('span', { class: 'bp-hub-icon', 'aria-hidden': 'true' }, sheet.icon) : null,
+        h('span', { class: 'bp-hub-title' }, tx(sheet.title))),
       h('ul', { class: 'bp-rows' }, rows));
     requestAnimationFrame(() => drawCurves(board));
     return board;
@@ -233,7 +223,7 @@
     }, 120);
   });
 
-  /* ---------- játszótér (flexbox / grid) ---------- */
+  /* ---------- kattintgatós poszter 1: elrendezés-játszótér (flexbox / grid) ---------- */
 
   const PLAYGROUNDS = {
     flexbox: {
@@ -261,9 +251,12 @@
     },
   };
 
+  const optionPills = (name, options, current, onPick) => h('div', { class: 'pg-options' }, options.map((option) => h('label', { class: 'pg-option' },
+    h('input', { type: 'radio', name, value: option, checked: current === option, onchange: () => onPick(option) }),
+    h('span', {}, option))));
+
   function renderPlayground(kind) {
     const cfg = PLAYGROUNDS[kind];
-    if (!cfg) return null;
     const state = Object.fromEntries(Object.entries(cfg.props).map(([prop, options]) => [prop, options[0]]));
     let gap = 12;
     let count = cfg.items;
@@ -283,58 +276,282 @@
     const controls = h('div', { class: 'pg-controls' },
       Object.entries(cfg.props).map(([prop, options]) => h('fieldset', { class: 'pg-field' },
         h('legend', {}, h('code', {}, prop)),
-        h('div', { class: 'pg-options' }, options.map((option) => h('label', { class: 'pg-option' },
-          h('input', {
-            type: 'radio', name: `${kind}-${prop}`, value: option, checked: state[prop] === option,
-            onchange: () => { state[prop] = option; update(); },
-          }),
-          h('span', {}, option)))))),
-      h('label', { class: 'pg-range' }, h('span', {}, `${t('cs.pgGap')}: `, h('output', {}, `${gap}px`)),
-        h('input', {
-          type: 'range', min: '0', max: '40', value: String(gap),
-          oninput: (e) => { gap = Number(e.target.value); e.target.previousElementSibling.querySelector('output').textContent = `${gap}px`; update(); },
-        })),
-      h('label', { class: 'pg-range' }, h('span', {}, `${t('cs.pgItems')}: `, h('output', {}, String(count))),
-        h('input', {
-          type: 'range', min: '1', max: String(cfg.maxItems), value: String(count),
-          oninput: (e) => { count = Number(e.target.value); e.target.previousElementSibling.querySelector('output').textContent = String(count); update(); },
-        })));
+        optionPills(`${kind}-${prop}`, options, state[prop], (option) => { state[prop] = option; update(); }))),
+      rangeControl(t('cs.pgGap'), 0, 40, 1, gap, 'px', (value) => { gap = value; update(); }),
+      rangeControl(t('cs.pgItems'), 1, cfg.maxItems, 1, count, '', (value) => { count = value; update(); }));
 
     update();
-    return h('section', { class: 'card playground no-print', style: '--c:#99e9f2;--a:#0c8599' },
-      h('header', { class: 'card-head' },
-        h('h2', { class: 'card-title' }, h('span', { class: 'hl' }, `${cfg.name} ${t('cs.pg')}`))),
-      h('p', { class: 'pg-hint' }, t('cs.pgHint')),
-      h('div', { class: 'pg-layout' }, controls, h('div', {}, stage, codeHost)));
+    return posterCard(`${cfg.name} ${t('cs.pg')}`, t('cs.pgHint'), controls, h('div', {}, stage, codeHost));
   }
+
+  /* ---------- kattintgatós poszter 2: CSS-generátorok ---------- */
+
+  const hexToRgb = (hex) => {
+    const n = parseInt(hex.slice(1), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  };
+  const alphaText = (pct) => String(Math.round(pct) / 100);
+  const withAlpha = (hex, pct) => {
+    if (pct >= 100) return hex;
+    const [r, g, b] = hexToRgb(hex);
+    return `rgb(${r} ${g} ${b} / ${alphaText(pct)})`;
+  };
+  const toHsl = (hex) => {
+    const [r, g, b] = hexToRgb(hex).map((v) => v / 255);
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    let hue = 0;
+    let sat = 0;
+    if (max !== min) {
+      const d = max - min;
+      sat = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      hue = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+      hue *= 60;
+    }
+    return [Math.round(hue), Math.round(sat * 100), Math.round(l * 100)];
+  };
+
+  /*
+   * Egy generátor: vezérlők (range | color | pick | check), és rules(state) → szabályok listája.
+   * Egy szabály: { sel: '' | ':hover', lines: ['prop: érték;', …] }. A megjelenített CSS a
+   * className-mel készül, az élő előnézet ugyanezt kapja egy saját <style>-ban.
+   */
+  const GENERATORS = {
+    colors: {
+      name: { hu: 'Színválasztó & háttérminta', en: 'Color picker & background pattern' },
+      className: '.box',
+      controls: [
+        { key: 'color', type: 'color', label: { hu: 'Szín', en: 'Color' }, value: '#7048e8' },
+        { key: 'alpha', type: 'range', label: { hu: 'Átlátszóság', en: 'Opacity' }, min: 0, max: 100, value: 100, unit: '%' },
+        { key: 'pattern', type: 'pick', label: { hu: 'Minta', en: 'Pattern' }, options: ['none', 'stripes', 'dots', 'checks', 'grid'], value: 'stripes' },
+        { key: 'size', type: 'range', label: { hu: 'Mintaméret', en: 'Pattern size' }, min: 8, max: 64, value: 28, unit: 'px' },
+        { key: 'bg', type: 'color', label: { hu: 'Alapszín', en: 'Base color' }, value: '#fff4e6' },
+      ],
+      rules(s) {
+        const c = withAlpha(s.color, s.alpha);
+        const size = s.size;
+        if (s.pattern === 'none') return [{ sel: '', lines: [`background-color: ${c};`] }];
+        const patterns = {
+          stripes: [`repeating-linear-gradient(45deg, ${c} 0 ${size / 4}px, transparent ${size / 4}px ${size / 2}px)`],
+          dots: [`radial-gradient(${c} 22%, transparent 24%)`, `${size}px ${size}px`],
+          checks: [`conic-gradient(${c} 25%, transparent 0 50%, ${c} 0 75%, transparent 0)`, `${size}px ${size}px`],
+          grid: [`linear-gradient(${c} 2px, transparent 2px), linear-gradient(90deg, ${c} 2px, transparent 2px)`, `${size}px ${size}px`],
+        };
+        const [image, bgSize] = patterns[s.pattern];
+        return [{ sel: '', lines: [`background-color: ${s.bg};`, `background-image: ${image};`, ...(bgSize ? [`background-size: ${bgSize};`] : [])] }];
+      },
+      extra(s) {
+        const [r, g, b] = hexToRgb(s.color);
+        const [hue, sat, light] = toHsl(s.color);
+        const a = s.alpha < 100 ? ` / ${alphaText(s.alpha)}` : '';
+        const hexA = s.alpha < 100 ? Math.round((s.alpha / 100) * 255).toString(16).padStart(2, '0') : '';
+        const formats = [`${s.color}${hexA}`, `rgb(${r} ${g} ${b}${a})`, `hsl(${hue} ${sat}% ${light}%${a})`];
+        return h('div', { class: 'gen-formats' },
+          h('p', { class: 'gen-formats-title' }, t('cs.formats')),
+          h('div', { class: 'gen-chips' }, formats.map((text) => h('button', {
+            type: 'button', class: 'gen-chip', 'data-copy': text, 'aria-label': t('copy.aria', { label: text }),
+          }, h('span', { class: 'gen-swatch', style: `background:${text}`, 'aria-hidden': 'true' }), text))));
+      },
+    },
+    gradient: {
+      name: { hu: 'Színátmenet-generátor', en: 'Gradient generator' },
+      className: '.box',
+      controls: [
+        { key: 'type', type: 'pick', label: { hu: 'Típus', en: 'Type' }, options: ['linear', 'radial', 'conic'], value: 'linear' },
+        { key: 'angle', type: 'range', label: { hu: 'Szög', en: 'Angle' }, min: 0, max: 360, value: 135, unit: 'deg' },
+        { key: 'c1', type: 'color', label: { hu: '1. szín', en: 'Color 1' }, value: '#ff6b6b' },
+        { key: 'c2', type: 'color', label: { hu: '2. szín', en: 'Color 2' }, value: '#ffd43b' },
+        { key: 'three', type: 'check', label: { hu: 'Harmadik szín', en: 'Third color' }, value: true },
+        { key: 'c3', type: 'color', label: { hu: '3. szín', en: 'Color 3' }, value: '#4dabf7' },
+      ],
+      rules(s) {
+        const colors = [s.c1, s.c2, ...(s.three ? [s.c3] : [])].join(', ');
+        const value = s.type === 'linear'
+          ? `linear-gradient(${s.angle}deg, ${colors})`
+          : s.type === 'radial' ? `radial-gradient(circle, ${colors})` : `conic-gradient(from ${s.angle}deg, ${colors}${s.three ? '' : `, ${s.c1}`})`;
+        return [{ sel: '', lines: [`background: ${value};`] }];
+      },
+    },
+    shadow: {
+      name: { hu: 'Árnyékgenerátor', en: 'Box shadow generator' },
+      className: '.card',
+      controls: [
+        { key: 'x', type: 'range', label: { hu: 'Vízszintes (x)', en: 'Horizontal (x)' }, min: -40, max: 40, value: 6, unit: 'px' },
+        { key: 'y', type: 'range', label: { hu: 'Függőleges (y)', en: 'Vertical (y)' }, min: -40, max: 40, value: 12, unit: 'px' },
+        { key: 'blur', type: 'range', label: { hu: 'Elmosás', en: 'Blur' }, min: 0, max: 80, value: 24, unit: 'px' },
+        { key: 'spread', type: 'range', label: { hu: 'Terjedés', en: 'Spread' }, min: -20, max: 40, value: 0, unit: 'px' },
+        { key: 'color', type: 'color', label: { hu: 'Szín', en: 'Color' }, value: '#2b2a28' },
+        { key: 'alpha', type: 'range', label: { hu: 'Erősség', en: 'Strength' }, min: 0, max: 100, value: 30, unit: '%' },
+        { key: 'inset', type: 'check', label: { hu: 'Belső árnyék (inset)', en: 'Inner shadow (inset)' }, value: false },
+        { key: 'radius', type: 'range', label: { hu: 'Lekerekítés', en: 'Corner radius' }, min: 0, max: 60, value: 16, unit: 'px' },
+      ],
+      rules(s) {
+        return [{
+          sel: '',
+          lines: [
+            `box-shadow: ${s.inset ? 'inset ' : ''}${s.x}px ${s.y}px ${s.blur}px ${s.spread}px ${withAlpha(s.color, s.alpha)};`,
+            `border-radius: ${s.radius}px;`,
+          ],
+        }];
+      },
+    },
+    border: {
+      name: { hu: 'Keret- és sarokgenerátor', en: 'Border & radius generator' },
+      className: '.box',
+      controls: [
+        { key: 'width', type: 'range', label: { hu: 'Vastagság', en: 'Width' }, min: 0, max: 16, value: 4, unit: 'px' },
+        { key: 'style', type: 'pick', label: { hu: 'Stílus', en: 'Style' }, options: ['solid', 'dashed', 'dotted', 'double', 'groove', 'ridge'], value: 'dashed' },
+        { key: 'color', type: 'color', label: { hu: 'Szín', en: 'Color' }, value: '#1c7ed6' },
+        { key: 'tl', type: 'range', label: { hu: 'Bal felső sarok', en: 'Top left corner' }, min: 0, max: 90, value: 30, unit: 'px' },
+        { key: 'tr', type: 'range', label: { hu: 'Jobb felső sarok', en: 'Top right corner' }, min: 0, max: 90, value: 8, unit: 'px' },
+        { key: 'br', type: 'range', label: { hu: 'Jobb alsó sarok', en: 'Bottom right corner' }, min: 0, max: 90, value: 30, unit: 'px' },
+        { key: 'bl', type: 'range', label: { hu: 'Bal alsó sarok', en: 'Bottom left corner' }, min: 0, max: 90, value: 8, unit: 'px' },
+        { key: 'outline', type: 'check', label: { hu: 'Outline (fókuszkeret)', en: 'Outline (focus ring)' }, value: false },
+        { key: 'offset', type: 'range', label: { hu: 'Outline távolsága', en: 'Outline offset' }, min: 0, max: 16, value: 4, unit: 'px' },
+      ],
+      rules(s) {
+        const same = s.tl === s.tr && s.tr === s.br && s.br === s.bl;
+        return [{
+          sel: '',
+          lines: [
+            `border: ${s.width}px ${s.style} ${s.color};`,
+            `border-radius: ${same ? `${s.tl}px` : `${s.tl}px ${s.tr}px ${s.br}px ${s.bl}px`};`,
+            ...(s.outline ? [`outline: 3px solid ${s.color};`, `outline-offset: ${s.offset}px;`] : []),
+          ],
+        }];
+      },
+    },
+    button: {
+      name: { hu: 'Gombgenerátor', en: 'Button generator' },
+      className: '.btn',
+      preview: 'button',
+      controls: [
+        { key: 'bg', type: 'color', label: { hu: 'Háttér', en: 'Background' }, value: '#ffa94d' },
+        { key: 'fg', type: 'color', label: { hu: 'Szöveg', en: 'Text' }, value: '#2b2a28' },
+        { key: 'font', type: 'range', label: { hu: 'Betűméret', en: 'Font size' }, min: 12, max: 30, value: 18, unit: 'px' },
+        { key: 'py', type: 'range', label: { hu: 'Belső tér fent-lent', en: 'Padding top/bottom' }, min: 4, max: 30, value: 10, unit: 'px' },
+        { key: 'px', type: 'range', label: { hu: 'Belső tér oldalt', en: 'Padding left/right' }, min: 8, max: 60, value: 24, unit: 'px' },
+        { key: 'radius', type: 'range', label: { hu: 'Lekerekítés', en: 'Corner radius' }, min: 0, max: 40, value: 12, unit: 'px' },
+        { key: 'bw', type: 'range', label: { hu: 'Keret', en: 'Border' }, min: 0, max: 6, value: 2, unit: 'px' },
+        { key: 'shadow', type: 'range', label: { hu: 'Árnyék', en: 'Shadow' }, min: 0, max: 10, value: 4, unit: 'px' },
+        { key: 'lift', type: 'check', label: { hu: 'Megemelkedik hoverre', en: 'Lifts on hover' }, value: true },
+      ],
+      rules(s) {
+        const base = [
+          `padding: ${s.py}px ${s.px}px;`,
+          `background: ${s.bg};`,
+          `color: ${s.fg};`,
+          `font-size: ${s.font}px;`,
+          `font-weight: 700;`,
+          `border: ${s.bw}px solid ${s.fg};`,
+          `border-radius: ${s.radius}px;`,
+          ...(s.shadow ? [`box-shadow: ${s.shadow}px ${s.shadow}px 0 ${s.fg};`] : []),
+          'cursor: pointer;',
+          'transition: transform 0.15s, box-shadow 0.15s;',
+        ];
+        const rules = [{ sel: '', lines: base }];
+        if (s.lift) {
+          rules.push({ sel: ':hover', lines: ['transform: translate(-2px, -2px);', ...(s.shadow ? [`box-shadow: ${s.shadow + 2}px ${s.shadow + 2}px 0 ${s.fg};`] : [])] });
+          rules.push({ sel: ':active', lines: ['transform: translate(1px, 1px);', ...(s.shadow ? [`box-shadow: ${Math.max(0, s.shadow - 2)}px ${Math.max(0, s.shadow - 2)}px 0 ${s.fg};`] : [])] });
+        }
+        return rules;
+      },
+    },
+  };
+
+  function rangeControl(label, min, max, step, value, unit, onInput) {
+    const out = h('output', {}, `${value}${unit}`);
+    return h('label', { class: 'pg-range' },
+      h('span', {}, `${label}: `, out),
+      h('input', {
+        type: 'range', min: String(min), max: String(max), step: String(step), value: String(value),
+        oninput: (event) => {
+          const v = Number(event.target.value);
+          out.textContent = `${v}${unit}`;
+          onInput(v);
+        },
+      }));
+  }
+
+  let generatorSeq = 0;
+
+  function renderGenerator(kind) {
+    const cfg = GENERATORS[kind];
+    const state = Object.fromEntries(cfg.controls.map((c) => [c.key, c.value]));
+    const scope = `gen-${kind}-${++generatorSeq}`;
+    const style = h('style');
+    const target = cfg.preview === 'button'
+      ? h('button', { type: 'button', class: 'gen-target' }, t('cs.btnLabel'))
+      : h('div', { class: 'gen-target' }, kind === 'shadow' || kind === 'border' ? h('span', { class: 'gen-label' }, cfg.className) : null);
+    const stage = h('div', { class: `gen-stage gen-${kind}`, id: scope }, target);
+    const extraHost = h('div', { class: 'gen-extra' });
+    const codeHost = h('div', { class: 'pg-code' });
+
+    const update = () => {
+      const rules = cfg.rules(state);
+      style.textContent = rules.map((r) => `#${scope} .gen-target${r.sel} { ${r.lines.join(' ')} }`).join('\n');
+      const css = rules.map((r) => `${cfg.className}${r.sel} {\n${r.lines.map((line) => `  ${line}`).join('\n')}\n}`).join('\n');
+      codeHost.replaceChildren(codeBlock(css, { lang: 'css', label: t('cs.pgCode') }));
+      extraHost.replaceChildren(cfg.extra ? cfg.extra(state) : '');
+    };
+
+    const controls = h('div', { class: 'pg-controls' }, cfg.controls.map((c) => {
+      const label = tx(c.label);
+      if (c.type === 'range') return rangeControl(label, c.min, c.max, c.step || 1, state[c.key], c.unit === 'deg' ? '°' : c.unit, (v) => { state[c.key] = v; update(); });
+      if (c.type === 'color') {
+        const code = h('code', {}, state[c.key]);
+        return h('label', { class: 'gen-color' },
+          h('input', { type: 'color', value: state[c.key], oninput: (event) => { state[c.key] = event.target.value; code.textContent = event.target.value; update(); } }),
+          h('span', {}, label), code);
+      }
+      if (c.type === 'check') {
+        return h('label', { class: 'gen-check' },
+          h('input', { type: 'checkbox', checked: state[c.key], onchange: (event) => { state[c.key] = event.target.checked; update(); } }),
+          h('span', {}, label));
+      }
+      return h('fieldset', { class: 'pg-field' },
+        h('legend', {}, label),
+        optionPills(`${scope}-${c.key}`, c.options, state[c.key], (option) => { state[c.key] = option; update(); }));
+    }));
+
+    update();
+    return posterCard(tx(cfg.name), t('cs.genHint'), controls, h('div', {}, style, stage, extraHost, codeHost));
+  }
+
+  /** A világos, kattintgatós kártya a blueprint lap tetején. */
+  const posterCard = (title, hint, controls, output) => h('section', { class: 'card playground no-print', style: '--c:#99e9f2;--a:#0c8599' },
+    h('header', { class: 'card-head' }, h('h2', { class: 'card-title' }, h('span', { class: 'hl' }, title))),
+    h('p', { class: 'pg-hint' }, hint),
+    h('div', { class: 'pg-layout' }, controls, output));
+
+  function renderPoster(kind) {
+    if (PLAYGROUNDS[kind]) return renderPlayground(kind);
+    if (GENERATORS[kind]) return renderGenerator(kind);
+    return null;
+  }
+
+  /* ---------- egy sheet ---------- */
 
   function renderSheet(sheet) {
     document.title = `${tx(sheet.title)} · ${t('cs.docTitle')}`;
     const index = SHEETS.indexOf(sheet);
     const color = PALETTE[index % PALETTE.length];
 
-    const viewSwitch = h('div', { class: 'seg', role: 'group', 'aria-label': t('cs.view') },
-      VIEWS.map((key) => h('button', {
-        type: 'button', 'aria-pressed': String(view === key),
-        onclick: () => { view = key; store.set(VIEW_KEY, key); renderSheet(sheet); },
-      }, t(`cs.view.${key}`))));
-
-    const title = tx(sheet.title);
     const head = h('header', { class: 'sheet-head' },
       h('a', { class: 'back no-print', href: '#' }, t('cs.back')),
       h('h1', { class: 'sheet-title' },
-        h('span', { class: 'sheet-name' }, title),
+        h('span', { class: 'sheet-name' }, tx(sheet.title)),
+        sheet.icon ? h('span', { class: 'sheet-name-icon', 'aria-hidden': 'true' }, sheet.icon) : null,
         h('span', { class: 'sheet-sub' }, t('cs.sheet'))),
       h('p', { class: 'sheet-intro' }, tx(sheet.intro)),
       h('div', { class: 'sheet-tools no-print' },
         h('span', { class: `level level-${sheet.level}` }, t(`cs.level.${sheet.level}`)),
         h('span', { class: 'sheet-count' }, t('cs.entries', { n: countItems(sheet), m: minutes(sheet) })),
-        viewSwitch,
         h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => window.print() }, t('cs.print'))));
 
-    const body = view === 'blueprint' ? renderBlueprint(sheet) : renderPosterOrNotebook(sheet);
-    app.replaceChildren(h('article', { class: `sheet wrap view-${view}`, style: `--c:${color.c};--a:${color.a}` },
-      h('div', { class: 'sheet-paper' }, head, renderPlayground(sheet.playground), body)));
+    app.replaceChildren(h('article', { class: 'sheet wrap view-blueprint', style: `--c:${color.c};--a:${color.a}` },
+      h('div', { class: 'sheet-paper' }, head, renderPoster(sheet.playground), renderBlueprint(sheet))));
   }
 
   /* ---------- másolás kattintásra ---------- */
@@ -345,7 +562,7 @@
   });
   app.addEventListener('keydown', (event) => {
     const node = event.target.closest('[data-copy]');
-    if (node && (event.key === 'Enter' || event.key === ' ')) {
+    if (node && node.tagName !== 'BUTTON' && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       copyText(node.dataset.copy);
     }
