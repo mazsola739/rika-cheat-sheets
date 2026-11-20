@@ -115,11 +115,13 @@
     const draw = () => {
       const q = normalize(query.trim());
       const visible = SHEETS.filter((s) => (level === 'all' || s.level === level) && (!q || searchText(s).includes(q)));
-      chips.replaceChildren(...['all', 'kezdo', 'kozep', 'halado'].map((key) =>
+      // csak az a szint kap gombot, amelyikben van lap; mindegyiken a darabszám
+      const count = (key) => (key === 'all' ? SHEETS.length : SHEETS.filter((s) => s.level === key).length);
+      chips.replaceChildren(...['all', 'kezdo', 'kozep', 'halado'].filter((key) => count(key) > 0).map((key) =>
         h('li', {}, h('button', {
           type: 'button', class: 'chip', 'aria-pressed': String(level === key),
           onclick: () => { level = key; draw(); },
-        }, key === 'all' ? t('cs.all') : t(`cs.level.${key}`)))));
+        }, key === 'all' ? t('cs.all') : t(`cs.level.${key}`), h('span', { class: 'chip-count' }, String(count(key)))))));
       grid.replaceChildren(...(visible.length ? visible.map(sheetCard) : [h('p', { class: 'empty' }, t('cs.none'))]));
     };
 

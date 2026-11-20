@@ -130,16 +130,16 @@
 
   /* Kategóriák sorrendje és színe (kiemelő). */
   const CATEGORIES = {
-    array: '#b2f2bb',
-    string: '#ffd8a8',
-    number: '#ffec99',
-    date: '#d0bfff',
-    dom: '#a5d8ff',
-    object: '#fcc2d7',
-    function: '#99e9f2',
-    type: '#ffc9c9',
-    node: '#d8f5a2',
-    misc: '#e9ecef',
+    array: '#8ce99a',
+    string: '#ffc078',
+    number: '#ffe066',
+    date: '#b197fc',
+    dom: '#74c0fc',
+    object: '#faa2c1',
+    function: '#66d9e8',
+    type: '#ffa8a8',
+    node: '#c0eb75',
+    misc: '#ced4da',
   };
 
   /* ---------- feldolgozás ---------- */
@@ -265,16 +265,63 @@
     }
   })();
 
-  /** Kód vagy példa: futtatható snippetnél átírható. */
-  const codePart = (s, part, text) => h('code', isRunnable(s)
-    ? {
-      'data-part': part,
-      contenteditable: EDIT_MODE,
-      spellcheck: 'false',
-      'aria-label': t(part === 'code' ? 'sn.codeLabel' : 'sn.exampleLabel', { name: s.fn }),
-      html: highlight(text),
+  /**
+   * A színezett kódot soronként külön elembe teszi (a kódablak sorszámaihoz és sortöréséhez).
+   * Ha egy színezett rész több soron át tart, soronként lezárja és újranyitja.
+   */
+  function lineHtml(text) {
+    const lines = [];
+    let current = '';
+    let open = '';
+    for (const [, tag, close, newline, rest] of highlight(text).matchAll(/(<span[^>]*>)|(<\/span>)|(\n)|([^<\n]+)/g)) {
+      if (tag) {
+        open = tag;
+        current += tag;
+      } else if (close) {
+        open = '';
+        current += close;
+      } else if (newline) {
+        lines.push(open ? `${current}</span>` : current);
+        current = open;
+      } else current += rest;
     }
-    : { html: highlight(text) });
+    lines.push(current);
+    return lines.map((line) => `<span class="ln">${line}</span>`).join('');
+  }
+
+  /** Az átírható rész szövege; a soronként tördelt kódnál a sorokat újsorral fűzi össze. */
+  function partText(el) {
+    if (!el.hasAttribute('data-lines')) return el.textContent;
+    const lines = [];
+    let loose = '';
+    for (const node of el.childNodes) {
+      if (node.nodeType === 1 && node.classList.contains('ln')) {
+        lines.push(loose + node.textContent);
+        loose = '';
+      } else loose += node.textContent;
+    }
+    if (loose) lines.push(loose);
+    return lines.join('\n');
+  }
+
+  /** Újraszínezi (és a kódablakban újra sorokra bontja) a részt. */
+  const paint = (el, text) => {
+    el.innerHTML = el.hasAttribute('data-lines') ? lineHtml(text) : highlight(text);
+  };
+
+  /** Kód vagy példa: futtatható snippetnél átírható. A kódablakban (lines) soronként, sorszámmal. */
+  const codePart = (s, part, text, lines = false) => h('code', {
+    ...(isRunnable(s)
+      ? {
+        'data-part': part,
+        contenteditable: EDIT_MODE,
+        spellcheck: 'false',
+        'aria-label': t(part === 'code' ? 'sn.codeLabel' : 'sn.exampleLabel', { name: s.fn }),
+      }
+      : {}),
+    'data-lines': lines || null,
+    html: lines ? lineHtml(text) : highlight(text),
+  });
 
   const runButtons = (s, cls) => (isRunnable(s)
     ? [
@@ -285,33 +332,45 @@
 
   const runOutput = (s) => (isRunnable(s) ? h('ul', { class: 'run-out', 'aria-live': 'polite', hidden: true }) : null);
 
+  /*
+   * Kódablak nézet: mint egy szerkesztő. Fülön a fájl neve, a leírás JSDoc-megjegyzésként a kód fölött,
+   * utána a kód és a példa sorszámozva (a hosszú sor tördelődik, nincs görgetés),
+   * futtatás után alul a konzol, legalul az állapotsor a kategória színében.
+   */
   function renderWindow(s) {
     const isFav = favorites.has(s.id);
+    const catName = t(`sn.cat.${s.category}`);
+    const commentLines = (lines) => lines.map((line) => h('span', { class: 'ln' }, h('span', { class: 'tok-c' }, line)));
+    const out = runOutput(s);
+    out?.setAttribute('data-title', t('sn.console'));
     return h('article', { class: 'window', id: s.id, style: `--c:${CATEGORIES[s.category]}`, 'aria-labelledby': `t-${s.id}` },
       h('header', { class: 'win-bar' },
         h('span', { class: 'win-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
-        h('span', { class: 'win-file' }, `${s.fn}.js`),
-        h('button', {
-          type: 'button',
-          class: 'win-btn fav',
-          'data-fav': s.id,
-          'aria-pressed': String(isFav),
-          'aria-label': t(isFav ? 'sn.favRemove' : 'sn.favAdd', { name: s.fn }),
-        }, isFav ? '★' : '☆'),
-        runButtons(s, 'win-btn'),
-        h('button', { type: 'button', class: 'win-btn', 'data-copy': s.id, 'aria-label': t('copy.aria', { label: `${s.fn}.js` }) }, t('copy'))),
-      h('div', { class: 'win-body' },
-        h('div', { class: 'win-head' },
-          h('h3', { class: 'win-title', id: `t-${s.id}` }, h('a', { href: `#${s.id}` }, s.title)),
-          h('span', { class: 'win-cat' }, `#${t(`sn.cat.${s.category}`)}`)),
-        s.description.map((paragraph) => h('p', { class: 'win-desc', lang: 'en' }, paragraph)),
-        h('pre', { class: 'win-code' }, codePart(s, 'code', s.code)),
-        s.example
-          ? h('div', { class: 'win-example' },
-            h('span', { class: 'win-label' }, t('sn.example')),
-            h('pre', {}, codePart(s, 'example', s.example)))
-          : null,
-        runOutput(s)));
+        h('h3', { class: 'win-tab', id: `t-${s.id}` },
+          h('span', { class: 'win-js', 'aria-hidden': 'true' }, 'JS'),
+          h('a', { href: `#${s.id}` }, `${s.fn}.js`)),
+        h('span', { class: 'win-tools' },
+          h('button', {
+            type: 'button',
+            class: 'win-btn fav',
+            'data-fav': s.id,
+            'aria-pressed': String(isFav),
+            'aria-label': t(isFav ? 'sn.favRemove' : 'sn.favAdd', { name: s.fn }),
+          }, isFav ? '★' : '☆'),
+          runButtons(s, 'win-btn'),
+          h('button', { type: 'button', class: 'win-btn', 'data-copy': s.id, 'aria-label': t('copy.aria', { label: `${s.fn}.js` }) }, t('copy')))),
+      h('p', { class: 'win-crumbs', 'aria-hidden': 'true' }, `snippets › ${catName} › ${s.fn}.js`),
+      h('pre', { class: 'win-src' },
+        s.description.length ? h('code', { class: 'win-doc', lang: 'en' }, commentLines(['/**', ...s.description.map((p) => ` * ${p}`), ' */'])) : null,
+        codePart(s, 'code', s.code, true),
+        s.example ? h('code', { class: 'win-sep' }, h('span', { class: 'ln' }), commentLines([`// ${t('sn.example')}`])) : null,
+        s.example ? codePart(s, 'example', s.example, true) : null),
+      out,
+      h('footer', { class: 'win-status', 'aria-hidden': 'true' },
+        h('span', {}, '⎇ main'),
+        h('span', {}, catName),
+        h('span', { class: 'win-status-end' }, 'JavaScript'),
+        h('span', {}, 'UTF-8')));
   }
 
   /** A leírás első mondata a kártya elejére kerül, a többi a hátára. */
@@ -329,12 +388,14 @@
     const isFav = favorites.has(s.id);
     const [lead, more] = splitDescription(s.description);
     const hasBack = Boolean(s.example || more);
+    // a megfordítás a jobb alsó, behajtott sarok (szamárfül)
     const flipButton = (toBack) => h('button', {
       type: 'button',
-      class: 'icard-btn flip-btn',
+      class: 'dog-ear',
       'data-flip': toBack ? 'back' : 'front',
+      title: t(toBack ? 'sn.flipBack' : 'sn.flipFront'),
       'aria-label': t(toBack ? 'sn.flipBackAria' : 'sn.flipFrontAria', { name: s.fn }),
-    }, t(toBack ? 'sn.flipBack' : 'sn.flipFront'));
+    });
 
     const front = h('section', { class: 'icard-face icard-front' },
       h('header', { class: 'icard-head' },
@@ -350,11 +411,7 @@
           h('button', { type: 'button', class: 'icard-btn', 'data-copy': s.id, 'aria-label': t('copy.aria', { label: `${s.fn}.js` }) }, t('copy')))),
       lead ? h('p', { class: 'icard-desc', lang: 'en' }, lead) : null,
       h('pre', { class: 'icard-code' }, codePart(s, 'code', s.code)),
-      hasBack
-        ? h('footer', { class: 'icard-foot' },
-          isRunnable(s) ? h('button', { type: 'button', class: 'icard-btn run-btn', 'data-run': s.id, 'aria-label': t('sn.runAria', { name: s.fn }), title: t('sn.editHint') }, t('sn.run')) : null,
-          flipButton(true))
-        : null);
+      hasBack ? flipButton(true) : null);
 
     const back = hasBack
       ? h('section', { class: 'icard-face icard-back', inert: true },
@@ -364,7 +421,8 @@
         more ? h('p', { class: 'icard-more', lang: 'en' }, more) : null,
         s.example ? h('pre', { class: 'icard-example' }, codePart(s, 'example', s.example)) : null,
         runOutput(s),
-        h('footer', { class: 'icard-foot' }, runButtons(s, 'icard-btn'), flipButton(false)))
+        isRunnable(s) ? h('footer', { class: 'icard-foot' }, runButtons(s, 'icard-btn')) : null,
+        flipButton(false))
       : null;
 
     return h('article', { class: 'icard', id: s.id, style: `--c:${CATEGORIES[s.category]}`, 'aria-labelledby': `t-${s.id}` },
@@ -545,12 +603,12 @@
     if (!out) return;
     // a kartotékkártyán az eredmény a hátoldalon van: futtatáskor megfordul
     if (!article.classList.contains('is-flipped')) flipCard(article, true, false);
-    const list = RUNNER.steps(exampleEl ? exampleEl.textContent : s.example);
+    const list = RUNNER.steps(exampleEl ? partText(exampleEl) : s.example);
     out.hidden = false;
     out.replaceChildren(h('li', { class: 'run-line run-wait' }, t('sn.running')));
     buttons.forEach((button) => { button.disabled = true; });
 
-    const result = list.length ? await RUNNER.run(codeEl ? codeEl.textContent : s.code, list) : null;
+    const result = list.length ? await RUNNER.run(codeEl ? partText(codeEl) : s.code, list) : null;
     buttons.forEach((button) => { button.disabled = false; });
 
     if (!result) out.replaceChildren(h('li', { class: 'run-line run-val' }, t('sn.noSteps')));
@@ -584,8 +642,8 @@
     if (!s) return;
     const codeEl = article.querySelector('[data-part="code"]');
     const exampleEl = article.querySelector('[data-part="example"]');
-    if (codeEl) codeEl.innerHTML = highlight(s.code);
-    if (exampleEl) exampleEl.innerHTML = highlight(s.example);
+    if (codeEl) paint(codeEl, s.code);
+    if (exampleEl) paint(exampleEl, s.example);
     article.classList.remove('is-edited');
     article.querySelectorAll('[data-reset]').forEach((button) => button.setAttribute('hidden', ''));
     const out = article.querySelector('.run-out');
@@ -616,7 +674,7 @@
   // szerkesztés után újra színezzük a kódot
   listEl.addEventListener('focusout', (event) => {
     const part = event.target.closest?.('[data-part]');
-    if (part && part.closest('article')?.classList.contains('is-edited')) part.innerHTML = highlight(part.textContent);
+    if (part && part.closest('article')?.classList.contains('is-edited')) paint(part, partText(part));
   });
 
   listEl.addEventListener('click', (event) => {
@@ -640,7 +698,7 @@
       // az esetleg átírt kódot másoljuk
       const s = snippets.find((x) => x.id === copyBtn.dataset.copy);
       const codeEl = copyBtn.closest('article')?.querySelector('[data-part="code"]');
-      if (s) copyText(codeEl ? codeEl.textContent : s.code);
+      if (s) copyText(codeEl ? partText(codeEl) : s.code);
       return;
     }
     const favBtn = event.target.closest('[data-fav]');
