@@ -94,3 +94,4 @@ Az 1–127. snippet a [30 seconds of code](https://www.30secondsofcode.org/) pro
 A 128–167. snippet ehhez az oldalhoz készült.
 Betűtípusok: [Patrick Hand](https://fonts.google.com/specimen/Patrick+Hand) és
 [Shantell Sans](https://fonts.google.com/specimen/Shantell+Sans) (Google Fonts, OFL).
+Az agy és a logó képe (`assets/img/`) AI-val készült, rájuk nem vonatkozik szabad licenc.
