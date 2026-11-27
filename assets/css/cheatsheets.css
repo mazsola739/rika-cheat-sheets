@@ -35,7 +35,10 @@
 }
 
 .sheet-card {
+  /* a dosszié a saját színének nagyon halvány árnyalatát kapja */
+  --tint: color-mix(in srgb, var(--c) 26%, var(--card));
   border-top-left-radius: 4px;
+  background: var(--tint);
 }
 
 .sheet-tab {
@@ -51,7 +54,7 @@
   border: 2.5px solid var(--ink);
   border-bottom: 0;
   border-radius: 14px 16px 0 0 / 12px 14px 0 0;
-  background: var(--card);
+  background: var(--tint, var(--card));
   font: 800 19px/1.15 var(--font-head);
 }
 
@@ -63,7 +66,7 @@
   right: 0;
   bottom: -4px;
   height: 6px;
-  background: var(--card);
+  background: var(--tint, var(--card));
 }
 
 .sheet-tab-title {

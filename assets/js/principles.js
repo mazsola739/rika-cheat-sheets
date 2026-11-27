@@ -123,15 +123,14 @@
 
   /* ---------- színek, segédek ---------- */
 
-  const hueOf = (i) => (28 + i * (330 / N)) % 360;
-  const sliceColor = (i) => `hsl(${hueOf(i).toFixed(0)} 72% ${i % 2 ? 51 : 56}%)`;
-  const innerColor = (i) => `hsl(${hueOf(i).toFixed(0)} 58% ${i % 2 ? 36 : 40}%)`;
-  const lightColor = (i) => `hsl(${hueOf(i).toFixed(0)} 90% 86%)`;
-  /* csoportszín = a csoport középső szeletének színe, kicsit sötétebben (feliratokhoz, vonalakhoz) */
-  const GROUP_COLORS = Object.fromEntries(GROUP_KEYS.map((key) => {
-    const idx = CARDS.map((card, i) => (card.group === key ? i : -1)).filter((i) => i >= 0);
-    return [key, `hsl(${hueOf(idx[Math.floor(idx.length / 2)] ?? 0).toFixed(0)} 68% 42%)`];
-  }));
+  /* minden csoport egy szín (8 színfolt a keréken), a csoporton belül a szeletek világosabb/sötétebb váltakozva */
+  const GROUP_HUE = Object.fromEntries(GROUP_KEYS.map((key, gi) => [key, (28 + gi * (330 / GROUP_KEYS.length)) % 360]));
+  const hueOf = (i) => GROUP_HUE[CARDS[i].group];
+  const sliceColor = (i) => `hsl(${hueOf(i).toFixed(0)} 72% ${i % 2 ? 50 : 58}%)`;
+  const innerColor = (i) => `hsl(${hueOf(i).toFixed(0)} 58% ${i % 2 ? 34 : 40}%)`;
+  const lightColor = (i) => `hsl(${hueOf(i).toFixed(0)} 90% ${i % 2 ? 83 : 88}%)`;
+  /* csoportszín: kicsit sötétebben (feliratokhoz, vonalakhoz) */
+  const GROUP_COLORS = Object.fromEntries(GROUP_KEYS.map((key) => [key, `hsl(${GROUP_HUE[key].toFixed(0)} 68% 42%)`]));
   const indexOf = (id) => CARDS.findIndex((card) => card.id === id);
   const sideLabel = (card) => {
     const big = tx(card.big);
