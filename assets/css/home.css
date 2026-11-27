@@ -104,18 +104,17 @@
     height: 100svh;
   }
 
+  /* csak a kép zsugorodik; ha az sem elég, az oldal inkább görgethető, de semmi nem csúszik egymásra */
   body.home main {
     display: flex;
-    flex: 1 1 auto;
+    flex: 1 0 auto;
     flex-direction: column;
-    min-height: 0;
   }
 
   .home .hero {
     display: flex;
-    flex: 1 1 auto;
+    flex: 1 0 auto;
     flex-direction: column;
-    min-height: 0;
     padding-block: 10px 0;
   }
 
@@ -126,7 +125,7 @@
     align-self: center;
     width: auto;
     max-width: 100%;
-    min-height: 120px;
+    min-height: 90px;
     max-height: 440px;
     aspect-ratio: 2000 / 669;
   }
@@ -145,7 +144,7 @@
   .home .hero-logo {
     width: auto;
     max-width: 100%;
-    height: clamp(80px, 16vh, 190px);
+    height: clamp(70px, 15vh, 190px);
   }
 
   .home .hero-text .lead {
@@ -162,6 +161,7 @@
   }
 
   .home .tips {
+    flex-shrink: 0;
     margin-top: 16px;
   }
 
