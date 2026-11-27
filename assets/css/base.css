@@ -844,15 +844,132 @@ kbd {
 }
 
 .footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 24px;
-  padding-block: 18px 26px;
+  display: grid;
+  gap: 4px;
+  padding-block: 18px 30px;
+  text-align: center;
 }
 
 .footer p {
   margin: 0;
+}
+
+.footer-motto {
+  color: var(--ink-faint);
+}
+
+.footer a,
+.linkbtn {
+  color: var(--teal);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.footer a:hover,
+.linkbtn:hover {
+  text-decoration: underline wavy;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.linkbtn {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Contact me ablak */
+.contact {
+  position: fixed;
+  width: calc(100% - 32px);
+  max-width: 480px;
+  padding: 22px 24px 20px;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-card);
+  background: var(--card);
+  box-shadow: 5px 5px 0 var(--ink);
+  color: var(--ink);
+}
+
+.contact::backdrop {
+  background: rgba(43, 42, 40, 0.5);
+}
+
+.contact h2 {
+  margin: 0 40px 4px 0;
+  font: 800 26px/1.2 var(--font-head);
+}
+
+.contact-lead {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+}
+
+.contact label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.contact input,
+.contact textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-small);
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.3 var(--font-hand);
+}
+
+.contact textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.contact .botcheck {
+  display: none;
+}
+
+.contact-send {
+  width: 100%;
+}
+
+.contact-status {
+  min-height: 1.5em;
+  margin: 10px 0 0;
+  font-weight: 700;
+}
+
+.contact-small {
+  margin: 4px 0 0;
+  color: var(--ink-faint);
+  font-size: 15px;
+}
+
+.contact-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.contact-close:hover {
+  background: var(--hover);
 }
 
 .toast {
@@ -927,6 +1044,7 @@ kbd {
 
   .nav,
   .footer,
+  .contact,
   .toolbar,
   .copy,
   .no-print,

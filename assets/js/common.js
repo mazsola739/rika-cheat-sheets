@@ -79,8 +79,19 @@
       'nav.principles': 'Elvek',
       'lang.switch': 'Switch to English',
       'footer.tagline': 'Rika cheat sheets · minél többet tudsz, annál színesebb',
-      'footer.source': 'Forráskód a GitHubon',
-      'footer.portfolio': 'mazsola739',
+      'footer.motto': 'Minél többet tudsz, annál színesebb.',
+      'footer.portfolio': 'Portfólió',
+      'contact.title': 'Írj nekem',
+      'contact.lead': 'Írj egy üzenetet, és válaszolok.',
+      'contact.name': 'Név',
+      'contact.email': 'E-mail',
+      'contact.message': 'Üzenet',
+      'contact.send': 'Üzenet küldése',
+      'contact.sending': 'Küldés…',
+      'contact.ok': 'Köszönöm! Az üzeneted úton van, hamarosan válaszolok.',
+      'contact.fail': 'Bocsi, az üzenetet nem sikerült elküldeni. Próbáld újra kicsit később.',
+      'contact.small': 'Az üzeneted a Web3Forms-on keresztül jut el hozzám. A neved és az e-mail-címed csak arra használom, hogy válaszoljak.',
+      'contact.close': 'Bezárás',
       'copy': 'Másol',
       'copy.aria': '{label} másolása',
       'copy.done': 'Kimásolva a vágólapra ✓',
@@ -94,8 +105,19 @@
       'nav.principles': 'Principles',
       'lang.switch': 'Váltás magyarra',
       'footer.tagline': 'Rika cheat sheets · the more you know, the more colorful it gets',
-      'footer.source': 'Source on GitHub',
-      'footer.portfolio': 'mazsola739',
+      'footer.motto': 'The more you know, the more colorful it gets.',
+      'footer.portfolio': 'Portfolio',
+      'contact.title': 'Get in touch',
+      'contact.lead': 'Write me a message and I’ll write back.',
+      'contact.name': 'Name',
+      'contact.email': 'E-mail',
+      'contact.message': 'Message',
+      'contact.send': 'Send message',
+      'contact.sending': 'Sending…',
+      'contact.ok': 'Thank you! Your message is on its way, I’ll write back soon.',
+      'contact.fail': 'Sorry, the message couldn’t be sent. Please try again a bit later.',
+      'contact.small': 'Your message reaches my inbox through Web3Forms. I only use your name and e-mail address to write back to you.',
+      'contact.close': 'Close',
       'copy': 'Copy',
       'copy.aria': 'Copy {label}',
       'copy.done': 'Copied to clipboard ✓',
@@ -807,6 +829,71 @@
       }
     });
   }
+
+  /* ---------- Contact me ablak ----------
+   * Az üzenetet a Web3Forms (https://web3forms.com) küldi el nekem e-mailben,
+   * ugyanazzal a kulccsal, mint a Matchmaker és a Rika Ipsum.
+   */
+
+  const CONTACT_KEY = '8674bf2a-c248-426a-aed4-379fa983cb34';
+  let contactDialog = null;
+
+  function buildContact() {
+    const status = h('p', { class: 'contact-status', role: 'status' });
+    const send = h('button', { type: 'submit', class: 'btn btn-primary contact-send', 'data-i18n': 'contact.send' }, t('contact.send'));
+    const field = (key, input) => h('label', {}, h('span', { 'data-i18n': key }, t(key)), input);
+    const form = h('form', {},
+      field('contact.name', h('input', { name: 'name', required: true, maxlength: 100, autocomplete: 'name' })),
+      field('contact.email', h('input', { name: 'email', type: 'email', required: true, maxlength: 200, autocomplete: 'email' })),
+      field('contact.message', h('textarea', { name: 'message', required: true, maxlength: 5000 })),
+      // ember nem látja, a spambotok bepipálják
+      h('input', { class: 'botcheck', type: 'checkbox', name: 'botcheck', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }),
+      send,
+      status,
+      h('p', { class: 'contact-small', 'data-i18n': 'contact.small' }, t('contact.small')));
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const msg = Object.fromEntries(new FormData(form));
+      msg.access_key = CONTACT_KEY;
+      msg.subject = 'Rika cheat sheets: a message from ' + msg.name;
+      msg.from_name = 'Rika cheat sheets contact form';
+      send.disabled = true;
+      send.textContent = t('contact.sending');
+      status.textContent = '';
+      const failed = () => { status.textContent = t('contact.fail'); };
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(msg),
+      })
+        .then((r) => r.json())
+        .then((res) => {
+          if (res.success) {
+            form.reset();
+            status.textContent = t('contact.ok');
+          } else failed();
+        })
+        .catch(failed)
+        .finally(() => { send.disabled = false; send.textContent = t('contact.send'); });
+    });
+
+    const dialog = h('dialog', { class: 'contact', 'aria-labelledby': 'contactTitle' },
+      h('button', { type: 'button', class: 'contact-close', 'data-i18n-attr': 'aria-label:contact.close', 'aria-label': t('contact.close'), onclick: () => dialog.close() }, '×'),
+      h('h2', { id: 'contactTitle', 'data-i18n': 'contact.title' }, t('contact.title')),
+      h('p', { class: 'contact-lead', 'data-i18n': 'contact.lead' }, t('contact.lead')),
+      form);
+    // a sötét háttérre kattintva is bezárul
+    dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+    document.body.append(dialog);
+    return dialog;
+  }
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-contact-open]')) return;
+    contactDialog ||= buildContact();
+    contactDialog.showModal();
+  });
 
   /** Ékezet- és kisbetű-független kereséshez. */
   const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
