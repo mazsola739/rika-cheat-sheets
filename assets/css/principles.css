@@ -1165,3 +1165,152 @@
     padding: 7% 6% 6%;
   }
 }
+
+/* ---------- telefonon: forgatható félkerék (tárcsa) ---------- */
+
+.dial {
+  display: grid;
+  gap: 4px;
+}
+
+.dial-card {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-height: 132px;
+  padding: 10px;
+  border: 2.5px solid var(--ink);
+  border-left: 8px solid var(--g, var(--ink));
+  border-radius: var(--r-card);
+  background: var(--card);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.dc-pic {
+  overflow: hidden;
+  border-radius: var(--r-small);
+  aspect-ratio: 4 / 3;
+  background: var(--paper-2);
+}
+
+.dc-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dc-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--g, var(--ink-soft));
+  font: 700 14px/1.2 var(--font-head);
+}
+
+.dc-group .co-num {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--g, var(--ink));
+  color: #fff;
+  font-size: 12px;
+}
+
+.dc-title {
+  margin: 2px 0 0;
+  font: 800 24px/1.1 var(--font-head);
+}
+
+.dc-name {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.dc-open {
+  min-height: 34px;
+  margin-top: 8px;
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+.dial-wheel {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -1);
+}
+
+.dial-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: pan-y; /* függőlegesen görget az oldal, oldalra húzva forog a kerék */
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+
+.dial-svg:active {
+  cursor: grabbing;
+}
+
+.dial-svg:focus-visible {
+  outline-offset: -3px;
+}
+
+.dial-slice .ds-out {
+  stroke: var(--paper);
+  stroke-width: 1.5;
+}
+
+.dial-slice .ds-label {
+  fill: var(--ink);
+  font-family: var(--font-head);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.dial-slice.is-sel .ds-label {
+  fill: #fff;
+  font-weight: 800;
+}
+
+.dial-slice .ds-num {
+  fill: #fff;
+  font: 800 15px var(--font-head);
+  pointer-events: none;
+}
+
+.dial-marker {
+  fill: var(--ink);
+  pointer-events: none;
+}
+
+.dial-arrow {
+  position: absolute;
+  z-index: 1;
+  bottom: 10px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--ink);
+  color: var(--ink);
+  font: 800 24px/1 var(--font-head);
+  cursor: pointer;
+}
+
+.dial-prev {
+  left: var(--gutter);
+}
+
+.dial-next {
+  right: var(--gutter);
+}

@@ -32,6 +32,10 @@
       'pr.catalog': 'Katalógus',
       'pr.catalogTitle': 'Az elvek katalógusa',
       'pr.groups': 'Csoportok',
+      'pr.dialHint': 'Forgasd a kereket az ujjaddal vagy a nyilakkal. A jelölő alatti elvet a kártyán nyitod meg, vagy koppints még egyszer a szeletére.',
+      'pr.dialPrev': 'Előző elv',
+      'pr.dialNext': 'Következő elv',
+      'pr.open': 'Megnyitom',
       'pr.hint': 'Mutass egy szeletre vagy egy névre: kigyullad a nyilával és a listájával együtt. Kattints a megnyitáshoz. Billentyűzettel: ← → lépked, Enter megnyitja.',
       'pr.wheelLine1': 'A tiszta kód',
       'pr.wheelLine2': 'alapelvei',
@@ -67,6 +71,10 @@
       'pr.catalog': 'Catalog',
       'pr.catalogTitle': 'The catalog of principles',
       'pr.groups': 'Groups',
+      'pr.dialHint': 'Turn the wheel with your finger or the arrows. Open the principle under the marker from the card, or tap its slice again.',
+      'pr.dialPrev': 'Previous principle',
+      'pr.dialNext': 'Next principle',
+      'pr.open': 'Open it',
       'pr.hint': 'Point at a slice or a name: it lights up together with its arrow and list. Click to open it. Keyboard: ← → to step, Enter to open.',
       'pr.wheelLine1': 'Clean code',
       'pr.wheelLine2': 'principles',
@@ -314,7 +322,191 @@
         h('a', { href: `#${CARDS[i].id}`, 'data-index': String(i) }, sideLabel(CARDS[i]))))));
   }
 
+  /* ---------- telefonon: forgatható félkerék ----------
+   * A kerék nagy, és csak a teteje lóg be alulról, mint egy tárcsa. Ujjal oldalra húzva forog,
+   * elengedve a legközelebbi szeletre ugrik. Ami a jelölő alatt van, annak a kártyája látszik fölötte.
+   * Körbeér: az utolsó elv után újra az első jön.
+   */
+
+  const phoneQuery = window.matchMedia('(max-width: 760px)');
+  const D = { W: 400, H: 232, cy: 436, rIn: 258, rOut: 392, rBand: 226, step: 9.5 };
+  let dialPos = 0; // hányadik elv van a jelölő alatt (törtszám forgatás közben)
+  let dialAnim = 0;
+  let dialEls = null;
+
+  const mod = (n, m) => ((n % m) + m) % m;
+  const dialPolar = (r, deg) => {
+    const a = ((deg - 90) * Math.PI) / 180;
+    return [D.W / 2 + r * Math.cos(a), D.cy + r * Math.sin(a)];
+  };
+  const dialSector = (r0, r1, a0, a1) => {
+    const [x0, y0] = dialPolar(r1, a0);
+    const [x1, y1] = dialPolar(r1, a1);
+    const [x2, y2] = dialPolar(r0, a1);
+    const [x3, y3] = dialPolar(r0, a0);
+    return `M${f1(x0)} ${f1(y0)}A${r1} ${r1} 0 0 1 ${f1(x1)} ${f1(y1)}L${f1(x2)} ${f1(y2)}A${r0} ${r0} 0 0 0 ${f1(x3)} ${f1(y3)}Z`;
+  };
+
+  function drawDial() {
+    if (!dialEls) return;
+    const base = Math.round(dialPos);
+    const sel = mod(base, N);
+    const parts = [];
+    for (let k = -7; k <= 7; k++) {
+      const i = mod(base + k, N);
+      const card = CARDS[i];
+      const a0 = (base + k - dialPos - 0.5) * D.step;
+      const a1 = a0 + D.step;
+      const mid = (a0 + a1) / 2;
+      const isSel = i === sel;
+      const label = tx(card.big);
+      const size = Math.min(label.length <= 2 ? 24 : 17, 118 / (label.length * 0.56));
+      const [lx, ly] = dialPolar((D.rIn + D.rOut) / 2, mid);
+      const first = i === 0 || CARDS[i - 1].group !== card.group;
+      const [bx, by] = dialPolar((D.rBand + D.rIn) / 2, mid);
+      parts.push(svg('g', { class: `dial-slice${isSel ? ' is-sel' : ''}`, 'data-index': String(i) },
+        svg('path', { class: 'ds-band', d: dialSector(D.rBand, D.rIn - 3, a0, a1), fill: GROUP_COLORS[card.group] }),
+        svg('path', { class: 'ds-out', d: dialSector(D.rIn, D.rOut, a0 + 0.15, a1 - 0.15), fill: isSel ? sliceColor(i) : lightColor(i) }),
+        svg('text', {
+          class: 'ds-label',
+          transform: `translate(${f1(lx)} ${f1(ly)}) rotate(${f1(mid - 90)})`,
+          'text-anchor': 'middle',
+          'dominant-baseline': 'central',
+          'font-size': f1(size),
+        }, label),
+        first ? svg('text', { class: 'ds-num', x: f1(bx), y: f1(by), 'text-anchor': 'middle', 'dominant-baseline': 'central' }, String(GROUP_ARCS[card.group].gi + 1)) : null));
+    }
+    dialEls.slices.replaceChildren(...parts);
+    if (dialEls.shown !== sel) {
+      dialEls.shown = sel;
+      fillDialCard(sel);
+    }
+  }
+
+  function fillDialCard(i) {
+    const card = CARDS[i];
+    const arc = GROUP_ARCS[card.group];
+    dialEls.card.style.setProperty('--g', GROUP_COLORS[card.group]);
+    dialEls.card.replaceChildren(
+      h('div', { class: 'dc-pic' }, scene(card.id, 'dc-scene')),
+      h('div', { class: 'dc-text' },
+        h('p', { class: 'dc-group' },
+          h('span', { class: 'co-num', 'aria-hidden': 'true' }, String(arc.gi + 1)),
+          `${tx(DATA.groups[card.group])} · ${arc.idx.indexOf(i) + 1}/${arc.idx.length}`),
+        h('h3', { class: 'dc-title' }, tx(card.big)),
+        tx(card.big) !== card.name ? h('p', { class: 'dc-name' }, card.name) : null,
+        h('a', { class: 'btn btn-primary dc-open', href: `#${card.id}` }, `${t('pr.open')} →`)));
+  }
+
+  function spinTo(target) {
+    cancelAnimationFrame(dialAnim);
+    const from = dialPos;
+    const dist = target - from;
+    const done = () => { lastVisited = mod(Math.round(dialPos), N); };
+    if (Math.abs(dist) < 0.001) { dialPos = target; drawDial(); done(); return; }
+    const start = performance.now();
+    const dur = Math.min(520, 180 + Math.abs(dist) * 70);
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / dur);
+      dialPos = from + dist * (1 - (1 - p) ** 3);
+      drawDial();
+      if (p < 1) dialAnim = requestAnimationFrame(tick);
+      else done();
+    };
+    dialAnim = requestAnimationFrame(tick);
+  }
+
+  function renderDial() {
+    dialPos = lastVisited >= 0 ? lastVisited : 0;
+    const slices = svg('g', { class: 'dial-slices' });
+    const wheel = svg('svg', {
+      class: 'dial-svg',
+      viewBox: `0 0 ${D.W} ${D.H}`,
+      tabindex: '0',
+      role: 'group',
+      'aria-label': `${t('pr.wheel')}. ${t('pr.dialHint')}`,
+    },
+    slices,
+    svg('path', { class: 'dial-marker', d: `M${D.W / 2 - 12} 22h24l-12 16z` }));
+    const card = h('div', { class: 'dial-card', 'aria-live': 'polite' });
+    const arrow = (dir) => h('button', {
+      type: 'button',
+      class: `dial-arrow dial-${dir < 0 ? 'prev' : 'next'}`,
+      'aria-label': t(dir < 0 ? 'pr.dialPrev' : 'pr.dialNext'),
+      onclick: () => spinTo(Math.round(dialPos) + dir),
+    }, dir < 0 ? '‹' : '›');
+    dialEls = { slices, card, shown: -1 };
+
+    // húzás: vízszintesen forgat, függőlegesen hagyja görgetni az oldalt
+    let drag = null;
+    wheel.addEventListener('pointerdown', (event) => {
+      cancelAnimationFrame(dialAnim);
+      const pxPerStep = (wheel.getBoundingClientRect().width / D.W) * ((D.rIn + D.rOut) / 2) * ((D.step * Math.PI) / 180);
+      drag = { x: event.clientX, pos: dialPos, pxPerStep, moved: false, id: event.pointerId };
+    });
+    wheel.addEventListener('pointermove', (event) => {
+      if (!drag || event.pointerId !== drag.id) return;
+      const dx = event.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) < 6) return;
+      if (!drag.moved) {
+        drag.moved = true;
+        wheel.setPointerCapture(event.pointerId);
+      }
+      dialPos = drag.pos - dx / drag.pxPerStep;
+      drawDial();
+    });
+    wheel.addEventListener('pointerup', (event) => {
+      if (!drag || event.pointerId !== drag.id) return;
+      const wasDrag = drag.moved;
+      drag = null;
+      if (wasDrag) {
+        spinTo(Math.round(dialPos));
+        return;
+      }
+      // koppintás: a szeletre forgat, a már kiválasztottat megnyitja
+      const slice = event.target.closest?.('.dial-slice');
+      if (!slice) {
+        spinTo(Math.round(dialPos));
+        return;
+      }
+      const i = Number(slice.dataset.index);
+      const sel = mod(Math.round(dialPos), N);
+      if (i === sel) {
+        location.hash = CARDS[i].id;
+        return;
+      }
+      let diff = mod(i - sel, N);
+      if (diff > N / 2) diff -= N;
+      spinTo(Math.round(dialPos) + diff);
+    });
+    wheel.addEventListener('pointercancel', () => {
+      drag = null;
+      spinTo(Math.round(dialPos));
+    });
+    wheel.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') spinTo(Math.round(dialPos) + 1);
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') spinTo(Math.round(dialPos) - 1);
+      else if (event.key === 'Enter' || event.key === ' ') location.hash = CARDS[mod(Math.round(dialPos), N)].id;
+      else return;
+      event.preventDefault();
+    });
+
+    heroEl.replaceChildren(
+      h('header', { class: 'hero-head' }, h('h2', { class: 'a-title', tabindex: '-1' }, t('pr.catalogTitle'))),
+      h('div', { class: 'dial' }, card, h('div', { class: 'dial-wheel' }, arrow(-1), wheel, arrow(1))),
+      h('p', { class: 'wheel-hint' }, t('pr.dialHint')));
+    heroEl.hidden = false;
+    drawDial();
+  }
+
   function renderHero() {
+    dialEls = null;
+    if (phoneQuery.matches) {
+      wheelEl = null;
+      linksEl = null;
+      renderDial();
+      return;
+    }
     wheelEl = h('div', { class: 'wheel' });
     linksEl = svg('svg', { class: 'wheel-links', 'aria-hidden': 'true' });
     const side = (name) => GROUP_KEYS
@@ -336,6 +528,8 @@
   }
 
   function hideHero() {
+    cancelAnimationFrame(dialAnim);
+    dialEls = null;
     heroEl.hidden = true;
     heroEl.replaceChildren();
     wheelEl = null;
@@ -603,6 +797,8 @@
   document.fonts?.ready.then(scheduleLinks);
 
   document.addEventListener('rika:lang', () => route({ force: true }));
+  // telefon és asztali nézet között váltva a katalógus teteje (kerék / tárcsa) újrarajzolódik
+  phoneQuery.addEventListener('change', () => { if (!heroEl.hidden) renderHero(); });
 
   route();
   lastNarrow = isNarrow();

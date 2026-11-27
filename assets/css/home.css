@@ -94,3 +94,87 @@
   color: var(--ink);
   font: 600 14px/1.5 var(--font-code);
 }
+
+/* asztali gépen a kezdőlap egy képernyőre fér: a kép annyi helyet kap, amennyi a többi után marad */
+@media (min-width: 761px) and (min-height: 560px) {
+  body.home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100svh;
+  }
+
+  body.home main {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .home .hero {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    padding-block: 10px 0;
+  }
+
+  /* a kép magassága a maradék hely, a szélessége ebből jön (így a puha szélek a kép szélén maradnak) */
+  .home .hero-art,
+  .home .hero-art.has-image {
+    flex: 1 1 0;
+    align-self: center;
+    width: auto;
+    max-width: 100%;
+    min-height: 120px;
+    max-height: 440px;
+    aspect-ratio: 2000 / 669;
+  }
+
+  .home .hero-art.has-image .art-img,
+  .home .hero-art .art-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .home .hero-text {
+    margin-top: 2px;
+  }
+
+  .home .hero-logo {
+    width: auto;
+    max-width: 100%;
+    height: clamp(80px, 16vh, 190px);
+  }
+
+  .home .hero-text .lead {
+    margin-top: 6px;
+    font-size: 20px;
+  }
+
+  .home .hero-btns {
+    margin-top: 14px;
+  }
+
+  .home .origin-note {
+    margin-top: 14px;
+  }
+
+  .home .tips {
+    margin-top: 16px;
+  }
+
+  .home .tips-title {
+    margin-bottom: 8px;
+    font-size: 20px;
+  }
+
+  .home .footer {
+    margin-top: 14px;
+  }
+
+  .home .footer-inner {
+    padding-block: 8px 12px;
+  }
+}
