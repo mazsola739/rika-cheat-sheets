@@ -618,12 +618,12 @@
 .icard-desc,
 .icard-more {
   margin: 0;
-  color: #1c3d96;
+  color: #13286b;
   font: 400 18px/var(--lh) var(--font-hand);
 }
 
 .icard-more {
-  color: #3b4a6b;
+  color: #2b3655;
   font-size: 16.5px;
 }
 

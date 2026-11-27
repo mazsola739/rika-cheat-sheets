@@ -9,7 +9,7 @@
 (() => {
   'use strict';
 
-  const { h, svg, t, tx, addStrings, codeBlock, mountArt, getLang } = window.Rika;
+  const { h, svg, t, tx, addStrings, codeBlock, getLang } = window.Rika;
   const DATA = window.PRINCIPLES;
   const GROUP_KEYS = Object.keys(DATA.groups);
   // csoportonként egymás után (a kerék szeletei és a lapozás is ezt a sorrendet követi)
@@ -107,7 +107,6 @@
   let view = null; // 'catalog' vagy 'p:<index>' – hogy ne rajzoljuk újra feleslegesen
   let wheelEl = null;
 
-  mountArt(document.getElementById('splash'), { variant: 'compact', id: 'pr', seed: 913 })(1);
 
   // a plakátképek közös színátmenetei, egyszer a dokumentumban
   document.body.append(svg('svg', {

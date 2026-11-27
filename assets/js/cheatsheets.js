@@ -9,7 +9,7 @@
 (() => {
   'use strict';
 
-  const { h, svg, t, tx, addStrings, highlight, copyText, codeBlock, mountArt, normalize, bindSearchShortcut, PALETTE } = window.Rika;
+  const { h, svg, t, tx, addStrings, highlight, copyText, codeBlock, normalize, bindSearchShortcut, PALETTE } = window.Rika;
   const SHEETS = window.CHEATSHEETS;
   const NEON = ['#69db7c', '#ffa94d', '#ffd43b', '#b197fc', '#74c0fc', '#f783ac', '#63e6be', '#ff8787'];
 
@@ -129,7 +129,6 @@
     bindSearchShortcut(search);
 
     const head = h('section', { class: 'page-head wrap' },
-      h('div', { class: 'splash', id: 'splash' }),
       h('div', { class: 'page-head-text' },
         h('p', { class: 'kicker' }, t('cs.kicker')),
         h('h1', { class: 'page-title' }, h('span', { class: 'hl hl-orange' }, t('cs.title'))),
@@ -140,7 +139,6 @@
         h('label', { class: 'search' }, h('span', { class: 'sr-only' }, t('cs.searchLabel')), search, h('kbd', { 'aria-hidden': 'true' }, '/')),
         chips),
       grid));
-    mountArt(document.getElementById('splash'), { variant: 'compact', id: 'cs', seed: 4242 })(1);
     draw();
   }
 

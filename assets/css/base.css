@@ -230,6 +230,80 @@ svg {
   color: var(--line);
 }
 
+.nav-inner > nav {
+  margin-left: auto;
+}
+
+/* telefonon a menü alsó fülsáv, mint egy appban: fent csak a logó és a HU / EN marad */
+.nav-links a::before {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  body {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
+  .nav-inner {
+    flex-wrap: nowrap;
+    padding-block: 8px;
+  }
+
+  .brand-logo {
+    height: 44px;
+  }
+
+  .nav-links {
+    position: fixed;
+    z-index: 40;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 2.5px solid var(--ink);
+    background: var(--card);
+    font-size: 13px;
+  }
+
+  .nav-links li:has(a[target="_blank"]) {
+    display: none; /* a GitHub link a láblécben van */
+  }
+
+  .nav-links a,
+  .nav-links a[aria-current="page"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    height: 100%;
+    padding: 8px 2px 9px;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  .nav-links a[aria-current="page"] {
+    background: var(--nav-hl);
+  }
+
+  .nav-links a::before {
+    display: block;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .nav-links a[href="principles.html"]::before { content: "🎡"; }
+  .nav-links a[href="roadmap.html"]::before { content: "🗺️"; }
+  .nav-links a[href="cheatsheets.html"]::before { content: "📐"; }
+  .nav-links a[href="snippets.html"]::before { content: "🗂️"; }
+
+  body .toast {
+    bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+}
+
 /* ---------- oldalfejléc ---------- */
 
 .page-head {
@@ -270,6 +344,11 @@ svg {
 .page-head-text {
   flex: 1 1 340px;
   min-width: 0;
+}
+
+/* az aloldalakon nincs kép a szöveg mellett, így a bevezető szélesebb lehet */
+.page-head .lead {
+  max-width: 62ch;
 }
 
 .page-head > .splash {
@@ -1018,13 +1097,6 @@ kbd {
     font-size: 20px;
   }
 
-  .nav-links {
-    font-size: 16px;
-  }
-
-  .nav-links a {
-    padding: 7px 8px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

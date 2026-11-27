@@ -15,7 +15,7 @@
 (() => {
   'use strict';
 
-  const { h, t, addStrings, store, highlight, copyText, mountArt, normalize, bindSearchShortcut } = window.Rika;
+  const { h, t, addStrings, store, highlight, copyText, normalize, bindSearchShortcut } = window.Rika;
   const SOURCE = 'snippets/snippets.js';
   const FAV_KEY = 'rika-cheat-sheets:snippets:favorites';
 
@@ -217,7 +217,6 @@
   const favFilterEl = document.getElementById('fav-filter');
   const pagerEls = [document.getElementById('pager-top'), document.getElementById('pager-bottom')];
 
-  mountArt(document.getElementById('splash'), { variant: 'compact', id: 'sn', seed: 7311 })(1);
 
   /* ---------- megjelenítés ---------- */
 

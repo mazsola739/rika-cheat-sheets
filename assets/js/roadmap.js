@@ -5,7 +5,7 @@
 (() => {
   'use strict';
 
-  const { h, svg, store, t, tx, addStrings, getLang, toast, downloadBlob, isoDate, humanDate, hashString, splatterDots, mountArt, RAINBOW } = window.Rika;
+  const { h, svg, store, t, tx, addStrings, getLang, toast, downloadBlob, isoDate, humanDate, hashString, splatterDots, RAINBOW } = window.Rika;
   const DATA = window.ROADMAP;
   const STORE_KEY = `rika-cheat-sheets:roadmap:${DATA.id}:v1`;
   const LEVELS = new Set(['must', 'good', 'extra']);
@@ -129,7 +129,6 @@
 
   const road = document.getElementById('road');
   // a fejléc képe ugyanolyan, mint a többi oldalon (teljes színű)
-  mountArt(document.getElementById('splash'), { variant: 'compact', id: 'rm' })(1);
 
   const tickSvg = () =>
     svg('svg', { class: 'tick', viewBox: '0 0 24 24', 'aria-hidden': 'true' },
